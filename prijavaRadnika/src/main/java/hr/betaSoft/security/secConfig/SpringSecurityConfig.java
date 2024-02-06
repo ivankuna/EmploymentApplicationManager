@@ -29,10 +29,7 @@ public class SpringSecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
-                                // za sada svi imaju pristup /users, kasnije samo admin
-//                                .requestMatchers("/users").permitAll()
-                                .requestMatchers("/users").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
-//                                .requestMatchers("/users").hasRole("ADMIN")
+                                .requestMatchers("/users/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
                                 .requestMatchers("/access-denied").permitAll()
                                 .requestMatchers("/**").hasRole("ADMIN")
                 ).formLogin(

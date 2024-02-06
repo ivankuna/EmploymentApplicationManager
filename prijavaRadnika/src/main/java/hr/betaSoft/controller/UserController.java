@@ -1,5 +1,6 @@
 package hr.betaSoft.controller;
 
+import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
 import hr.betaSoft.security.userdto.UserDto;
@@ -11,6 +12,7 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -78,9 +80,10 @@ public class UserController {
     }
 
     @GetMapping("/users/new")
-    public String showForm(Model model) {
+    public String showAddForm(Model model) {
 
         List<Data> dataList = new ArrayList<>();
+
         dataList.add(new Data("Korisničko ime:", "username","", "",""));;
         dataList.add(new Data("OIB:", "oib","", "",""));;
         dataList.add(new Data("Naziv tvrtke:", "company","", "",""));;
@@ -94,6 +97,7 @@ public class UserController {
         dataList.add(new Data("Lozinka:", "password","", "",""));;
 
         UserDto userDto = (UserDto) model.getAttribute("userDto");
+
         if (userDto != null) {
             model.addAttribute("class", userDto);
         } else {
@@ -109,27 +113,61 @@ public class UserController {
         return "form";
     }
 
+    @GetMapping("users/update/{id}")
+    public String showEditForm(@PathVariable("id") long id, Model model, RedirectAttributes ra) {
+
+        try {
+            List<Data> dataList = new ArrayList<>();
+
+            dataList.add(new Data("OIB:", "oib","", "",""));;
+            dataList.add(new Data("Naziv tvrtke:", "company","", "",""));;
+            dataList.add(new Data("Adresa:", "address","", "",""));;
+            dataList.add(new Data("Naziv grada:", "city","", "",""));;
+            dataList.add(new Data("Ime:", "firstName","", "",""));;
+            dataList.add(new Data("Prezime:", "lastName","", "",""));;
+            dataList.add(new Data("Telefon:", "telephone","", "",""));;
+            dataList.add(new Data("E-Mail:", "email","", "",""));;
+            dataList.add(new Data("E-Mail za slanje:", "emailToSend","", "",""));;
+
+            UserDto user = userService.convertEntityToDto(userService.findById(id));
+
+            model.addAttribute("class", user);
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("title", "Korisnik");
+            model.addAttribute("dataId", "id");
+            model.addAttribute("btnName", "Prihvati");
+            model.addAttribute("path", "/users");
+            return "form";
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/users";
+        }
+    }
+
     @PostMapping("/users/save")
     public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) {
 
         User usernameExists = userService.findByUsername(userDto.getUsername());
 
         if (usernameExists != null) {
-
             ra.addFlashAttribute("userDto", userDto);
             ra.addFlashAttribute("message", "Već postoji račun registriran s tim korisničkim imenom.");
             return "redirect:/users/new";
         }
 
         if (result.hasErrors()) {
-            return showForm(model);
+            return showAddForm(model);
+        }
+
+        if (userDto.getId() != null) {
+            userDto.setUsername(userService.findById(userDto.getId()).getUsername());
+            userDto.setPassword(userService.findById(userDto.getId()).getPassword());
         }
 
         userService.saveUser(userDto);
         return "redirect:/users";
     }
 
-    // premjestiti u novi kontroller (MainController?)
     @GetMapping("/access-denied")
     public String showAccessDenied() {
 

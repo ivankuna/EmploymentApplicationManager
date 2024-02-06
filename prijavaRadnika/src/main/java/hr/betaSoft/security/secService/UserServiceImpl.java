@@ -42,7 +42,13 @@ public class UserServiceImpl implements UserService {
         user.setEmail(userDto.getEmail());
         user.setEmailToSend(userDto.getEmailToSend());
         user.setUsername(userDto.getUsername());
-        user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+
+        if (userDto.getId() != null) {
+            user.setId(userDto.getId());
+            user.setPassword(userDto.getPassword());
+        } else {
+            user.setPassword(passwordEncoder.encode(userDto.getPassword()));
+        }
 
         if (isUserTableEmpty()) {
             role_name = "ROLE_ADMIN";
@@ -52,13 +58,18 @@ public class UserServiceImpl implements UserService {
 
         Role role = roleRepository.findByName(role_name);
 
-        if(role == null){
+        if (role == null){
             role = checkRoleExist(role_name);
         }
 
         user.setRoles(Arrays.asList(role));
 
         userRepository.save(user);
+    }
+
+    @Override
+    public void deleteUser(long id) {
+        userRepository.deleteById(id);
     }
 
     @Override
@@ -100,7 +111,12 @@ public class UserServiceImpl implements UserService {
         return userRepository.findAll();
     }
 
-    private UserDto convertEntityToDto(User user){
+    @Override
+    public User findById(long id) {
+        return userRepository.findById(id);
+    }
+
+    public UserDto convertEntityToDto(User user){
 
         UserDto userDto = new UserDto();
         userDto.setId(user.getId());

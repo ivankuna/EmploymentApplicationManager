@@ -9,6 +9,8 @@ public interface UserService {
 
     void saveUser(UserDto userDto);
 
+    void deleteUser(long id);
+
     User findByUsername(String username);
 
     User findByEmail(String email);
@@ -20,4 +22,8 @@ public interface UserService {
     List<User> findAll();
 
     long countUsers();
+
+    UserDto convertEntityToDto(User user);
+
+    User findById(long id);
 }
