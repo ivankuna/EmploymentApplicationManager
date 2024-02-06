@@ -7,6 +7,9 @@ import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.Column;
 import hr.betaSoft.tools.Data;
 import jakarta.validation.Valid;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -17,6 +20,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 @Controller
@@ -26,6 +30,22 @@ public class UserController {
 
     public UserController(UserService userService) {
         this.userService = userService;
+    }
+
+    @GetMapping("/authorization")
+    public String authorization() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
+
+        if (authorityList.get(0).getAuthority().equals("ROLE_ADMIN")) {
+            return "redirect:/users";
+        } else {
+            return "redirect:/employees";
+        }
     }
 
     @GetMapping("/login")
@@ -64,8 +84,8 @@ public class UserController {
         columnList.add(new Column("Naziv grada", "city", "id"));
         columnList.add(new Column("Osoba", "name", "id"));
         columnList.add(new Column("Telefon", "telephone", "id"));
-        columnList.add(new Column("E-Mail", "email", "id"));
-        columnList.add(new Column("E-Mail za slanje", "emailToSend", "id"));
+        columnList.add(new Column("e-mail", "email", "id"));
+        columnList.add(new Column("e-mail za prijavu", "emailToSend", "id"));
 
         List<User> userList = userService.findAll();
         model.addAttribute("dataList", userList);
@@ -84,16 +104,16 @@ public class UserController {
 
         List<Data> dataList = new ArrayList<>();
 
-        dataList.add(new Data("Korisničko ime:", "username","", "",""));;
-        dataList.add(new Data("OIB:", "oib","", "",""));;
         dataList.add(new Data("Naziv tvrtke:", "company","", "",""));;
+        dataList.add(new Data("OIB:", "oib","", "",""));;
         dataList.add(new Data("Adresa:", "address","", "",""));;
-        dataList.add(new Data("Naziv grada:", "city","", "",""));;
+        dataList.add(new Data("Grad:", "city","", "",""));;
         dataList.add(new Data("Ime:", "firstName","", "",""));;
         dataList.add(new Data("Prezime:", "lastName","", "",""));;
         dataList.add(new Data("Telefon:", "telephone","", "",""));;
-        dataList.add(new Data("E-Mail:", "email","", "",""));;
-        dataList.add(new Data("E-Mail za slanje:", "emailToSend","", "",""));;
+        dataList.add(new Data("e-mail:", "email","", "",""));;
+        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "",""));;
+        dataList.add(new Data("Korisničko ime:", "username","", "",""));;
         dataList.add(new Data("Lozinka:", "password","", "",""));;
 
         UserDto userDto = (UserDto) model.getAttribute("userDto");
@@ -114,20 +134,21 @@ public class UserController {
     }
 
     @GetMapping("users/update/{id}")
-    public String showEditForm(@PathVariable("id") long id, Model model, RedirectAttributes ra) {
+    public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
             List<Data> dataList = new ArrayList<>();
 
-            dataList.add(new Data("OIB:", "oib","", "",""));;
+
             dataList.add(new Data("Naziv tvrtke:", "company","", "",""));;
+            dataList.add(new Data("OIB:", "oib","", "",""));;
             dataList.add(new Data("Adresa:", "address","", "",""));;
-            dataList.add(new Data("Naziv grada:", "city","", "",""));;
+            dataList.add(new Data("Grad:", "city","", "",""));;
             dataList.add(new Data("Ime:", "firstName","", "",""));;
             dataList.add(new Data("Prezime:", "lastName","", "",""));;
             dataList.add(new Data("Telefon:", "telephone","", "",""));;
-            dataList.add(new Data("E-Mail:", "email","", "",""));;
-            dataList.add(new Data("E-Mail za slanje:", "emailToSend","", "",""));;
+            dataList.add(new Data("e-mail:", "email","", "",""));;
+            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "",""));;
 
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
@@ -165,6 +186,20 @@ public class UserController {
         }
 
         userService.saveUser(userDto);
+        return "redirect:/users";
+    }
+
+    @GetMapping("/users/delete/{id}")
+    public String deleteUser(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+            if (id == 1) {
+                ra.addFlashAttribute("message", "Nemoguće obrisati administratora!");
+            } else {
+                userService.deleteUser(id);
+            }
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
         return "redirect:/users";
     }
 

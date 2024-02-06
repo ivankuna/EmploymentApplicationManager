@@ -72,13 +72,15 @@
         <div class="container-fluid">
             <div class="row">
                 <h4 th:text="${title}">Popis podataka</h4>
-                <hr>
+
                 <div class="col-md-12">
                     <hr>
+                    <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
+                </div>
+                <div class="col-md-12">
+<!--                    <hr>-->
                     <a th:href="@{${addLink}}" class="btn btn-primary">Dodaj zapis</a>
                 </div>
-
-                <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
                 <br>
                 <div class="table-responsive">
                     <br>

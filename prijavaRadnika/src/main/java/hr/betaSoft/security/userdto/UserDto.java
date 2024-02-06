@@ -43,7 +43,7 @@ public class UserDto
     @Email
     private String email;
 
-    @NotEmpty(message = "Email za slanje mora biti upisan!")
+    @NotEmpty(message = "Email za prijavu mora biti upisan!")
     @Email
     private String emailToSend;
 

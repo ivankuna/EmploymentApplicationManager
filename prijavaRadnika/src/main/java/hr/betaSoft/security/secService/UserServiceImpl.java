@@ -7,6 +7,7 @@ import hr.betaSoft.security.secRepo.UserRepository;
 import hr.betaSoft.security.userdto.UserDto;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Arrays;
 import java.util.List;
@@ -67,9 +68,18 @@ public class UserServiceImpl implements UserService {
         userRepository.save(user);
     }
 
+    @Transactional
     @Override
-    public void deleteUser(long id) {
-        userRepository.deleteById(id);
+    public void deleteUser(Long id) {
+        User user = userRepository.findById(id).orElse(null);
+
+        if (user != null) {
+            user.getRoles().clear();
+
+            userRepository.save(user);
+
+            userRepository.delete(user);
+        }
     }
 
     @Override

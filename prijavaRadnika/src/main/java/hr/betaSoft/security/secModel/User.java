@@ -1,5 +1,6 @@
 package hr.betaSoft.security.secModel;
 
+import hr.betaSoft.model.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -15,8 +16,7 @@ import java.util.List;
 @AllArgsConstructor
 @Entity
 @Table(name="users")
-public class User
-{
+public class User {
     private static final long serialVersionUID = 1L;
 
     @Id
@@ -53,6 +53,8 @@ public class User
     @Column(nullable=false)
     private String password;
 
+    @OneToMany(mappedBy = "user")
+    private List<Employee> employees;
 
     @ManyToMany(fetch = FetchType.EAGER, cascade=CascadeType.ALL)
     @JoinTable(

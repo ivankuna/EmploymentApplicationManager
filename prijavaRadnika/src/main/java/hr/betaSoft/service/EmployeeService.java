@@ -1,4 +1,12 @@
 package hr.betaSoft.service;
 
-public class EmployeeService {
+import hr.betaSoft.model.Employee;
+
+import java.util.List;
+
+public interface EmployeeService {
+
+    List<Employee> findAll();
+
+    Employee findById(long id);
 }

@@ -43,17 +43,32 @@
                 <form method="POST" role="form" th:action="@{/register/save}" th:object="${user}">
 
                     <div class="form-group mb-3">
-                        <label class="form-label">Naziv firme</label>
+                        <label class="form-label">Naziv tvrtke</label>
                         <input class="form-control"
                                id="company"
                                name="company"
-                               placeholder="Unesite naziv firme"
+                               placeholder="Unesite naziv tvrtke"
                                th:field="*{company}"
                                type="text"
                                required
                         />
                         <p th:errors="*{company}" class="text-danger"
                            th:if="${#fields.hasErrors('company')}">
+                        </p>
+                    </div>
+
+                    <div class="form-group mb-3">
+                        <label class="form-label">OIB</label>
+                        <input class="form-control"
+                               id="oib"
+                               name="oib"
+                               placeholder="Unesite OIB"
+                               th:field="*{oib}"
+                               type="text"
+                               required
+                        />
+                        <p th:errors="*{lastName}" class="text-danger"
+                           th:if="${#fields.hasErrors('oib')}">
                         </p>
                     </div>
 
@@ -88,21 +103,6 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label">OIB</label>
-                        <input class="form-control"
-                               id="oib"
-                               name="oib"
-                               placeholder="Unesite OIB"
-                               th:field="*{oib}"
-                               type="text"
-                               required
-                        />
-                        <p th:errors="*{lastName}" class="text-danger"
-                           th:if="${#fields.hasErrors('oib')}">
-                        </p>
-                    </div>
-
-                    <div class="form-group mb-3">
                         <label class="form-label">Adresa</label>
                         <input class="form-control"
                                id="address"
@@ -118,11 +118,11 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label">Grad</label>
+                        <label class="form-label">Grad ( poštanski broj i naziv )</label>
                         <input class="form-control"
                                id="city"
                                name="city"
-                               placeholder="Unesite naziv grada"
+                               placeholder="Unesite grad"
                                th:field="*{city}"
                                type="text"
                                required
@@ -148,11 +148,11 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label">Email</label>
+                        <label class="form-label">e-mail</label>
                         <input class="form-control"
                                id="email"
                                name="email"
-                               placeholder="Unesite adresu e-pošte"
+                               placeholder="Unesite e-,ail"
                                th:field="*{email}"
                                type="email"
                                required
@@ -163,11 +163,11 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label class="form-label">Email za slanje</label>
+                        <label class="form-label">e-mail za prijavu</label>
                         <input class="form-control"
                                id="emailToSend"
                                name="emailToSend"
-                               placeholder="Unesite adresu e-pošte za slanje"
+                               placeholder="Unesite e-mail za prijavu"
                                th:field="*{emailToSend}"
                                type="email"
                                required
@@ -199,7 +199,7 @@
                                name="password"
                                placeholder="Unesite lozinku"
                                th:field="*{password}"
-                               type="password"
+                               type="text"
                                required
                         />
                         <p th:errors="*{password}" class="text-danger"

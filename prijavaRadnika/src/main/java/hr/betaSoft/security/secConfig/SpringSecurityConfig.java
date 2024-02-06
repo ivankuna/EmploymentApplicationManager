@@ -29,14 +29,16 @@ public class SpringSecurityConfig {
         http.csrf().disable()
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
-                                .requestMatchers("/users/**").hasAnyAuthority("ROLE_ADMIN","ROLE_USER")
+                                .requestMatchers("/authorization").permitAll()
+                                .requestMatchers("/users/**").hasRole("ADMIN")
+                                .requestMatchers("/employees/**").hasRole("USER")
                                 .requestMatchers("/access-denied").permitAll()
                                 .requestMatchers("/**").hasRole("ADMIN")
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
                                 .loginProcessingUrl("/login")
-                                .defaultSuccessUrl("/users", true)
+                                .defaultSuccessUrl("/authorization", true)
                                 .permitAll()
                 ).logout(
                         logout -> logout
