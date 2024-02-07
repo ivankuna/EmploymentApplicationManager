@@ -2,6 +2,7 @@ package hr.betaSoft.service;
 
 import hr.betaSoft.model.Employee;
 import hr.betaSoft.repository.EmployeeRepository;
+import hr.betaSoft.security.secModel.User;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,8 +17,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
-    public Employee findById(long id) {
-        return employeeRepository.findById(id);
+    public void saveEmployee(Employee employee) {
+        employeeRepository.save(employee);
     }
 
     @Override
@@ -25,4 +26,17 @@ public class EmployeeServiceImpl implements EmployeeService {
 
         return employeeRepository.findAll();
     }
+
+    @Override
+    public Employee findById(long id) {
+
+        return employeeRepository.findById(id);
+    }
+
+    @Override
+    public List<Employee> findByUser(User user) {
+
+        return employeeRepository.findByUser(user);
+    }
+
 }

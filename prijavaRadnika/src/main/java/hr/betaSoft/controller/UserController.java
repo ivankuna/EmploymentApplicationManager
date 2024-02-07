@@ -104,17 +104,17 @@ public class UserController {
 
         List<Data> dataList = new ArrayList<>();
 
-        dataList.add(new Data("Naziv tvrtke:", "company","", "",""));;
-        dataList.add(new Data("OIB:", "oib","", "",""));;
-        dataList.add(new Data("Adresa:", "address","", "",""));;
-        dataList.add(new Data("Grad:", "city","", "",""));;
-        dataList.add(new Data("Ime:", "firstName","", "",""));;
-        dataList.add(new Data("Prezime:", "lastName","", "",""));;
-        dataList.add(new Data("Telefon:", "telephone","", "",""));;
-        dataList.add(new Data("e-mail:", "email","", "",""));;
-        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "",""));;
-        dataList.add(new Data("Korisničko ime:", "username","", "",""));;
-        dataList.add(new Data("Lozinka:", "password","", "",""));;
+        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text"));;
+        dataList.add(new Data("OIB:", "oib","", "","","text"));;
+        dataList.add(new Data("Adresa:", "address","", "","","text"));;
+        dataList.add(new Data("Grad:", "city","", "","","text"));;
+        dataList.add(new Data("Ime:", "firstName","", "","","text"));;
+        dataList.add(new Data("Prezime:", "lastName","", "","","text"));;
+        dataList.add(new Data("Telefon:", "telephone","", "","","text"));;
+        dataList.add(new Data("e-mail:", "email","", "","","text"));;
+        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text"));;
+        dataList.add(new Data("Korisničko ime:", "username","", "","","text"));;
+        dataList.add(new Data("Lozinka:", "password","", "","","text"));;
 
         UserDto userDto = (UserDto) model.getAttribute("userDto");
 
@@ -127,7 +127,7 @@ public class UserController {
         model.addAttribute("dataList", dataList);
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
-        model.addAttribute("btnName", "Prihvati");
+        model.addAttribute("btnName", "Spremi");
         model.addAttribute("path", "/users");
 
         return "form";
@@ -139,16 +139,15 @@ public class UserController {
         try {
             List<Data> dataList = new ArrayList<>();
 
-
-            dataList.add(new Data("Naziv tvrtke:", "company","", "",""));;
-            dataList.add(new Data("OIB:", "oib","", "",""));;
-            dataList.add(new Data("Adresa:", "address","", "",""));;
-            dataList.add(new Data("Grad:", "city","", "",""));;
-            dataList.add(new Data("Ime:", "firstName","", "",""));;
-            dataList.add(new Data("Prezime:", "lastName","", "",""));;
-            dataList.add(new Data("Telefon:", "telephone","", "",""));;
-            dataList.add(new Data("e-mail:", "email","", "",""));;
-            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "",""));;
+            dataList.add(new Data("Naziv tvrtke:", "company","", "","","text"));;
+            dataList.add(new Data("OIB:", "oib","", "","","text"));;
+            dataList.add(new Data("Adresa:", "address","", "","","text"));;
+            dataList.add(new Data("Grad:", "city","", "","","text"));;
+            dataList.add(new Data("Ime:", "firstName","", "","","text"));;
+            dataList.add(new Data("Prezime:", "lastName","", "","","text"));;
+            dataList.add(new Data("Telefon:", "telephone","", "","","text"));;
+            dataList.add(new Data("e-mail:", "email","", "","","text"));;
+            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text"));;
 
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
@@ -156,7 +155,7 @@ public class UserController {
             model.addAttribute("dataList", dataList);
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Prihvati");
+            model.addAttribute("btnName", "Ažuriraj");
             model.addAttribute("path", "/users");
             return "form";
         } catch (UserNotFoundException e) {

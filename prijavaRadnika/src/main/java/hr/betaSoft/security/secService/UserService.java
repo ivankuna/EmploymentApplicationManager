@@ -11,19 +11,15 @@ public interface UserService {
 
     void deleteUser(Long id);
 
+    List<User> findAll();
+
+    User findById(long id);
+
     User findByUsername(String username);
 
-    User findByEmail(String email);
-
-    User findByEmailToSend(String emailToSend);
-
-    List<UserDto> findAllUsers();
-
-    List<User> findAll();
+    User getAuthenticatedUser();
 
     long countUsers();
 
     UserDto convertEntityToDto(User user);
-
-    User findById(long id);
 }

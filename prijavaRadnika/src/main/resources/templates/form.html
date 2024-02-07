@@ -50,7 +50,7 @@
             <label th:for="${data.field}" th:text="${data.name}"></label>
 
             <div th:if="${#strings.isEmpty(data.model)}">
-                <input type="text" class="form-control" th:id="${data.field}" th:field="*{__${data.field}__}" required
+                <input th:type="${data.type}"  class="form-control" th:id="${data.field}" th:field="*{__${data.field}__}" required
                        title="Molimo Vas da popunite ovo polje.">
             </div>
 

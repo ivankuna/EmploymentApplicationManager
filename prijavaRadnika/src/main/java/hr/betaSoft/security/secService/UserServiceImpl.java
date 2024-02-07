@@ -5,6 +5,8 @@ import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secRepo.RoleRepository;
 import hr.betaSoft.security.secRepo.UserRepository;
 import hr.betaSoft.security.userdto.UserDto;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -83,39 +85,6 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findByUsername(String username) {
-
-        return userRepository.findByUsername(username);
-    }
-
-    @Override
-    public User findByEmail(String email) {
-
-        return userRepository.findByEmail(email);
-    }
-
-    @Override
-    public User findByEmailToSend(String emailToSend) {
-
-        return userRepository.findByEmailToSend(emailToSend);
-    }
-
-    public boolean isUserTableEmpty() {
-
-        long userCount = userRepository.count();
-        return userCount == 0;
-    }
-
-
-    @Override
-    public List<UserDto> findAllUsers() {
-
-        List<User> users = userRepository.findAll();
-        return users.stream().map((user) ->   convertEntityToDto(user))
-                .collect(Collectors.toList());
-    }
-
-    @Override
     public List<User> findAll() {
 
         return userRepository.findAll();
@@ -123,7 +92,26 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findById(long id) {
+
         return userRepository.findById(id);
+    }
+
+    @Override
+    public User findByUsername(String username) {
+
+        return userRepository.findByUsername(username);
+    }
+
+    @Override
+    public User getAuthenticatedUser() {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        return findByUsername(authentication.getName());
+    }
+
+    public long countUsers() {
+
+        return userRepository.count();
     }
 
     public UserDto convertEntityToDto(User user){
@@ -144,15 +132,16 @@ public class UserServiceImpl implements UserService {
         return userDto;
     }
 
+    public boolean isUserTableEmpty() {
+
+        long userCount = userRepository.count();
+        return userCount == 0;
+    }
+
     private Role checkRoleExist(String role_name) {
 
         Role role = new Role();
         role.setName(role_name);
         return roleRepository.save(role);
-    }
-
-    public long countUsers() {
-
-        return userRepository.count();
     }
 }
