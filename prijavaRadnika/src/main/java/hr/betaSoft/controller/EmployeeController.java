@@ -110,7 +110,7 @@ public class EmployeeController {
     public String deleteEmployee(@PathVariable Long id, RedirectAttributes ra) {
 
         try {
-            userService.deleteUser(id);
+            employeeService.deleteEmployee(id);
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
         }

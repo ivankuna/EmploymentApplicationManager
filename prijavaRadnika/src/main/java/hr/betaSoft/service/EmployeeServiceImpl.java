@@ -4,6 +4,7 @@ import hr.betaSoft.model.Employee;
 import hr.betaSoft.repository.EmployeeRepository;
 import hr.betaSoft.security.secModel.User;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -18,7 +19,19 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public void saveEmployee(Employee employee) {
+
         employeeRepository.save(employee);
+    }
+
+    @Transactional
+    @Override
+    public void deleteEmployee(Long id) {
+
+        Employee employee = employeeRepository.findById(id).orElse(null);
+
+        if (employee != null) {
+            employeeRepository.delete(employee);
+        }
     }
 
     @Override
