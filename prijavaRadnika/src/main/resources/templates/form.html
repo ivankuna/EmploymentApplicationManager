@@ -11,6 +11,8 @@
     <style>
         * {  font-size: 14px; }
     </style>
+
+
 </head>
 <body>
 <div class="content">
@@ -41,7 +43,7 @@
     <h4 th:text="${title}">Podatak</h4>
     <hr>
     <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
-    <form id="myForm" th:object="${class}" th:action="@{${path} + '/save'}" method="POST" >
+    <form id="myForm" th:object="${class}" th:action="@{${path} + '/save'}" method="POST">
 
         <input type="hidden" th:field="*{__${dataId}__}">
 
@@ -49,17 +51,37 @@
 
             <label th:for="${data.field}" th:text="${data.name}"></label>
 
-            <div th:if="${#strings.isEmpty(data.model)}">
-                <input th:type="${data.type}"  class="form-control" th:id="${data.field}" th:field="*{__${data.field}__}" required
-                       title="Molimo Vas da popunite ovo polje.">
-            </div>
+            <div th:if="${data.required == 'true'}">
 
-            <div th:unless="${#strings.isEmpty(data.model)}">
-                <select class="form-control" th:id="${data.field}" th:field="*{__${data.id}__}" required
-                        title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
-                    <option th:each="item : ${__${data.model}__}" th:value="${item[data.field]}"
-                            th:text="${item[data.option]}"></option>
-                </select>
+                <div th:if="${#strings.isEmpty(data.model)}">
+                    <input th:type="${data.type}" class="form-control" th:id="${data.field}"
+                           th:field="*{__${data.field}__}" required
+                           title="Molimo Vas da popunite ovo polje.">
+                </div>
+
+                <div th:unless="${#strings.isEmpty(data.model)}">
+                    <select class="form-control" th:id="${data.field}" th:field="*{__${data.id}__}" required
+                            title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
+                        <option th:each="item : ${__${data.model}__}" th:value="${item[data.field]}"
+                                th:text="${item[data.option]}"></option>
+                    </select>
+                </div>
+            </div>
+            <div th:if="${data.required == 'false'}">
+
+                <div th:if="${#strings.isEmpty(data.model)}">
+                    <input th:type="${data.type}" class="form-control" th:id="${data.field}"
+                           th:field="*{__${data.field}__}"
+                    >
+                </div>
+
+                <div th:unless="${#strings.isEmpty(data.model)}">
+                    <select class="form-control" th:id="${data.field}" th:field="*{__${data.id}__}"
+                            title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
+                        <option th:each="item : ${__${data.model}__}" th:value="${item[data.field]}"
+                                th:text="${item[data.option]}"></option>
+                    </select>
+                </div>
             </div>
         </div>
         <div class="form-group">

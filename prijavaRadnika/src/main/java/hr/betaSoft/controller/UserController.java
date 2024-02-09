@@ -6,6 +6,8 @@ import hr.betaSoft.security.secService.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.Column;
 import hr.betaSoft.tools.Data;
+import hr.betaSoft.tools.DeviceDetector;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -72,20 +74,28 @@ public class UserController {
     }
 
     @GetMapping("/users")
-    public String showUsers(Model model) {
+    public String showUsers(Model model, HttpServletRequest request) {
+
+        DeviceDetector deviceDetector = new DeviceDetector();
+        boolean isMobile = deviceDetector.isMobileDevice(request);
 
         List<Column> columnList = new ArrayList<>();
 
-        columnList.add(new Column("ID", "id", "id"));
-        columnList.add(new Column("Korisničko ime", "username", "id"));
-        columnList.add(new Column("OIB", "oib", "id"));
-        columnList.add(new Column("Naziv tvrtke", "company", "id"));
-        columnList.add(new Column("Adresa", "address", "id"));
-        columnList.add(new Column("Naziv grada", "city", "id"));
-        columnList.add(new Column("Osoba", "name", "id"));
-        columnList.add(new Column("Telefon", "telephone", "id"));
-        columnList.add(new Column("e-mail", "email", "id"));
-        columnList.add(new Column("e-mail za prijavu", "emailToSend", "id"));
+        if (isMobile) {
+            columnList.add(new Column("Naziv tvrtke", "company", "id"));
+            columnList.add(new Column("Korisničko ime", "username", "id"));
+        } else {
+            columnList.add(new Column("ID", "id", "id"));
+            columnList.add(new Column("Korisničko ime", "username", "id"));
+            columnList.add(new Column("OIB", "oib", "id"));
+            columnList.add(new Column("Naziv tvrtke", "company", "id"));
+            columnList.add(new Column("Adresa", "address", "id"));
+            columnList.add(new Column("Naziv grada", "city", "id"));
+            columnList.add(new Column("Osoba", "name", "id"));
+            columnList.add(new Column("Telefon", "telephone", "id"));
+            columnList.add(new Column("e-mail", "email", "id"));
+            columnList.add(new Column("e-mail za prijavu", "emailToSend", "id"));
+        }
 
         List<User> userList = userService.findAll();
         model.addAttribute("dataList", userList);
@@ -104,17 +114,19 @@ public class UserController {
 
         List<Data> dataList = new ArrayList<>();
 
-        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text"));;
-        dataList.add(new Data("OIB:", "oib","", "","","text"));;
-        dataList.add(new Data("Adresa:", "address","", "","","text"));;
-        dataList.add(new Data("Grad:", "city","", "","","text"));;
-        dataList.add(new Data("Ime:", "firstName","", "","","text"));;
-        dataList.add(new Data("Prezime:", "lastName","", "","","text"));;
-        dataList.add(new Data("Telefon:", "telephone","", "","","text"));;
-        dataList.add(new Data("e-mail:", "email","", "","","text"));;
-        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text"));;
-        dataList.add(new Data("Korisničko ime:", "username","", "","","text"));;
-        dataList.add(new Data("Lozinka:", "password","", "","","text"));;
+        List<String> items = new ArrayList<>();
+
+        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
+        dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
+        dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
+        dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
+        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+        dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
+        dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
+        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
+        dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", items));;
+        dataList.add(new Data("Lozinka:", "password","", "","","text", "true", items));;
 
         UserDto userDto = (UserDto) model.getAttribute("userDto");
 
@@ -139,15 +151,17 @@ public class UserController {
         try {
             List<Data> dataList = new ArrayList<>();
 
-            dataList.add(new Data("Naziv tvrtke:", "company","", "","","text"));;
-            dataList.add(new Data("OIB:", "oib","", "","","text"));;
-            dataList.add(new Data("Adresa:", "address","", "","","text"));;
-            dataList.add(new Data("Grad:", "city","", "","","text"));;
-            dataList.add(new Data("Ime:", "firstName","", "","","text"));;
-            dataList.add(new Data("Prezime:", "lastName","", "","","text"));;
-            dataList.add(new Data("Telefon:", "telephone","", "","","text"));;
-            dataList.add(new Data("e-mail:", "email","", "","","text"));;
-            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text"));;
+            List<String> items = new ArrayList<>();
+
+            dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
+            dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
+            dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
+            dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
+            dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+            dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+            dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
+            dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
+            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
 
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 

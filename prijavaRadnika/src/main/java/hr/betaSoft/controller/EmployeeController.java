@@ -37,6 +37,7 @@ public class EmployeeController {
         columnList.add(new Column("Ime", "firstName", "id"));
         columnList.add(new Column("Prezime", "lastName", "id"));
         columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
+        columnList.add(new Column("Umirovljenik", "retiree", "id"));
 
         List<Employee> employeeList = employeeService.findByUser(userService.getAuthenticatedUser());
         model.addAttribute("dataList", employeeList);
@@ -55,10 +56,20 @@ public class EmployeeController {
 
         List<Data> dataList = new ArrayList<>();
 
-        dataList.add(new Data("Ime:", "firstName","", "","","text"));;
-        dataList.add(new Data("Prezime:", "lastName","", "","","text"));;
-        dataList.add(new Data("OIB:", "oib","", "","","text"));;
-        dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date"));;
+        List<String> items = new ArrayList<>();
+
+
+        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+        dataList.add(new Data("Spol:", "gender","", "","","text", "false",Employee.GENDER ));;
+        dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
+        dataList.add(new Data("JMBG:", "jmbg","", "","","text", "true", items));;
+        dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date", "true", items));;
+        dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
+        dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
+        dataList.add(new Data("Osobni broj osiguranika HZMO:", "hzmoInsuranceNumber","", "","","text", "true", items));;
+        dataList.add(new Data("Najviša stručna sprema:", "highestProfessionalQualification","", "","","text", "true", items));;
+        dataList.add(new Data("Grad:", "highestLevelOfEducation","", "","","text", "true", items));;
 
         model.addAttribute("class", new Employee());
 
@@ -77,10 +88,16 @@ public class EmployeeController {
         try {
             List<Data> dataList = new ArrayList<>();
 
-            dataList.add(new Data("Ime:", "firstName","", "","","text"));;
-            dataList.add(new Data("Prezime:", "lastName","", "","","text"));;
-            dataList.add(new Data("OIB:", "oib","", "","","text"));;
-            dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date"));;
+            List<String> items = new ArrayList<>();
+
+
+            dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+            dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+            dataList.add(new Data("Spol:", "gender","", "","","text", "false",Employee.GENDER ));;
+            dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
+            dataList.add(new Data("JMBG:", "jmbg","", "","","text", "true", items));;
+            dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date", "true", items));;
+            dataList.add(new Data("Umirovljenik:", "retiree","", "","","checkbox", "false", items));;
 
             Employee employee = employeeService.findById(id);
 
