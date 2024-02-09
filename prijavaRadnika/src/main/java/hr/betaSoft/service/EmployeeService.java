@@ -16,4 +16,6 @@ public interface EmployeeService {
     Employee findById(long id);
 
     List<Employee> findByUser(User user);
+
+    boolean checkOib(String oib);
 }

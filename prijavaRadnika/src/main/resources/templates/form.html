@@ -71,7 +71,8 @@
 
                 <!--  ITEMS -->
                 <div th:if="${data.items != null and data.items.size() > 0}">
-                    <select class="form-control" th:id="${data.field}" th:field="${data.field}" required
+                    <select class="form-control" th:id="${data.field}"
+                            th:field="*{__${data.field}__}" required
                             title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
                         <option th:each="item : ${data.items}" th:value="${item}"
                                 th:text="${item}"></option>
@@ -98,7 +99,8 @@
                 </div>
 
                 <div th:if="${data.items != null and data.items.size() > 0}">
-                    <select class="form-control" th:id="${data.field}" th:field="${data.field}"
+                    <select class="form-control" th:id="${data.field}"
+                            th:field="*{__${data.field}__}"
                             title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
                         <option th:each="item : ${data.items}" th:value="${item}"
                                 th:text="${item}"></option>
