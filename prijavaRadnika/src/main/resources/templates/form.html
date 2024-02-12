@@ -20,7 +20,7 @@
 <div class="content">
     <!-- NAVBAR -->
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <a class="navbar-brand" href="#">betaSoft (c)</a>
+        <a class="navbar-brand" href="#">Sustav za prijavu radnika - betaSoft (c)</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -45,7 +45,7 @@
     <h4 th:text="${title}">Podatak</h4>
     <hr>
     <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
-    <form id="myForm" th:object="${class}" th:action="@{${path} + '/save'}" method="POST">
+    <form id="myForm" th:object="${class}" th:action="@{${path_save}}" method="POST">
 
         <input type="hidden" th:field="*{__${dataId}__}">
 
@@ -111,8 +111,11 @@
         </div>
         <div class="form-group">
             <button type="submit" class="btn btn-primary" th:text="${btnName}"></button>
-            <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${path}]]">Odustani
+            <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${path_show}]]">Odustani
             </button>
+        </div>
+        <div class="row">
+            <br/><br/>
         </div>
     </form>
 </div>

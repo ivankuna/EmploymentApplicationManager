@@ -30,9 +30,14 @@ public class SpringSecurityConfig {
                 .authorizeHttpRequests((authorize) ->
                         authorize.requestMatchers("/register/**").permitAll()
                                 .requestMatchers("/authorization").permitAll()
+                                .requestMatchers("/work_in_progress").permitAll()
+                                .requestMatchers("/access-denied").permitAll()
                                 .requestMatchers("/users/**").hasRole("ADMIN")
                                 .requestMatchers("/employees/**").hasRole("USER")
-                                .requestMatchers("/access-denied").permitAll()
+                                .requestMatchers("/prijava/**").hasRole("USER")
+                                .requestMatchers("/promjena/**").hasRole("USER")
+                                .requestMatchers("/odjava/**").hasRole("USER")
+                                .requestMatchers("/postavke/**").hasRole("USER")
                                 .requestMatchers("/**").hasRole("ADMIN")
                 ).formLogin(
                         form -> form

@@ -2,7 +2,10 @@ package hr.betaSoft.controller;
 
 import hr.betaSoft.exception.EmployeeNotFoundException;
 import hr.betaSoft.model.Employee;
+import hr.betaSoft.security.exception.UserNotFoundException;
+import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
+import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.Column;
 import hr.betaSoft.tools.Data;
@@ -11,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -30,7 +34,7 @@ public class EmployeeController {
         this.userService = userService;
     }
 
-    @GetMapping("/employees")
+    @GetMapping("/employees/show")
     public String showEmployees(Model model, HttpServletRequest request) {
 
         DeviceDetector deviceDetector = new DeviceDetector();
@@ -52,31 +56,33 @@ public class EmployeeController {
             columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
             columnList.add(new Column("Adresa", "address", "id"));
             columnList.add(new Column("Grad", "city", "id"));
-            columnList.add(new Column("Osobni broj osiguranika HZMO", "city", "id"));
-            columnList.add(new Column("Najviša stručna sprema", "highestProfessionalQualification", "id"));
-            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));
-            columnList.add(new Column("Radno mjesto", "employmentPosition", "id"));
-            columnList.add(new Column("Ugovor o radu", "employmentContract", "id"));
-            columnList.add(new Column("Razlog - na određeno", "reasonForDefinite", "id"));
-            columnList.add(new Column("Radno vrijeme", "workingHours", "id"));
-            columnList.add(new Column("Sati nepuno", "hoursForPartTime", "id"));
-            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
-            columnList.add(new Column("Datum odjave - za određeno", "dateOfSignOut", "id"));
-            columnList.add(new Column("Iznos osnovne plaće", "basicSalary", "id"));
-            columnList.add(new Column("Bruto/Neto", "salaryType", "id"));
-            columnList.add(new Column("Strani državljanin", "foreignNational", "id"));
-            columnList.add(new Column("Radna dozvola vrijedi do", "expiryDateOfWorkPermit", "id"));
-            columnList.add(new Column("Umirovljenik", "retiree", "id"));
-            columnList.add(new Column("Mlađi od 30 godina", "youngerThanThirty", "id"));
-            columnList.add(new Column("Prvo zaposlenje", "firstEmployment", "id"));
-            columnList.add(new Column("Invalid", "disability", "id"));
-            columnList.add(new Column("Napomena", "note", "id"));
+//            columnList.add(new Column("Osobni broj osiguranika HZMO", "city", "id"));
+//            columnList.add(new Column("Najviša stručna sprema", "highestProfessionalQualification", "id"));
+//            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));
+//            columnList.add(new Column("Radno mjesto", "employmentPosition", "id"));
+//            columnList.add(new Column("Ugovor o radu", "employmentContract", "id"));
+//            columnList.add(new Column("Razlog - na određeno", "reasonForDefinite", "id"));
+//            columnList.add(new Column("Radno vrijeme", "workingHours", "id"));
+//            columnList.add(new Column("Sati nepuno", "hoursForPartTime", "id"));
+//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
+//            columnList.add(new Column("Datum odjave - za određeno", "dateOfSignOut", "id"));
+//            columnList.add(new Column("Iznos osnovne plaće", "basicSalary", "id"));
+//            columnList.add(new Column("Bruto/Neto", "salaryType", "id"));
+//            columnList.add(new Column("Strani državljanin", "foreignNational", "id"));
+//            columnList.add(new Column("Radna dozvola vrijedi do", "expiryDateOfWorkPermit", "id"));
+//            columnList.add(new Column("Umirovljenik", "retiree", "id"));
+//            columnList.add(new Column("Mlađi od 30 godina", "youngerThanThirty", "id"));
+//            columnList.add(new Column("Prvo zaposlenje", "firstEmployment", "id"));
+//            columnList.add(new Column("Invalid", "disability", "id"));
+//            columnList.add(new Column("Napomena", "note", "id"));
         }
 
         List<Employee> employeeList = employeeService.findByUser(userService.getAuthenticatedUser());
         model.addAttribute("dataList", employeeList);
 
         model.addAttribute("title", "Popis radnika");
+        model.addAttribute("dodajNaziv", "Dodaj radnika");
+        model.addAttribute("path", "/employees");
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
@@ -133,7 +139,8 @@ public class EmployeeController {
         model.addAttribute("title", "Radnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
-        model.addAttribute("path", "/employees");
+        model.addAttribute("path_save", "/employees/save");
+        model.addAttribute("path_show", "/employees/show");
 
         return "form";
     }
@@ -187,11 +194,12 @@ public class EmployeeController {
             model.addAttribute("title", "Radnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
-            model.addAttribute("path", "/employees");
+            model.addAttribute("path_save", "/employees/save");
+            model.addAttribute("path_show", "/employees/show");
             return "form";
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/employees";
+            return "redirect:/employees/show";
         }
     }
 
@@ -211,7 +219,7 @@ public class EmployeeController {
         employee.setUser(userService.getAuthenticatedUser());
         employeeService.saveEmployee(employee);
 
-        return "redirect:/employees";
+        return "redirect:/employees/show";
     }
 
     @GetMapping("/employees/delete/{id}")
@@ -222,6 +230,65 @@ public class EmployeeController {
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
         }
+        return "redirect:/employees/show";
+    }
+
+    @GetMapping("employees/user/update/{id}")
+    public String showEditUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
+
+        try {
+            List<Data> dataList = new ArrayList<>();
+
+            List<String> items = new ArrayList<>();
+
+            dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
+            dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
+            dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
+            dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
+            dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+            dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+            dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
+            dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
+            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
+
+            UserDto user = userService.convertEntityToDto(userService.findById(id));
+
+            model.addAttribute("class", user);
+            model.addAttribute("dataList", dataList);
+            model.addAttribute("title", "Korisnik");
+            model.addAttribute("dataId", "id");
+            model.addAttribute("btnName", "Ažuriraj");
+            model.addAttribute("path_save", "/employees/user/save");
+            model.addAttribute("path_show", "/employees");
+            return "form";
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/employees";
+        }
+    }
+    @PostMapping("/employees/user/save")
+    public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) {
+
+        User usernameExists = userService.findByUsername(userDto.getUsername());
+
+        if (usernameExists != null) {
+            ra.addFlashAttribute("userDto", userDto);
+            ra.addFlashAttribute("message", "Već postoji račun registriran s tim korisničkim imenom.");
+            return "redirect:/users/new";
+        }
+
+        if (result.hasErrors()) {
+            return showAddForm(model);
+        }
+
+        if (userDto.getId() != null) {
+            userDto.setUsername(userService.findById(userDto.getId()).getUsername());
+            userDto.setPassword(userService.findById(userDto.getId()).getPassword());
+        }
+
+        userService.saveUser(userDto);
         return "redirect:/employees";
     }
+
+
 }

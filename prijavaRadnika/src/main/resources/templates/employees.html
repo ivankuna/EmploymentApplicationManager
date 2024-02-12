@@ -12,6 +12,7 @@
         * {  font-size: 14px; }
         .btn { height: 120px; } /* Dodani stil za visinu gumba */
 
+
     </style>
 </head>
 <body>
@@ -40,12 +41,40 @@
     <!--IZBORNIK-->
     <div class="row mt-4">
         <div class="col-md-10 offset-md-1">
-
             <div class="row">
                 <div class="col-md-6">
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/users/show'">
-                        <span style="font-size:16px">Evidencija korisnika</span><br/>
-                        <span style="font-size:12px">( pregled i unos korisnika aplikacije )</span>
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/employees/show'">
+                        <span style="font-size:16px">Evidencija radnika</span><br/><br/>
+                        <span style="font-size:12px">( pregled i unos radnika )</span>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/postavke'">
+                        <span style="font-size:16px">Postavke</span><br/><br/>
+                        <span style="font-size:12px">( uređivanje podataka korisnika programa )</span>
+                    </button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/prijava'">
+                        <span style="font-size:16px">Prijava radnika</span><br/><br/>
+                        <span style="font-size:12px">( slanje prijave radnika )</span>
+                    </button>
+                </div>
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/promjena'">
+                        <span style="font-size:16px">Promjena podataka</span><br/><br/>
+                        <span style="font-size:12px">( slanje promjene podataka za radnika )</span>
+                    </button>
+                </div>
+
+            </div>
+            <div class="row">
+                <div class="col-md-6">
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/odjava'">
+                        <span style="font-size:16px">Odjava radnika</span><br/><br/>
+                        <span style="font-size:12px">( slanje odjave radnika )</span>
                     </button>
                 </div>
                 <div class="col-md-6">
@@ -59,7 +88,7 @@
             </div>
         </div>
     </div>
-
+</div>
 
 </div>
 

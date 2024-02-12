@@ -34,46 +34,29 @@ public class UserController {
         this.userService = userService;
     }
 
-    @GetMapping("/authorization")
-    public String authorization() {
+//    @GetMapping("/login")
+//    public String loginForm(Model model) {
+//
+//        if (userService.countUsers() != 0) {
+//            return "login";
+//        }
+//        return showRegistrationForm(model);
+//    }
+//
+//    @GetMapping("/register")
+//    public String showRegistrationForm(Model model){
+//        UserDto user = new UserDto();
+//        model.addAttribute("user", user);
+//        return "register";
+//    }
+//
+//    @PostMapping("/register/save")
+//    public String registration(@Valid @ModelAttribute("user") UserDto user) {
+//        userService.saveUser(user);
+//        return "redirect:/login?success";
+//    }
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
-
-        List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
-
-        if (authorityList.get(0).getAuthority().equals("ROLE_ADMIN")) {
-            return "redirect:/users";
-        } else {
-            return "redirect:/employees";
-        }
-    }
-
-    @GetMapping("/login")
-    public String loginForm(Model model) {
-
-        if (userService.countUsers() != 0) {
-            return "login";
-        }
-        return showRegistrationForm(model);
-    }
-
-    @GetMapping("/register")
-    public String showRegistrationForm(Model model){
-        UserDto user = new UserDto();
-        model.addAttribute("user", user);
-        return "register";
-    }
-
-    @PostMapping("/register/save")
-    public String registration(@Valid @ModelAttribute("user") UserDto user) {
-
-        userService.saveUser(user);
-        return "redirect:/login?success";
-    }
-
-    @GetMapping("/users")
+    @GetMapping("/users/show")
     public String showUsers(Model model, HttpServletRequest request) {
 
         DeviceDetector deviceDetector = new DeviceDetector();
@@ -101,6 +84,8 @@ public class UserController {
         model.addAttribute("dataList", userList);
 
         model.addAttribute("title", "Popis korisnika");
+        model.addAttribute("dodajNaziv", "Dodaj korisnika");
+        model.addAttribute("path", "/users");
         model.addAttribute("addLink", "/users/new");
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
@@ -140,7 +125,8 @@ public class UserController {
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
-        model.addAttribute("path", "/users");
+        model.addAttribute("path_save", "/users/save");
+        model.addAttribute("path_show", "/users/show");
 
         return "form";
     }
@@ -170,11 +156,12 @@ public class UserController {
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
-            model.addAttribute("path", "/users");
+            model.addAttribute("path_save", "/users/save");
+            model.addAttribute("path_show", "/users/show");
             return "form";
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/users";
+            return "redirect:/users/show";
         }
     }
 
@@ -199,7 +186,7 @@ public class UserController {
         }
 
         userService.saveUser(userDto);
-        return "redirect:/users";
+        return "redirect:/users/show";
     }
 
     @GetMapping("/users/delete/{id}")
@@ -213,7 +200,7 @@ public class UserController {
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
         }
-        return "redirect:/users";
+        return "redirect:/users/show";
     }
 
     @GetMapping("/access-denied")
