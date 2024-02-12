@@ -54,6 +54,12 @@ User {
     @Column(nullable=false)
     private String password;
 
+    @Column(nullable=false)
+    private String smtpMail;
+
+    @Column(nullable=false)
+    private String smtpPass;
+
     @OneToMany(mappedBy = "user")
     private List<Employee> employees;
 

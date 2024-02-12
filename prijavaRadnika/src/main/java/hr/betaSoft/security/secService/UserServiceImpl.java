@@ -34,6 +34,7 @@ public class UserServiceImpl implements UserService {
     public void saveUser(UserDto userDto) {
 
         String role_name = "";
+        Long tempId = 0L;
 
         User user = new User();
         user.setCompany(userDto.getCompany());
@@ -44,16 +45,19 @@ public class UserServiceImpl implements UserService {
         user.setTelephone(userDto.getTelephone());
         user.setEmail(userDto.getEmail());
         user.setEmailToSend(userDto.getEmailToSend());
+        user.setSmtpMail(userDto.getSmtpMail());
+        user.setSmtpPass(userDto.getSmtpPass());
         user.setUsername(userDto.getUsername());
 
         if (userDto.getId() != null) {
             user.setId(userDto.getId());
             user.setPassword(userDto.getPassword());
+            tempId = userDto.getId();
         } else {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
 
-        if (isUserTableEmpty() || user.getId() == 1) {
+        if (isUserTableEmpty() || tempId == 1L) {
             role_name = "ROLE_ADMIN";
         } else {
             role_name = "ROLE_USER";
@@ -128,6 +132,8 @@ public class UserServiceImpl implements UserService {
         userDto.setTelephone(user.getTelephone());
         userDto.setEmail(user.getEmail());
         userDto.setEmailToSend(user.getEmailToSend());
+        userDto.setSmtpMail(user.getSmtpMail());
+        userDto.setSmtpPass(user.getSmtpPass());
 
         return userDto;
     }

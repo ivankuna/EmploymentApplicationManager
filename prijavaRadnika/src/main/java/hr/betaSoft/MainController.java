@@ -112,5 +112,4 @@ public class MainController {
     public String odjavaRadnika() {
         return "work-in-progress";
     }
-
 }

@@ -78,6 +78,8 @@ public class UserController {
             columnList.add(new Column("Telefon", "telephone", "id"));
             columnList.add(new Column("e-mail", "email", "id"));
             columnList.add(new Column("e-mail za prijavu", "emailToSend", "id"));
+            columnList.add(new Column("e-mail za slanje", "smtpMail", "id"));
+            columnList.add(new Column("lozinka za slanje", "smtpPass", "id"));
         }
 
         List<User> userList = userService.findAll();
@@ -110,6 +112,8 @@ public class UserController {
         dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
         dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
         dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
+        dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", items));;
+        dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", items));;
         dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", items));;
         dataList.add(new Data("Lozinka:", "password","", "","","text", "true", items));;
 
@@ -148,6 +152,8 @@ public class UserController {
             dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
             dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
             dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
+            dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", items));;
+            dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", items));;
 
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
