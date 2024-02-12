@@ -56,6 +56,12 @@ public class EmployeeController {
             columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
             columnList.add(new Column("Adresa", "address", "id"));
             columnList.add(new Column("Grad", "city", "id"));
+
+            columnList.add(new Column("Poslana prijava", "signUpSent", "id"));
+            columnList.add(new Column("Poslana odjava", "signOutSent", "id"));
+
+            columnList.add(new Column("Datum slanja prijave", "dateOfSignUpSent", "id"));
+            columnList.add(new Column("Datum slanja odjave", "dateOfSignOutSent", "id"));
 //            columnList.add(new Column("Osobni broj osiguranika HZMO", "city", "id"));
 //            columnList.add(new Column("Najviša stručna sprema", "highestProfessionalQualification", "id"));
 //            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));

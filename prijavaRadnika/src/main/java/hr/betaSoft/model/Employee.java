@@ -42,80 +42,92 @@ public class Employee {
     @Column(nullable=false)
     private String lastName;
 
-    @Column(nullable=false)
+    @Column
     private String gender;
 
-    @Column(nullable=false)
+    @Column
     private String oib;
 
-    @Column(nullable=true)
+    @Column
     private String jmbg;
 
-    @Column(nullable=false)
+    @Column
     private Date dateOfBirth;
 
-    @Column(nullable=false)
+    @Column
     private String address;
 
-    @Column(nullable=false)
+    @Column
     private String city;
 
-    @Column(nullable=true)
+    @Column
     private String hzmoInsuranceNumber;
 
-    @Column(nullable=false)
+    @Column
     private String highestProfessionalQualification;
 
-    @Column(nullable=false)
+    @Column
     private String highestLevelOfEducation;
 
-    @Column(nullable=false)
+    @Column
     private String employmentPosition;
 
-    @Column(nullable=false)
+    @Column
     private String employmentContract;
 
-    @Column(nullable=true)
+    @Column
     private String reasonForDefinite;
 
-    @Column(nullable=false)
+    @Column
     private String workingHours;
 
-    @Column(nullable=true)
+    @Column
     private Integer hoursForPartTime;
 
-    @Column(nullable=false)
+    @Column
     private Date dateOfSignUp;
 
-    @Column(nullable=true)
+    @Column
     private Date dateOfSignOut;
 
-    @Column(nullable=false)
+    @Column
     private BigDecimal basicSalary;
 
-    @Column(nullable=false)
+    @Column
     private String salaryType;
 
-    @Column(nullable=false)
+    @Column
     private boolean foreignNational;
 
-    @Column(nullable=true)
+    @Column
     private Date expiryDateOfWorkPermit;
 
-    @Column(nullable=false)
+    @Column
     private boolean retiree;
 
-    @Column(nullable=false)
+    @Column
     private boolean youngerThanThirty;
 
-    @Column(nullable=false)
+    @Column
     private boolean firstEmployment;
 
-    @Column(nullable=false)
+    @Column
     private boolean disability;
 
-    @Column(nullable=true)
+    @Column
     private String note;
+
+    @Column
+    private boolean signUpSent;
+
+    @Column
+    private boolean signOutSent;
+
+    @Column
+    private Date dateOfSignUpSent;
+
+    @Column
+    private Date dateOfSignOutSent;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

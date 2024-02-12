@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
             user.setPassword(passwordEncoder.encode(userDto.getPassword()));
         }
 
-        if (isUserTableEmpty()) {
+        if (isUserTableEmpty() || user.getId() == 1) {
             role_name = "ROLE_ADMIN";
         } else {
             role_name = "ROLE_USER";
