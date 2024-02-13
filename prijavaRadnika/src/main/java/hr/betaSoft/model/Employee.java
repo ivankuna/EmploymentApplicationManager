@@ -1,11 +1,13 @@
 package hr.betaSoft.model;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hr.betaSoft.security.secModel.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -26,7 +28,7 @@ public class Employee {
 
     public static final List<String>  PROFESSIONAL_QUALIFICATION = Arrays.asList("NKV", "PKV", "NSS", "KV", "SSS", "VKV", "VŠS", "VSS");
 
-    public static final List<String> EMPLOYMENT_CONTRACT = Arrays.asList("Određeno", "Neodređeno");
+    public static final List<String> EMPLOYMENT_CONTRACT = Arrays.asList("Određeno", "Neodređeno", "Dodatni", "Sezonski");
 
     public static final List<String> WORKING_HOURS = Arrays.asList("Puno", "Nepuno");
 
@@ -51,7 +53,8 @@ public class Employee {
     @Column
     private String jmbg;
 
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
 
     @Column
@@ -84,10 +87,12 @@ public class Employee {
     @Column
     private Integer hoursForPartTime;
 
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date dateOfSignUp;
 
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date dateOfSignOut;
 
     @Column
@@ -99,7 +104,8 @@ public class Employee {
     @Column
     private boolean foreignNational;
 
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date expiryDateOfWorkPermit;
 
     @Column
@@ -123,10 +129,12 @@ public class Employee {
     @Column
     private boolean signOutSent;
 
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date dateOfSignUpSent;
 
-    @Column
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
     private Date dateOfSignOutSent;
 
     @ManyToOne

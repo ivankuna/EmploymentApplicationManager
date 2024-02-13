@@ -16,9 +16,6 @@
           font-size: 14px;
         }
 
-        }
-
-
     </style>
 </head>
 <body>
@@ -58,7 +55,6 @@
                     <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
                 </div>
                 <div class="col-md-12">
-<!--                    <a th:href="@{${path}}" class="btn btn-primary">Povratak u izbornik</a>-->
                     <a th:href="@{${addLink}}" class="btn btn-primary" th:text="${dodajNaziv}">Dodaj</a>
                 </div>
                 <br>
@@ -87,7 +83,6 @@
                 <div class="col-md-12">
                     <br>
                     <a th:href="@{${path}}" class="btn btn-primary">Povratak u izbornik</a>
-<!--                    <a th:href="@{${addLink}}" class="btn btn-primary" th:text="${dodajNaziv}">Dodaj</a>-->
                 </div>
             </div>
         </div>
@@ -108,33 +103,7 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
-
-<script>
-
-    $(document).ready(function() {
-        $('#myTable').DataTable( {
-            "language": {
-                "lengthMenu": "Prikaži _MENU_ zapisa po stranici",
-                "zeroRecords": "Nema pronađenih zapisa",
-                "info": "Stranica _PAGE_ od _PAGES_",
-                "infoEmpty": "Nema dostupnih zapisa",
-                "infoFiltered": "",
-                "search": "Filtriraj:",
-                "paginate": {
-                    "first": "Prva",
-                    "previous": "Prethodna",
-                    "next": "Slijedeća",
-                    "last": "Zadnja"
-                },
-                "emptyTable": "Nema dostupnih podataka u tablici",
-                "loadingRecords": "Učitavanje...",
-                "processing": "Obrada..."
-            }
-        } );
-    } );
-
-
-</script>
+<script type="text/javascript" src="/js/script-table.js"></script>
 
 </body>
 </html>
