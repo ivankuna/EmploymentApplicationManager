@@ -105,8 +105,8 @@ public class EmployeeController {
         List<Employee> employeeList = employeeService.findByUser(userService.getAuthenticatedUser());
         model.addAttribute("dataList", employeeList);
 
-        model.addAttribute("title", "Popis radnika");
-        model.addAttribute("dodajNaziv", "Dodaj radnika");
+        model.addAttribute("title", "PRIJAVA RADNIKA");
+        model.addAttribute("dodajNaziv", "Novi nalog");
         model.addAttribute("path", "/employees");
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
@@ -114,6 +114,7 @@ public class EmployeeController {
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("columnList", columnList);
         model.addAttribute("sendMail", "YES");
+        model.addAttribute("isMobile", "isMobile");
 
         return "table";
     }

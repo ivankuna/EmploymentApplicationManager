@@ -10,7 +10,7 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <style>
         * {  font-size: 14px; }
-        .btn { height: 120px; } /* Dodani stil za visinu gumba */
+        .btn { height: 100px; }
 
 
     </style>
@@ -39,48 +39,34 @@
         </div>
     </nav>
     <!--IZBORNIK-->
-    <div class="row mt-4">
-        <div class="col-md-10 offset-md-1">
+    <div class="container mt-4">
+        <div class="col-md-6 offset-md-3">
             <div class="row">
                 <div class="col-md-6">
                     <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/employees/show'">
-                        <span style="font-size:16px">Evidencija radnika</span><br/><br/>
-                        <span style="font-size:12px">( pregled i unos radnika )</span>
+                        <span>Prijava radnika</span>
                     </button>
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/postavke'">
-                        <span style="font-size:16px">Postavke</span><br/><br/>
-                        <span style="font-size:12px">( uređivanje podataka korisnika programa )</span>
-                    </button>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-md-6">
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/prijava'">
-                        <span style="font-size:16px">Prijava radnika</span><br/><br/>
-                        <span style="font-size:12px">( slanje prijave radnika )</span>
-                    </button>
-                </div>
-                <div class="col-md-6">
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/promjena'">
-                        <span style="font-size:16px">Promjena podataka</span><br/><br/>
-                        <span style="font-size:12px">( slanje promjene podataka za radnika )</span>
-                    </button>
-                </div>
 
-            </div>
-            <div class="row">
-                <div class="col-md-6">
                     <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/odjava'">
-                        <span style="font-size:16px">Odjava radnika</span><br/><br/>
-                        <span style="font-size:12px">( slanje odjave radnika )</span>
+                        <span>Odjava radnika</span>
                     </button>
-                </div>
-                <div class="col-md-6">
+
+
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/promjena'">
+                        <span>Promjena kod radnika</span>
+                    </button>
+
+
+                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/postavke'">
+                        <span>Postavke</span>
+                    </button>
+
                     <button class="btn btn-dark btn-block mb-3" onclick="window.location.href='/logout'">
-                        <span style="font-size:16px">Odjava</span>
+                        <span>Odjava</span>
                     </button>
+
+
+
                 </div>
             </div>
             <div class="row">

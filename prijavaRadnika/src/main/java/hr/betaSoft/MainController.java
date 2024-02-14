@@ -84,10 +84,10 @@ public class MainController {
         return "employees";
     }
 
-    @GetMapping("/prijava")
-    public String prijavaRadnika() {
-        return "work-in-progress";
-    }
+//    @GetMapping("/prijava")
+//    public String prijavaRadnika() {
+//        return "work-in-progress";
+//    }
 
     @GetMapping("/promjena")
     public String promjenaRadnika() {

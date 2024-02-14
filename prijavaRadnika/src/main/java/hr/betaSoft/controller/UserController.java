@@ -95,6 +95,7 @@ public class UserController {
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("columnList", columnList);
         model.addAttribute("sendMail", "NO");
+        model.addAttribute("isMobile", "isMobile");
 
         return "table";
     }
