@@ -8,10 +8,12 @@ import java.util.Properties;
 public class SendMail {
 
     public static void sendMail(Integer kontrola) {
+
         final String username = "betasoft@abel.hr";
         final String password = "Betasoft1503";
         final String host = "mail.abel.hr";
         final int port = 465;
+
         final String receiverEmail = "sinisa.kuna@yahoo.com";
 
         Properties props = new Properties();

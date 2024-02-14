@@ -90,9 +90,11 @@ public class UserController {
         model.addAttribute("dodajNaziv", "Dodaj korisnika");
         model.addAttribute("path", "/users");
         model.addAttribute("addLink", "/users/new");
+        model.addAttribute("sendLink", "");
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("columnList", columnList);
+        model.addAttribute("sendMail", "NO");
 
         return "table";
     }
