@@ -66,6 +66,12 @@ public class Employee {
     private String highestLevelOfEducation;
 
     @Column
+    private String ibanRegular;
+
+    @Column
+    private String ibanProtected;
+
+    @Column
     private String employmentPosition;
 
     @Column
@@ -79,6 +85,12 @@ public class Employee {
 
     @Column
     private String reasonForDefinite;
+
+    @Column
+    private boolean additionalWork;
+
+    @Column
+    private Integer additionalWorkHours;
 
     @Column
     private String workingHours;

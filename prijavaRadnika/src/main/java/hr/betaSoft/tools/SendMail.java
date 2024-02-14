@@ -1,5 +1,9 @@
 package hr.betaSoft.tools;
 
+import hr.betaSoft.model.Employee;
+import hr.betaSoft.security.secService.UserService;
+import hr.betaSoft.service.EmployeeService;
+
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -7,7 +11,13 @@ import java.util.Properties;
 
 public class SendMail {
 
-    public static void sendMail(Integer kontrola) {
+    private EmployeeService employeeService;
+
+    private UserService userService;
+
+    public void sendMail(long employeeId) {
+
+        Employee employee = employeeService.findById(employeeId);
 
         final String username = "betasoft@abel.hr";
         final String password = "Betasoft1503";
@@ -40,7 +50,7 @@ public class SendMail {
 //            String htmlBody = "<html><body><h1>Testiranje slanje mail-a</h1><p>ovo je test slanja mail-a abel - java</p></body></html>";
 //            message.setContent(htmlBody, "text/html");
 
-            String plainTextBody = "Ovo je test slanja mail-a abel - java broj # " + kontrola;
+            String plainTextBody = "Ovo je test slanja mail-a abel - java broj # ";
             message.setText(plainTextBody);
 
             Transport.send(message);

@@ -6,6 +6,8 @@ document.addEventListener("DOMContentLoaded", function() {
     var expiryDateOfWorkPermitInput = document.getElementById('expiryDateOfWorkPermit');
     var workingHoursControl = document.getElementById("workingHours");
     var hoursForPartTimeControl = document.getElementById("hoursForPartTime");
+    var additionalWorkCheckbox = document.getElementById("additionalWork");
+    var additionalWorkHoursControl = document.getElementById("additionalWorkHours");
 
     function toggleReasonForDefinite() {
         if (employmentContractControl.value === "Određeno") {
@@ -34,11 +36,22 @@ document.addEventListener("DOMContentLoaded", function() {
         }
     }
 
+    function toggleAdditionalWorkInput() {
+            if (additionalWorkCheckbox.checked) {
+                additionalWorkHoursControl.disabled = false;
+            } else {
+                additionalWorkHoursControl.disabled = true;
+                additionalWorkHoursControl.value = "";
+            }
+        }
+
     toggleReasonForDefinite();
     toggleExpiryDateOfWorkPermitInput();
-    toggleReasonForHoursForPartTime()
+    toggleReasonForHoursForPartTime();
+    toggleAdditionalWorkInput();
 
     employmentContractControl.addEventListener("change", toggleReasonForDefinite);
     foreignNationalCheckbox.addEventListener('change', toggleExpiryDateOfWorkPermitInput);
-    workingHoursControl.addEventListener("change", toggleReasonForHoursForPartTime)
+    workingHoursControl.addEventListener("change", toggleReasonForHoursForPartTime);
+    additionalWorkCheckbox.addEventListener('change', toggleAdditionalWorkInput);
 });
