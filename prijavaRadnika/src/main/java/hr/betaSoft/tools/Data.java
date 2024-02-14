@@ -24,5 +24,7 @@ public class Data {
 
     private String required;
 
+    private String enabled;
+
     private List<String> items;
 }

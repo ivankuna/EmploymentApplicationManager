@@ -65,9 +65,11 @@
                                        th:field="*{__${data.field}__}" required
                                        title="Molimo Vas da popunite ovo polje.">
                             </div>
+
                             <div th:if="${data.type != 'myDecimal'}">
                                 <input th:type="${data.type}" class="form-control" th:id="${data.field}"
                                        th:field="*{__${data.field}__}" required
+                                       th:disabled="${data.enabled == 'false'} ? 'disabled' : null"
                                        title="Molimo Vas da popunite ovo polje.">
                             </div>
                         </div>

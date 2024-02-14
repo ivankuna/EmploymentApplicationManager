@@ -191,20 +191,20 @@ public class UserController {
 
         List<String> items = new ArrayList<>();
 
-        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
-        dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
-        dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
-        dataList.add(new Data("Grad i poštanski broj:", "city","", "","","text", "false", items));;
-        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
-        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
-        dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
-        dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
-        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
-        dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", items));;
-        dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", items));;
+        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", "", items));;
+        dataList.add(new Data("OIB:", "oib","", "","","text", "true", "", items));;
+        dataList.add(new Data("Adresa:", "address","", "","","text", "true", "", items));;
+        dataList.add(new Data("Grad i poštanski broj:", "city","", "","","text", "false", "", items));;
+        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", "", items));;
+        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", "", items));;
+        dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", "", items));;
+        dataList.add(new Data("e-mail:", "email","", "","","text", "true", "", items));;
+        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", "", items));;
+        dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", "", items));;
+        dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", "", items));;
         if (!update) {
-            dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", items));;
-            dataList.add(new Data("Lozinka:", "password","", "","","text", "true", items));;
+            dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", "", items));;
+            dataList.add(new Data("Lozinka:", "password","", "","","text", "true", "", items));;
         }
         return dataList;
     }
