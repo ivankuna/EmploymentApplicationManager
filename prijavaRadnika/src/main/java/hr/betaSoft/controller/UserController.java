@@ -1,5 +1,6 @@
 package hr.betaSoft.controller;
 
+import hr.betaSoft.model.Employee;
 import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
@@ -99,24 +100,6 @@ public class UserController {
     @GetMapping("/users/new")
     public String showAddForm(Model model) {
 
-        List<Data> dataList = new ArrayList<>();
-
-        List<String> items = new ArrayList<>();
-
-        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
-        dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
-        dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
-        dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
-        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
-        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
-        dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
-        dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
-        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
-        dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", items));;
-        dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", items));;
-        dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", items));;
-        dataList.add(new Data("Lozinka:", "password","", "","","text", "true", items));;
-
         UserDto userDto = (UserDto) model.getAttribute("userDto");
 
         if (userDto != null) {
@@ -125,7 +108,7 @@ public class UserController {
             model.addAttribute("class", new UserDto());
         }
 
-        model.addAttribute("dataList", dataList);
+        model.addAttribute("dataList", defineDataList(false));
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
@@ -139,26 +122,10 @@ public class UserController {
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
-            List<Data> dataList = new ArrayList<>();
-
-            List<String> items = new ArrayList<>();
-
-            dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
-            dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
-            dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
-            dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
-            dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
-            dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
-            dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
-            dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
-            dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
-            dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", items));;
-            dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", items));;
-
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
-            model.addAttribute("dataList", dataList);
+            model.addAttribute("dataList", defineDataList(true));
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
@@ -213,5 +180,29 @@ public class UserController {
     public String showAccessDenied() {
 
         return "access-denied";
+    }
+
+    private List<Data> defineDataList(boolean update) {
+
+        List<Data> dataList = new ArrayList<>();
+
+        List<String> items = new ArrayList<>();
+
+        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
+        dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
+        dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
+        dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
+        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+        dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;
+        dataList.add(new Data("e-mail:", "email","", "","","text", "true", items));;
+        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", items));;
+        dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", items));;
+        dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", items));;
+        if (!update) {
+            dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", items));;
+            dataList.add(new Data("Lozinka:", "password","", "","","text", "true", items));;
+        }
+        return dataList;
     }
 }

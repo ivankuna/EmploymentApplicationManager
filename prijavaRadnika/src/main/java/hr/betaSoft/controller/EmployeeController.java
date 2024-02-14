@@ -42,7 +42,6 @@ public class EmployeeController {
     @InitBinder
     public void initBinder(WebDataBinder binder) {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-        // change the format according to your need.
         dateFormat.setLenient(false);
 
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
@@ -62,7 +61,6 @@ public class EmployeeController {
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
             columnList.add(new Column("Status", "signUpSent", "id"));
         } else {
-
 //            columnList.add(new Column("ID", "id", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
@@ -116,38 +114,6 @@ public class EmployeeController {
     @GetMapping("/employees/new")
     public String showAddForm(Model model) {
 
-        List<Data> dataList = new ArrayList<>();
-
-        List<String> items = new ArrayList<>();
-
-        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
-        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
-        dataList.add(new Data("Spol:", "gender","", "","","text", "false",Employee.GENDER ));;
-        dataList.add(new Data("OIB:", "oib","", "","","text", "false", items));;
-        dataList.add(new Data("JMBG:", "jmbg","", "","","text", "false", items));;
-        dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date", "false", items));;
-        dataList.add(new Data("Adresa:", "address","", "","","text", "false", items));;
-        dataList.add(new Data("Grad:", "city","", "","","text", "false", items));;
-        dataList.add(new Data("Osobni broj osiguranika HZMO:", "hzmoInsuranceNumber","", "","","text", "false", items));;
-        dataList.add(new Data("Najviša stručna sprema:", "highestProfessionalQualification","", "","","text", "false",Employee.PROFESSIONAL_QUALIFICATION));;
-        dataList.add(new Data("Naziv najviše završene škole:", "highestLevelOfEducation","", "","","text", "false", items));;
-        dataList.add(new Data("Radno mjesto:", "employmentPosition","", "","","text", "false", items));;
-        dataList.add(new Data("Ugovor o radu:", "employmentContract","", "","","text", "false",Employee.EMPLOYMENT_CONTRACT));;
-        dataList.add(new Data("Razlog - na određeno:", "reasonForDefinite","", "","","text", "false", items));;
-        dataList.add(new Data("Radno vrijeme:", "workingHours","", "","","text", "false",Employee.WORKING_HOURS));;
-        dataList.add(new Data("Sati nepuno:", "hoursForPartTime","", "","","number", "false", items));;
-        dataList.add(new Data("Datum prijave:", "dateOfSignUp","", "","","date", "false", items));;
-        dataList.add(new Data("Datum odjave:", "dateOfSignOut","", "","","date", "false", items));;
-        dataList.add(new Data("Iznos osnovne plaće:", "basicSalary","", "","","myDecimal", "false", items));;
-        dataList.add(new Data("Bruto / Neto:", "salaryType","", "","","text", "false",Employee.SALARY_TYPE));;
-        dataList.add(new Data("Strani državljanin:", "foreignNational","", "","","checkbox", "false", items));;
-        dataList.add(new Data("Radna dozvola vrijedi do:", "expiryDateOfWorkPermit","", "","","date", "false", items));;
-        dataList.add(new Data("Umirovljenik:", "retiree","", "","","checkbox", "false", items));;
-        dataList.add(new Data("Mlađi od 30 godina:", "youngerThanThirty","", "","","checkbox", "false", items));;
-        dataList.add(new Data("Prvo zaposlenje:", "firstEmployment","", "","","checkbox", "false", items));;
-        dataList.add(new Data("Invalid:", "disability","", "","","checkbox", "false", items));;
-        dataList.add(new Data("Napomena:", "note","", "","","text", "false", items));;
-
         Employee employee = (Employee) model.getAttribute("employee");
 
         if (employee != null) {
@@ -156,7 +122,7 @@ public class EmployeeController {
             model.addAttribute("class", new Employee());
         }
 
-        model.addAttribute("dataList", dataList);
+        model.addAttribute("dataList", defineDataList());
         model.addAttribute("title", "Radnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
@@ -170,38 +136,6 @@ public class EmployeeController {
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
-            List<Data> dataList = new ArrayList<>();
-
-            List<String> items = new ArrayList<>();
-
-            dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
-            dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
-            dataList.add(new Data("Spol:", "gender","", "","","text", "false",Employee.GENDER ));;
-            dataList.add(new Data("OIB:", "oib","", "","","text", "false", items));;
-            dataList.add(new Data("JMBG:", "jmbg","", "","","text", "false", items));;
-            dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date", "false", items));;
-            dataList.add(new Data("Adresa:", "address","", "","","text", "false", items));;
-            dataList.add(new Data("Grad:", "city","", "","","text", "false", items));;
-            dataList.add(new Data("Osobni broj osiguranika HZMO:", "hzmoInsuranceNumber","", "","","text", "false", items));;
-            dataList.add(new Data("Najviša stručna sprema:", "highestProfessionalQualification","", "","","text", "false",Employee.PROFESSIONAL_QUALIFICATION));;
-            dataList.add(new Data("Naziv najviše završene škole:", "highestLevelOfEducation","", "","","text", "false", items));;
-            dataList.add(new Data("Radno mjesto:", "employmentPosition","", "","","text", "false", items));;
-            dataList.add(new Data("Ugovor o radu:", "employmentContract","", "","","text", "false",Employee.EMPLOYMENT_CONTRACT));;
-            dataList.add(new Data("Razlog - na određeno:", "reasonForDefinite","", "","","text", "false", items));;
-            dataList.add(new Data("Radno vrijeme:", "workingHours","", "","","text", "false",Employee.WORKING_HOURS));;
-            dataList.add(new Data("Sati nepuno:", "hoursForPartTime","", "","","number", "false", items));;
-            dataList.add(new Data("Datum prijave:", "dateOfSignUp","", "","","date", "false", items));;
-            dataList.add(new Data("Datum odjave:", "dateOfSignOut","", "","","date", "false", items));;
-            dataList.add(new Data("Iznos osnovne plaće:", "basicSalary","", "","","myDecimal", "false", items));;
-            dataList.add(new Data("Bruto / Neto:", "salaryType","", "","","text", "false",Employee.SALARY_TYPE));;
-            dataList.add(new Data("Strani državljanin:", "foreignNational","", "","","checkbox", "false", items));;
-            dataList.add(new Data("Radna dozvola vrijedi do:", "expiryDateOfWorkPermit","", "","","date", "false", items));;
-            dataList.add(new Data("Umirovljenik:", "retiree","", "","","checkbox", "false", items));;
-            dataList.add(new Data("Mlađi od 30 godina:", "youngerThanThirty","", "","","checkbox", "false", items));;
-            dataList.add(new Data("Prvo zaposlenje:", "firstEmployment","", "","","checkbox", "false", items));;
-            dataList.add(new Data("Invalid:", "disability","", "","","checkbox", "false", items));;
-            dataList.add(new Data("Napomena:", "note","", "","","text", "false", items));;
-
             Employee employee = employeeService.findById(id);
             Employee tempEmployee = (Employee) model.getAttribute("employee");
 
@@ -211,7 +145,7 @@ public class EmployeeController {
                 model.addAttribute("class", employee);
             }
 
-            model.addAttribute("dataList", dataList);
+            model.addAttribute("dataList", defineDataList());
             model.addAttribute("title", "Radnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
@@ -309,5 +243,43 @@ public class EmployeeController {
 
         userService.saveUser(userDto);
         return "redirect:/employees";
+    }
+
+    private List<Data> defineDataList() {
+
+        List<Data> dataList = new ArrayList<>();
+
+        List<String> items = new ArrayList<>();
+
+        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
+        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
+        dataList.add(new Data("Spol:", "gender","", "","","text", "false",Employee.GENDER ));;
+        dataList.add(new Data("OIB:", "oib","", "","","text", "false", items));;
+        dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date", "false", items));;
+        dataList.add(new Data("Adresa:", "address","", "","","text", "false", items));;
+        dataList.add(new Data("Grad:", "city","", "","","text", "false", items));;
+        dataList.add(new Data("Najviša stručna sprema:", "highestProfessionalQualification","", "","","text", "false",Employee.PROFESSIONAL_QUALIFICATION));;
+        dataList.add(new Data("Naziv najviše završene škole:", "highestLevelOfEducation","", "","","text", "false", items));;
+        dataList.add(new Data("Radno mjesto:", "employmentPosition","", "","","text", "false", items));;
+        dataList.add(new Data("Mjesto rada - Grad:", "cityOfEmployment","", "","","text", "false", items));;
+        dataList.add(new Data("Potrebna stručna sprema:", "requiredProfessionalQualifications","", "","","text", "false",Employee.PROFESSIONAL_QUALIFICATION));;
+        dataList.add(new Data("Ugovor o radu:", "employmentContract","", "","","text", "false",Employee.EMPLOYMENT_CONTRACT));;
+        dataList.add(new Data("Razlog - na određeno:", "reasonForDefinite","", "","","text", "false", items));;
+        dataList.add(new Data("Radno vrijeme:", "workingHours","", "","","text", "false",Employee.WORKING_HOURS));;
+        dataList.add(new Data("Sati nepuno:", "hoursForPartTime","", "","","number", "false", items));;
+        dataList.add(new Data("Neradni dan(i) u tjednu:", "nonWorkingDays","", "","","type", "false", items));;
+        dataList.add(new Data("Datum prijave:", "dateOfSignUp","", "","","date", "false", items));;
+        dataList.add(new Data("Datum odjave:", "dateOfSignOut","", "","","date", "false", items));;
+        dataList.add(new Data("Iznos osnovne plaće:", "basicSalary","", "","","myDecimal", "false", items));;
+        dataList.add(new Data("Bruto / Neto:", "salaryType","", "","","text", "false",Employee.SALARY_TYPE));;
+        dataList.add(new Data("Strani državljanin:", "foreignNational","", "","","checkbox", "false", items));;
+        dataList.add(new Data("Radna dozvola vrijedi do:", "expiryDateOfWorkPermit","", "","","date", "false", items));;
+        dataList.add(new Data("Umirovljenik:", "retiree","", "","","checkbox", "false", items));;
+        dataList.add(new Data("Mlađi od 30 godina:", "youngerThanThirty","", "","","checkbox", "false", items));;
+        dataList.add(new Data("Prvo zaposlenje:", "firstEmployment","", "","","checkbox", "false", items));;
+        dataList.add(new Data("Invalid:", "disability","", "","","checkbox", "false", items));;
+        dataList.add(new Data("Napomena:", "note","", "","","text", "false", items));;
+
+        return dataList;
     }
 }

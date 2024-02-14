@@ -18,7 +18,7 @@ $(document).ready(function() {
             "processing": "Obrada..."
         },
         "columnDefs": [ {
-            "targets": "_all", // Određuje sve stupce tablice
+            "targets": "_all",
             "render": function ( data, type, row ) {
                 if (data === "true") {
                     return "DA";

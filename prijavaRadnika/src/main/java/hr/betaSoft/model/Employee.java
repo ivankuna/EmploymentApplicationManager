@@ -7,7 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.format.annotation.DateTimeFormat;
 
 import java.math.BigDecimal;
 import java.sql.Date;
@@ -50,9 +49,6 @@ public class Employee {
     @Column
     private String oib;
 
-    @Column
-    private String jmbg;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfBirth;
@@ -64,9 +60,6 @@ public class Employee {
     private String city;
 
     @Column
-    private String hzmoInsuranceNumber;
-
-    @Column
     private String highestProfessionalQualification;
 
     @Column
@@ -74,6 +67,12 @@ public class Employee {
 
     @Column
     private String employmentPosition;
+
+    @Column
+    private String cityOfEmployment;
+
+    @Column
+    private String requiredProfessionalQualifications;
 
     @Column
     private String employmentContract;
@@ -86,6 +85,9 @@ public class Employee {
 
     @Column
     private Integer hoursForPartTime;
+
+    @Column
+    private String nonWorkingDays;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
@@ -133,9 +135,15 @@ public class Employee {
     @Temporal(TemporalType.DATE)
     private Date dateOfSignUpSent;
 
+    @Column
+    private String timeOfSignUpSent;
+
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfSignOutSent;
+
+    @Column
+    private String timeOfSignOutSent;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

@@ -22,7 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     toggleReasonForDefinite();
-    toggleExpiryDateOfWorkPermitInput(); // Dodana linija za poziv funkcije
+    toggleExpiryDateOfWorkPermitInput();
 
     employmentContractControl.addEventListener("change", toggleReasonForDefinite);
     foreignNationalCheckbox.addEventListener('change', toggleExpiryDateOfWorkPermitInput);
