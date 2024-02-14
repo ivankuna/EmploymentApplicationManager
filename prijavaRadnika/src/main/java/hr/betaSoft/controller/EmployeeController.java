@@ -251,13 +251,13 @@ public class EmployeeController {
 
         List<String> items = new ArrayList<>();
 
+        dataList.add(new Data("OIB:", "oib","", "","","text", "false", items));;
         dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
         dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
         dataList.add(new Data("Spol:", "gender","", "","","text", "false",Employee.GENDER ));;
-        dataList.add(new Data("OIB:", "oib","", "","","text", "false", items));;
         dataList.add(new Data("Datum rođenja:", "dateOfBirth","", "","","date", "false", items));;
         dataList.add(new Data("Adresa:", "address","", "","","text", "false", items));;
-        dataList.add(new Data("Grad:", "city","", "","","text", "false", items));;
+        dataList.add(new Data("Grad i poštanski broj:", "city","", "","","text", "false", items));;
         dataList.add(new Data("Najviša stručna sprema:", "highestProfessionalQualification","", "","","text", "false",Employee.PROFESSIONAL_QUALIFICATION));;
         dataList.add(new Data("Naziv najviše završene škole:", "highestLevelOfEducation","", "","","text", "false", items));;
         dataList.add(new Data("Radno mjesto:", "employmentPosition","", "","","text", "false", items));;
@@ -269,9 +269,9 @@ public class EmployeeController {
         dataList.add(new Data("Sati nepuno:", "hoursForPartTime","", "","","number", "false", items));;
         dataList.add(new Data("Neradni dan(i) u tjednu:", "nonWorkingDays","", "","","type", "false", items));;
         dataList.add(new Data("Datum prijave:", "dateOfSignUp","", "","","date", "false", items));;
-        dataList.add(new Data("Datum odjave:", "dateOfSignOut","", "","","date", "false", items));;
-        dataList.add(new Data("Iznos osnovne plaće:", "basicSalary","", "","","myDecimal", "false", items));;
+        dataList.add(new Data("Datum odjave - za određeno:", "dateOfSignOut","", "","","date", "false", items));;
         dataList.add(new Data("Bruto / Neto:", "salaryType","", "","","text", "false",Employee.SALARY_TYPE));;
+        dataList.add(new Data("Iznos osnovne plaće:", "basicSalary","", "","","myDecimal", "false", items));;
         dataList.add(new Data("Strani državljanin:", "foreignNational","", "","","checkbox", "false", items));;
         dataList.add(new Data("Radna dozvola vrijedi do:", "expiryDateOfWorkPermit","", "","","date", "false", items));;
         dataList.add(new Data("Umirovljenik:", "retiree","", "","","checkbox", "false", items));;

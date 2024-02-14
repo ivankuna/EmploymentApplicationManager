@@ -191,7 +191,7 @@ public class UserController {
         dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", items));;
         dataList.add(new Data("OIB:", "oib","", "","","text", "true", items));;
         dataList.add(new Data("Adresa:", "address","", "","","text", "true", items));;
-        dataList.add(new Data("Grad:", "city","", "","","text", "true", items));;
+        dataList.add(new Data("Grad i poštanski broj:", "city","", "","","text", "false", items));;
         dataList.add(new Data("Ime:", "firstName","", "","","text", "true", items));;
         dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", items));;
         dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", items));;

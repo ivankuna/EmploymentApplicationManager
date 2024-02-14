@@ -27,7 +27,7 @@ public class Employee {
 
     public static final List<String>  PROFESSIONAL_QUALIFICATION = Arrays.asList("NKV", "PKV", "NSS", "KV", "SSS", "VKV", "VŠS", "VSS");
 
-    public static final List<String> EMPLOYMENT_CONTRACT = Arrays.asList("Određeno", "Neodređeno", "Dodatni", "Sezonski");
+    public static final List<String> EMPLOYMENT_CONTRACT = Arrays.asList("Određeno", "Neodređeno");
 
     public static final List<String> WORKING_HOURS = Arrays.asList("Puno", "Nepuno");
 
