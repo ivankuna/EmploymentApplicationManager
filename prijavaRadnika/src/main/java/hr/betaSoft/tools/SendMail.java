@@ -40,7 +40,6 @@ public class SendMail {
             message.setText(text);
 
             Transport.send(message);
-            System.out.println("Success");
         } catch (MessagingException e) {
             e.printStackTrace();
         }

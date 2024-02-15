@@ -20,7 +20,7 @@ EMPLOYEE/RADNIK:
     dateOfBirth -> Datum rođenja
     address -> Adresa
     city -> Grad
-    highestProfessionalQualification -> Najviša stručna sprema
+    professionalQualification -> Stvarna stručna sprema
     highestLevelOfEducation -> Naziv najviše završene škole
     employmentPosition -> Radno mjesto
     cityOfEmployment -> Mjesto rada - Grad

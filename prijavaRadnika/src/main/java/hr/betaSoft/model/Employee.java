@@ -12,6 +12,7 @@ import java.math.BigDecimal;
 import java.sql.Date;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Stream;
 
 @Getter
 @Setter
@@ -60,7 +61,7 @@ public class Employee {
     private String city;
 
     @Column
-    private String highestProfessionalQualification;
+    private String professionalQualification;
 
     @Column
     private String highestLevelOfEducation;
@@ -78,7 +79,7 @@ public class Employee {
     private String cityOfEmployment;
 
     @Column
-    private String requiredProfessionalQualifications;
+    private String requiredProfessionalQualification;
 
     @Column
     private String employmentContract;
@@ -161,49 +162,59 @@ public class Employee {
     @JoinColumn(name = "user_id")
     private User user;
 
-    @Override
-    public String toString() {
-        return "Employee{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", gender='" + gender + '\'' +
-                ", oib='" + oib + '\'' +
-                ", dateOfBirth=" + dateOfBirth +
-                ", address='" + address + '\'' +
-                ", city='" + city + '\'' +
-                ", highestProfessionalQualification='" + highestProfessionalQualification + '\'' +
-                ", highestLevelOfEducation='" + highestLevelOfEducation + '\'' +
-                ", ibanRegular='" + ibanRegular + '\'' +
-                ", ibanProtected='" + ibanProtected + '\'' +
-                ", employmentPosition='" + employmentPosition + '\'' +
-                ", cityOfEmployment='" + cityOfEmployment + '\'' +
-                ", requiredProfessionalQualifications='" + requiredProfessionalQualifications + '\'' +
-                ", employmentContract='" + employmentContract + '\'' +
-                ", reasonForDefinite='" + reasonForDefinite + '\'' +
-                ", additionalWork=" + additionalWork +
-                ", additionalWorkHours=" + additionalWorkHours +
-                ", workingHours='" + workingHours + '\'' +
-                ", hoursForPartTime=" + hoursForPartTime +
-                ", nonWorkingDays='" + nonWorkingDays + '\'' +
-                ", dateOfSignUp=" + dateOfSignUp +
-                ", dateOfSignOut=" + dateOfSignOut +
-                ", basicSalary=" + basicSalary +
-                ", salaryType='" + salaryType + '\'' +
-                ", foreignNational=" + foreignNational +
-                ", expiryDateOfWorkPermit=" + expiryDateOfWorkPermit +
-                ", retiree=" + retiree +
-                ", youngerThanThirty=" + youngerThanThirty +
-                ", firstEmployment=" + firstEmployment +
-                ", disability=" + disability +
-                ", note='" + note + '\'' +
-                ", signUpSent=" + signUpSent +
-                ", signOutSent=" + signOutSent +
-                ", dateOfSignUpSent=" + dateOfSignUpSent +
-                ", timeOfSignUpSent='" + timeOfSignUpSent + '\'' +
-                ", dateOfSignOutSent=" + dateOfSignOutSent +
-                ", timeOfSignOutSent='" + timeOfSignOutSent + '\'' +
-                ", user=" + user +
-                '}';
+@Override
+public String toString() {
+    return "POSLODAVAC" +
+            "\n Tvrtka: " + getUser().getCompany() +
+            "\n Ime i prezime poslodavca: " + getUser().getName() +
+            "\n OIB: " + getUser().getOib() +
+            "\nPODACI O RADNIKU" +
+            "\n OIB: " + oib +
+            "\n Ime: " + firstName +
+            "\n Prezime: " + lastName +
+            "\n Spol: " + gender +
+            "\n Datum rođenja: " + dateOfBirth +
+            "\n Adresa - Ulica i broj: " + address +
+            "\n Grad i poštanski broj: " + city +
+            "\n Stvarna stručna sprema: " + professionalQualification +
+            "\n Radno mjesto: " + employmentPosition +
+            "\n Mjesto rada - Grad: " + cityOfEmployment +
+            "\n Potrebna stručna sprema: " + requiredProfessionalQualification +
+            "\n Ugovor o radu: " + employmentContract +
+            "\n Dodatni rad: " + additionalWork +
+            "\n Dodatni rad - sati: " + additionalWorkHours +
+            "\n Radno vrijeme: " + workingHours +
+            "\n Sati nepuno: " + hoursForPartTime +
+            "\n Neradni dani u tjednu: " + nonWorkingDays +
+            "\n Datum prijave: " + dateOfSignUp +
+            "\n Datum odjave - za određeno: " + dateOfSignOut +
+            "\n Iznos osnovne plaće: " + basicSalary + "€" +
+            "\n Strani državljanin: " + foreignNational +
+            "\n Radna dozvola vrijedi do: " + expiryDateOfWorkPermit +
+            "\n Umirovljenik: " + retiree +
+            "\n Mladi od 30 godina: " + youngerThanThirty +
+            "\n Prvo zaposlenje: " + firstEmployment +
+            "\n Invalid: " + disability
+            ;
+}
+
+    public boolean hasEmptyAttributes() {
+        boolean isEmpty = Stream.of(oib, firstName, lastName, gender, dateOfBirth, address, city,
+                        professionalQualification, employmentPosition, cityOfEmployment,
+                        requiredProfessionalQualification, employmentContract, additionalWork,
+                        workingHours, nonWorkingDays, dateOfSignUp, basicSalary, salaryType,
+                        foreignNational, retiree, youngerThanThirty,firstEmployment, disability)
+                .anyMatch(value -> value == null || (value instanceof String && ((String) value).isEmpty()));
+
+        if (employmentContract.equals("Određeno") && ((dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())
+                || (reasonForDefinite == null || reasonForDefinite.trim().isEmpty()))) {
+            isEmpty = true;
+        }        else if (additionalWork && (additionalWorkHours == null || additionalWorkHours == 0)) {
+            isEmpty = true;
+        } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
+            isEmpty = true;
+        }
+
+        return isEmpty;
     }
 }
