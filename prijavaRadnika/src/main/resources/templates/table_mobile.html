@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="hr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+  <meta charset="UTF-8">
+  <title th:text="${title}">Popis podataka</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+
+  <style>
+
+        * {
+          font-size: 10px;
+        }
+
+    </style>
+</head>
+<body>
+
+<div class="content">
+
+  <!-- NAVBAR -->
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <a class="navbar-brand" href="#">Sustav za prijavu radnika - betaSoft (c)</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
+             data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <span sec:authentication="name">not found</span>
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="/logout">Odjava</a>
+          </div>
+        </li>
+      </ul>
+    </div>
+  </nav>
+  <br>
+  <!-- TABLE -->
+  <div class="col-md-12">
+    <div class="container-fluid">
+      <div class="row">
+        <h4 th:text="${title}">Popis podataka</h4>
+
+        <div class="col-md-12">
+          <hr>
+          <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
+        </div>
+        <div class="col-md-12">
+          <a th:href="@{${addLink}}" class="btn btn-primary" th:text="${dodajNaziv}">Dodaj</a>
+        </div>
+        <br>
+        <div class="table-responsive">
+          <br>
+          <table id="myTable" class="table table-striped table-hover" data-locale="hr-HR">
+            <thead>
+            <tr>
+
+              <th></th>
+              <th th:each="column : ${columnList}" th:text="${column.name}"></th>
+
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="data : ${dataList}">
+
+              <td>
+                <div th:if="${sendMail == 'YES'}">
+                  <a th:href="@{${sendLink}(id=${data[columnList[0].id]})}">Pošalji</a>
+                </div>
+                <div>
+                  <a th:href="@{${updateLink}(id=${data[columnList[0].id]})}">Uredi</a>
+                </div>
+                <div>
+                  <a th:href="@{${deleteLink}(id=${data[columnList[0].id]})}"
+                     class="text-danger"
+                     onclick="return confirm('Jeste li sigurni da želite obrisati?') ? true : false">Obriši</a>
+                </div>
+              <td th:each="column : ${columnList}" th:text="${data[column.field]}"></td>
+
+              </td>
+
+            </tr>
+            </tbody>
+          </table>
+        </div>
+        <div class="col-md-12">
+          <br>
+          <a th:href="@{${path}}" class="btn btn-primary">Povratak u izbornik</a>
+        </div>
+      </div>
+    </div>
+    <div class="row">
+      <br/><br/>
+    </div>
+  </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/js/bootstrap.min.js"
+        integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.14.3/dist/umd/popper.min.js"
+        integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+<script type="text/javascript" th:src="@{${script}}"></script>
+
+</body>
+</html>

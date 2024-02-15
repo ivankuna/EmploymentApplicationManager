@@ -95,7 +95,7 @@ public class UserController {
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("columnList", columnList);
         model.addAttribute("sendMail", "NO");
-        model.addAttribute("isMobile", "isMobile");
+        model.addAttribute("script", "/js/script-table-users.js");
 
         return "table";
     }
@@ -117,7 +117,7 @@ public class UserController {
         model.addAttribute("btnName", "Spremi");
         model.addAttribute("path_save", "/users/save");
         model.addAttribute("path_show", "/users/show");
-
+        model.addAttribute("script", "/js/script-form-users.js");
         return "form";
     }
 
@@ -134,6 +134,7 @@ public class UserController {
             model.addAttribute("btnName", "Ažuriraj");
             model.addAttribute("path_save", "/users/save");
             model.addAttribute("path_show", "/users/show");
+            model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());

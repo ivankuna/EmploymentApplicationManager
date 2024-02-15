@@ -114,9 +114,18 @@ public class EmployeeController {
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("columnList", columnList);
         model.addAttribute("sendMail", "YES");
-        model.addAttribute("isMobile", "isMobile");
+        model.addAttribute("script", "/js/script-table-employees.js");
 
-        return "table";
+
+        if (isMobile)
+        {
+            return "table_mobile";
+        }
+        else {
+            return "table";
+        }
+
+
     }
 
     @GetMapping("/employees/new")
@@ -136,6 +145,7 @@ public class EmployeeController {
         model.addAttribute("btnName", "Spremi");
         model.addAttribute("path_save", "/employees/save");
         model.addAttribute("path_show", "/employees/show");
+        model.addAttribute("script", "/js/script-form-employees.js");
 
         return "form";
     }
@@ -159,6 +169,7 @@ public class EmployeeController {
             model.addAttribute("btnName", "Ažuriraj");
             model.addAttribute("path_save", "/employees/save");
             model.addAttribute("path_show", "/employees/show");
+            model.addAttribute("script", "/js/script-form-employees.js");
             return "form";
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
@@ -287,7 +298,7 @@ public class EmployeeController {
         dataList.add(new Data("Stvarna stručna sprema:", "highestProfessionalQualification", "", "", "", "text", "false", "", Employee.PROFESSIONAL_QUALIFICATION));;
         dataList.add(new Data("Naziv najviše završene škole:", "highestLevelOfEducation", "", "", "", "text", "false", "", items));;
         dataList.add(new Data("IBAN - tekući račun - redovni:", "ibanRegular", "", "", "", "text", "false", "", items));;
-        dataList.add(new Data("IBAN - tekući račun - zastićeni:", "ibanProtected", "", "", "", "text", "false", "", items));;
+        dataList.add(new Data("IBAN - tekući račun - zaštićeni:", "ibanProtected", "", "", "", "text", "false", "", items));;
         dataList.add(new Data("Radno mjesto:", "employmentPosition", "", "", "", "text", "false", "", items));;
         dataList.add(new Data("Mjesto rada - Grad:", "cityOfEmployment", "", "", "", "text", "false", "", items));;
         dataList.add(new Data("Potrebna stručna sprema:", "requiredProfessionalQualifications", "", "", "", "text", "false", "", Employee.PROFESSIONAL_QUALIFICATION));;
