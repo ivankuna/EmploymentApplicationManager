@@ -11,20 +11,12 @@ import java.util.Properties;
 
 public class SendMail {
 
-    private EmployeeService employeeService;
-
-    private UserService userService;
-
-    public void sendMail(long employeeId) {
-
-        Employee employee = employeeService.findById(employeeId);
+    public static void sendMail(String recipient, String subject, String text) {
 
         final String username = "betasoft@abel.hr";
         final String password = "Betasoft1503";
         final String host = "mail.abel.hr";
         final int port = 465;
-
-        final String receiverEmail = "sinisa.kuna@yahoo.com";
 
         Properties props = new Properties();
         props.put("mail.smtp.host", host);
@@ -43,15 +35,9 @@ public class SendMail {
         try {
             Message message = new MimeMessage(session);
             message.setFrom(new InternetAddress(username));
-            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(receiverEmail));
-            message.setSubject("Testiranje slanje mail-a");
-
-//            ako će se dodavati u body html
-//            String htmlBody = "<html><body><h1>Testiranje slanje mail-a</h1><p>ovo je test slanja mail-a abel - java</p></body></html>";
-//            message.setContent(htmlBody, "text/html");
-
-            String plainTextBody = "Ovo je test slanja mail-a abel - java broj # ";
-            message.setText(plainTextBody);
+            message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
+            message.setSubject(subject);
+            message.setText(text);
 
             Transport.send(message);
             System.out.println("Success");

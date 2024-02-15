@@ -10,6 +10,7 @@ import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.Column;
 import hr.betaSoft.tools.Data;
 import hr.betaSoft.tools.DeviceDetector;
+import hr.betaSoft.tools.SendMail;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -200,13 +201,11 @@ public class EmployeeController {
     public String sendEmployeeMail(@PathVariable Long id, RedirectAttributes ra) {
 
         try {
-
             ra.addFlashAttribute("message", "Šaljem mail");
             // SEND MAIL CODE
-
-
-
-
+            Employee employeeToSignUp = employeeService.findById(id);
+            String recipient = employeeToSignUp.getUser().getEmailToSend();
+            SendMail.sendMail(recipient, "Prijava radnika", employeeToSignUp.toString());
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
         }
@@ -276,6 +275,10 @@ public class EmployeeController {
         if (userDto.getId() != null) {
             userDto.setUsername(userService.findById(userDto.getId()).getUsername());
             userDto.setPassword(userService.findById(userDto.getId()).getPassword());
+            userDto.setCompany(userService.findById(userDto.getId()).getCompany());
+            userDto.setOib(userService.findById(userDto.getId()).getOib());
+            userDto.setSmtpMail(userService.findById(userDto.getId()).getSmtpMail());
+            userDto.setSmtpPass(userService.findById(userDto.getId()).getSmtpPass());
         }
 
         userService.saveUser(userDto);

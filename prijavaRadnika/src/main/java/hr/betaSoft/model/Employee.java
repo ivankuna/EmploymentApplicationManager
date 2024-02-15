@@ -160,4 +160,50 @@ public class Employee {
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Override
+    public String toString() {
+        return "Employee{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", gender='" + gender + '\'' +
+                ", oib='" + oib + '\'' +
+                ", dateOfBirth=" + dateOfBirth +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", highestProfessionalQualification='" + highestProfessionalQualification + '\'' +
+                ", highestLevelOfEducation='" + highestLevelOfEducation + '\'' +
+                ", ibanRegular='" + ibanRegular + '\'' +
+                ", ibanProtected='" + ibanProtected + '\'' +
+                ", employmentPosition='" + employmentPosition + '\'' +
+                ", cityOfEmployment='" + cityOfEmployment + '\'' +
+                ", requiredProfessionalQualifications='" + requiredProfessionalQualifications + '\'' +
+                ", employmentContract='" + employmentContract + '\'' +
+                ", reasonForDefinite='" + reasonForDefinite + '\'' +
+                ", additionalWork=" + additionalWork +
+                ", additionalWorkHours=" + additionalWorkHours +
+                ", workingHours='" + workingHours + '\'' +
+                ", hoursForPartTime=" + hoursForPartTime +
+                ", nonWorkingDays='" + nonWorkingDays + '\'' +
+                ", dateOfSignUp=" + dateOfSignUp +
+                ", dateOfSignOut=" + dateOfSignOut +
+                ", basicSalary=" + basicSalary +
+                ", salaryType='" + salaryType + '\'' +
+                ", foreignNational=" + foreignNational +
+                ", expiryDateOfWorkPermit=" + expiryDateOfWorkPermit +
+                ", retiree=" + retiree +
+                ", youngerThanThirty=" + youngerThanThirty +
+                ", firstEmployment=" + firstEmployment +
+                ", disability=" + disability +
+                ", note='" + note + '\'' +
+                ", signUpSent=" + signUpSent +
+                ", signOutSent=" + signOutSent +
+                ", dateOfSignUpSent=" + dateOfSignUpSent +
+                ", timeOfSignUpSent='" + timeOfSignUpSent + '\'' +
+                ", dateOfSignOutSent=" + dateOfSignOutSent +
+                ", timeOfSignOutSent='" + timeOfSignOutSent + '\'' +
+                ", user=" + user +
+                '}';
+    }
 }
