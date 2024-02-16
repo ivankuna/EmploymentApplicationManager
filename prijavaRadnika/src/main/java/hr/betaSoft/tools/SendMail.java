@@ -1,9 +1,5 @@
 package hr.betaSoft.tools;
 
-import hr.betaSoft.model.Employee;
-import hr.betaSoft.security.secService.UserService;
-import hr.betaSoft.service.EmployeeService;
-
 import javax.mail.*;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
@@ -25,6 +21,8 @@ public class SendMail {
         props.put("mail.smtp.ssl.enable", "true");
         props.put("mail.smtp.ssl.protocols", "TLSv1.2");
 
+
+
         Session session = Session.getInstance(props, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
@@ -38,6 +36,10 @@ public class SendMail {
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
             message.setText(text);
+
+//            format text to html
+//            String htmlBody = "<html><body><h1>Testiranje slanje mail-a</h1><p>ovo je test slanja mail-a abel - java</p></body></html>";
+//            message.setContent(htmlBody, "text/html");
 
             Transport.send(message);
         } catch (MessagingException e) {

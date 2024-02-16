@@ -77,35 +77,6 @@ public class EmployeeController {
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
             columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
             columnList.add(new Column("Status", "signUpSent", "id"));
-
-            //            columnList.add(new Column("ID", "id", "id"));
-//            columnList.add(new Column("Spol", "gender", "id"));
-//            columnList.add(new Column("OIB", "oib", "id"));
-//            columnList.add(new Column("JMBG", "jmbg", "id"));
-//            columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
-//            columnList.add(new Column("Poslana prijava", "signUpSent", "id"));
-//            columnList.add(new Column("Poslana odjava", "signOutSent", "id"));
-//            columnList.add(new Column("Datum slanja prijave", "dateOfSignUpSent", "id"));
-//            columnList.add(new Column("Datum slanja odjave", "dateOfSignOutSent", "id"));
-//            columnList.add(new Column("Osobni broj osiguranika HZMO", "city", "id"));
-//            columnList.add(new Column("Stvarna stručna sprema", "highestProfessionalQualification", "id"));
-//            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));
-//            columnList.add(new Column("Radno mjesto", "employmentPosition", "id"));
-//            columnList.add(new Column("Ugovor o radu", "employmentContract", "id"));
-//            columnList.add(new Column("Razlog - na određeno", "reasonForDefinite", "id"));
-//            columnList.add(new Column("Radno vrijeme", "workingHours", "id"));
-//            columnList.add(new Column("Sati nepuno", "hoursForPartTime", "id"));
-//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
-//            columnList.add(new Column("Datum odjave - za određeno", "dateOfSignOut", "id"));
-//            columnList.add(new Column("Iznos osnovne plaće", "basicSalary", "id"));
-//            columnList.add(new Column("Bruto/Neto", "salaryType", "id"));
-//            columnList.add(new Column("Strani državljanin", "foreignNational", "id"));
-//            columnList.add(new Column("Radna dozvola vrijedi do", "expiryDateOfWorkPermit", "id"));
-//            columnList.add(new Column("Umirovljenik", "retiree", "id"));
-//            columnList.add(new Column("Mlađi od 30 godina", "youngerThanThirty", "id"));
-//            columnList.add(new Column("Prvo zaposlenje", "firstEmployment", "id"));
-//            columnList.add(new Column("Invalid", "disability", "id"));
-//            columnList.add(new Column("Napomena", "note", "id"));
         }
 
         List<Employee> employeeList = employeeService.findByUser(userService.getAuthenticatedUser());
@@ -222,29 +193,6 @@ public class EmployeeController {
     public String showEditUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
-//            List<Data> dataList = new ArrayList<>();
-//
-//            List<String> items = new ArrayList<>();
-//
-//            dataList.add(new Data("Naziv tvrtke:", "company", "", "", "", "text", "true", "false", items));
-//            ;
-//            dataList.add(new Data("OIB:", "oib", "", "", "", "text", "true", "false", items));
-//            ;
-//            dataList.add(new Data("Adresa:", "address", "", "", "", "text", "true", "true", items));
-//            ;
-//            dataList.add(new Data("Grad:", "city", "", "", "", "text", "true", "true", items));
-//            ;
-//            dataList.add(new Data("Ime:", "firstName", "", "", "", "text", "true", "true", items));
-//            ;
-//            dataList.add(new Data("Prezime:", "lastName", "", "", "", "text", "true", "true", items));
-//            ;
-//            dataList.add(new Data("Telefon:", "telephone", "", "", "", "text", "true", "true", items));
-//            ;
-//            dataList.add(new Data("e-mail:", "email", "", "", "", "text", "true", "true", items));
-//            ;
-//            dataList.add(new Data("e-mail za prijavu:", "emailToSend", "", "", "", "text", "true", "true", items));
-//            ;
-
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
@@ -367,7 +315,7 @@ public class EmployeeController {
         ;
         dataList.add(new Data("Razlog - na određeno", "reasonForDefinite", "", "", "", "text", "false", "", items));
         ;
-        dataList.add(new Data("Dodatni rad *", "additionalWork", "", "", "", "checkbox", required, "", items));
+        dataList.add(new Data("Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", "", items));
         ;
         dataList.add(new Data("Dodatni rad - sati*", "additionalWorkHours", "", "", "", "number", required, "", items));
         ;

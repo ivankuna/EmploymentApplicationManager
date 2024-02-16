@@ -1,4 +1,4 @@
-package hr.betaSoft;
+package hr.betaSoft.controller;
 
 
 import hr.betaSoft.security.secModel.User;
@@ -84,11 +84,6 @@ public class MainController {
         return "employees";
     }
 
-//    @GetMapping("/prijava")
-//    public String prijavaRadnika() {
-//        return "work-in-progress";
-//    }
-
     @GetMapping("/promjena")
     public String promjenaRadnika() {
         return "work-in-progress";
@@ -98,12 +93,9 @@ public class MainController {
     public String postavkeFirme() {
 
         long id = getCurrentUserId();
-        if ( id != 0L)
-        {
+        if ( id != 0L) {
             return "redirect:/employees/user/update/"+id;
-        }
-        else
-        {
+        } else {
             return "page-not-found";
         }
     }

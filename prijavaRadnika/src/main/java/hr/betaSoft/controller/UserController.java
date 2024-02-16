@@ -35,28 +35,6 @@ public class UserController {
         this.userService = userService;
     }
 
-//    @GetMapping("/login")
-//    public String loginForm(Model model) {
-//
-//        if (userService.countUsers() != 0) {
-//            return "login";
-//        }
-//        return showRegistrationForm(model);
-//    }
-//
-//    @GetMapping("/register")
-//    public String showRegistrationForm(Model model){
-//        UserDto user = new UserDto();
-//        model.addAttribute("user", user);
-//        return "register";
-//    }
-//
-//    @PostMapping("/register/save")
-//    public String registration(@Valid @ModelAttribute("user") UserDto user) {
-//        userService.saveUser(user);
-//        return "redirect:/login?success";
-//    }
-
     @GetMapping("/users/show")
     public String showUsers(Model model, HttpServletRequest request) {
 
