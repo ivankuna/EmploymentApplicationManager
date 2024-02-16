@@ -171,6 +171,8 @@ public class UserController {
         try {
             if (id == 1) {
                 ra.addFlashAttribute("message", "Nemoguće obrisati administratora!");
+            } else if (userService.checkIfEmployeeUnderUserExist(id)) {
+                ra.addFlashAttribute("message", "Nemoguće obrisati korisnika s unešenim radnicima!");
             } else {
                 userService.deleteUser(id);
             }

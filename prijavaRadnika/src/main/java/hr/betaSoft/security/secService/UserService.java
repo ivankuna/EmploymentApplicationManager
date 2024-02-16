@@ -22,4 +22,6 @@ public interface UserService {
     long countUsers();
 
     UserDto convertEntityToDto(User user);
+
+    boolean checkIfEmployeeUnderUserExist(long userId);
 }

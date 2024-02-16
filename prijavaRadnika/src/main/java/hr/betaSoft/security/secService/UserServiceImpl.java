@@ -1,10 +1,12 @@
 package hr.betaSoft.security.secService;
 
+import hr.betaSoft.model.Employee;
 import hr.betaSoft.security.secModel.Role;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secRepo.RoleRepository;
 import hr.betaSoft.security.secRepo.UserRepository;
 import hr.betaSoft.security.userdto.UserDto;
+import hr.betaSoft.service.EmployeeService;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -21,13 +23,18 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
     private RoleRepository roleRepository;
     private PasswordEncoder passwordEncoder;
+    private EmployeeService employeeService;
+
+
 
     public UserServiceImpl(UserRepository userRepository,
                            RoleRepository roleRepository,
-                           PasswordEncoder passwordEncoder) {
+                           PasswordEncoder passwordEncoder,
+                           EmployeeService employeeService) {
         this.userRepository = userRepository;
         this.roleRepository = roleRepository;
         this.passwordEncoder = passwordEncoder;
+        this.employeeService = employeeService;
     }
 
     @Override
@@ -149,5 +156,20 @@ public class UserServiceImpl implements UserService {
         Role role = new Role();
         role.setName(role_name);
         return roleRepository.save(role);
+    }
+
+    @Override
+    public boolean checkIfEmployeeUnderUserExist(long userId) {
+
+        boolean employeeExist = false;
+
+        List<Employee> employeeList = employeeService.findAll();
+
+        for (Employee employee : employeeList) {
+            if (employee.getUser().equals(findById(userId))) {
+                employeeExist = true;
+            }
+        }
+        return employeeExist;
     }
 }
