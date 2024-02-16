@@ -52,7 +52,8 @@
 
                 <div class="col-md-12">
                     <hr>
-                    <div th:if="${message}" class="alert alert-success" th:text="${message}"></div>
+                    <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
+                    <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
                 </div>
                 <div class="col-md-12">
                     <a th:href="@{${addLink}}" class="btn btn-primary" th:text="${dodajNaziv}">Dodaj</a>
@@ -72,7 +73,8 @@
                             <td th:each="column : ${columnList}" th:text="${data[column.field]}"></td>
                             <td>
                                 <div th:if="${sendMail == 'YES'}">
-                                    <a th:href="@{${sendLink}(id=${data[columnList[0].id]})}">Pošalji</a>
+                                    <a th:href="@{${sendLink}(id=${data[columnList[0].id]})}"
+                                       onclick="return confirm('Jeste li sigurni da želite prijaviti radnika?')">Pošalji</a>
                                 </div>
                                 <div>
                                     <a th:href="@{${updateLink}(id=${data[columnList[0].id]})}">Uredi</a>
@@ -82,10 +84,7 @@
                                        class="text-danger"
                                        onclick="return confirm('Jeste li sigurni da želite obrisati?') ? true : false">Obriši</a>
                                 </div>
-
-
                             </td>
-
                         </tr>
                         </tbody>
                     </table>

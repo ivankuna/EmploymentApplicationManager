@@ -164,11 +164,10 @@ public class Employee {
 
 @Override
 public String toString() {
-    return "POSLODAVAC" +
+    return  "\nPOSLODAVAC" +
             "\n Tvrtka: " + getUser().getCompany() +
-            "\n Ime i prezime poslodavca: " + getUser().getName() +
             "\n OIB: " + getUser().getOib() +
-            "\nPODACI O RADNIKU" +
+            "\n\nPODACI O RADNIKU" +
             "\n OIB: " + oib +
             "\n Ime: " + firstName +
             "\n Prezime: " + lastName +

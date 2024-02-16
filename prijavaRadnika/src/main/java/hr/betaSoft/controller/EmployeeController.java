@@ -191,6 +191,16 @@ public class EmployeeController {
             return "redirect:/employees/new";
         }
 
+        if (employee.getId() != null) {
+            Employee tempEmployee = employeeService.findById(employee.getId());
+            employee.setSignUpSent(tempEmployee.isSignUpSent());
+            employee.setDateOfSignUpSent(tempEmployee.getDateOfSignUpSent());
+            employee.setTimeOfSignUpSent(tempEmployee.getTimeOfSignUpSent());
+            employee.setSignOutSent(tempEmployee.isSignOutSent());
+            employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
+            employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
+        }
+
         employee.setUser(userService.getAuthenticatedUser());
         employeeService.saveEmployee(employee);
 
@@ -297,7 +307,7 @@ public class EmployeeController {
 
             String recipient = employeeToSignUp.getUser().getEmailToSend();
             SendMail.sendMail(recipient, "Prijava radnika", employeeToSignUp.toString());
-            ra.addFlashAttribute("message", "Šaljem mail");
+            ra.addFlashAttribute("successMessage", "Šaljem mail");
 
             Date date = new Date(Calendar.getInstance().getTime().getTime());
 
