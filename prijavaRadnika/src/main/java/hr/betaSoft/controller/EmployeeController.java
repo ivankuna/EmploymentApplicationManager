@@ -140,7 +140,7 @@ public class EmployeeController {
             model.addAttribute("class", new Employee());
         }
 
-        model.addAttribute("dataList", defineDataList());
+        model.addAttribute("dataList", defineDataList(false));
         model.addAttribute("title", "Radnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
@@ -164,7 +164,7 @@ public class EmployeeController {
                 model.addAttribute("class", employee);
             }
 
-            model.addAttribute("dataList", defineDataList());
+            model.addAttribute("dataList", defineDataList(true));
             model.addAttribute("title", "Radnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
@@ -222,33 +222,33 @@ public class EmployeeController {
     public String showEditUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
-            List<Data> dataList = new ArrayList<>();
-
-            List<String> items = new ArrayList<>();
-
-            dataList.add(new Data("Naziv tvrtke:", "company", "", "", "", "text", "true", "false", items));
-            ;
-            dataList.add(new Data("OIB:", "oib", "", "", "", "text", "true", "false", items));
-            ;
-            dataList.add(new Data("Adresa:", "address", "", "", "", "text", "true", "true", items));
-            ;
-            dataList.add(new Data("Grad:", "city", "", "", "", "text", "true", "true", items));
-            ;
-            dataList.add(new Data("Ime:", "firstName", "", "", "", "text", "true", "true", items));
-            ;
-            dataList.add(new Data("Prezime:", "lastName", "", "", "", "text", "true", "true", items));
-            ;
-            dataList.add(new Data("Telefon:", "telephone", "", "", "", "text", "true", "true", items));
-            ;
-            dataList.add(new Data("e-mail:", "email", "", "", "", "text", "true", "true", items));
-            ;
-            dataList.add(new Data("e-mail za prijavu:", "emailToSend", "", "", "", "text", "true", "true", items));
-            ;
+//            List<Data> dataList = new ArrayList<>();
+//
+//            List<String> items = new ArrayList<>();
+//
+//            dataList.add(new Data("Naziv tvrtke:", "company", "", "", "", "text", "true", "false", items));
+//            ;
+//            dataList.add(new Data("OIB:", "oib", "", "", "", "text", "true", "false", items));
+//            ;
+//            dataList.add(new Data("Adresa:", "address", "", "", "", "text", "true", "true", items));
+//            ;
+//            dataList.add(new Data("Grad:", "city", "", "", "", "text", "true", "true", items));
+//            ;
+//            dataList.add(new Data("Ime:", "firstName", "", "", "", "text", "true", "true", items));
+//            ;
+//            dataList.add(new Data("Prezime:", "lastName", "", "", "", "text", "true", "true", items));
+//            ;
+//            dataList.add(new Data("Telefon:", "telephone", "", "", "", "text", "true", "true", items));
+//            ;
+//            dataList.add(new Data("e-mail:", "email", "", "", "", "text", "true", "true", items));
+//            ;
+//            dataList.add(new Data("e-mail za prijavu:", "emailToSend", "", "", "", "text", "true", "true", items));
+//            ;
 
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
-            model.addAttribute("dataList", dataList);
+            model.addAttribute("dataList", UserController.defineDataList(true, true));
             model.addAttribute("title", "Postavke");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
@@ -327,75 +327,77 @@ public class EmployeeController {
         return "redirect:/employees/show";
     }
 
-    private List<Data> defineDataList() {
+    private List<Data> defineDataList(boolean isRequired) {
+
+        String required = isRequired ? "true" : "false";
 
         List<Data> dataList = new ArrayList<>();
 
         List<String> items = new ArrayList<>();
 
-        dataList.add(new Data("OIB:", "oib", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("OIB *", "oib", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("Ime:", "firstName", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("Ime *", "firstName", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("Prezime:", "lastName", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("Prezime *", "lastName", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("Spol:", "gender", "", "", "", "text", "false", "", Employee.GENDER));
+        dataList.add(new Data("Spol *", "gender", "", "", "", "text", required, "", Employee.GENDER));
         ;
-        dataList.add(new Data("Datum rođenja:", "dateOfBirth", "", "", "", "date", "false", "", items));
+        dataList.add(new Data("Datum rođenja *", "dateOfBirth", "", "", "", "date", required, "", items));
         ;
-        dataList.add(new Data("Adresa:", "address", "", "", "", "text", "false", "true", items));
+        dataList.add(new Data("Adresa *", "address", "", "", "", "text", required, "true", items));
         ;
-        dataList.add(new Data("Grad i poštanski broj:", "city", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Grad i poštanski broj *", "city", "", "", "", "text", required, "", items));
         ;
-        dataList.add(new Data("Stvarna stručna sprema:", "professionalQualification", "", "", "", "text", "false", "", Employee.PROFESSIONAL_QUALIFICATION));
+        dataList.add(new Data("Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", required, "", Employee.PROFESSIONAL_QUALIFICATION));
         ;
-        dataList.add(new Data("Naziv najviše završene škole:", "highestLevelOfEducation", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", "", items));
         ;
-        dataList.add(new Data("IBAN - tekući račun - redovni:", "ibanRegular", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", "", items));
         ;
-        dataList.add(new Data("IBAN - tekući račun - zaštićeni:", "ibanProtected", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", "", items));
         ;
-        dataList.add(new Data("Radno mjesto:", "employmentPosition", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Radno mjesto *", "employmentPosition", "", "", "", "text", required, "", items));
         ;
-        dataList.add(new Data("Mjesto rada - Grad:", "cityOfEmployment", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", required, "", items));
         ;
-        dataList.add(new Data("Potrebna stručna sprema:", "requiredProfessionalQualification", "", "", "", "text", "false", "", Employee.PROFESSIONAL_QUALIFICATION));
+        dataList.add(new Data("Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", required, "", Employee.PROFESSIONAL_QUALIFICATION));
         ;
-        dataList.add(new Data("Ugovor o radu:", "employmentContract", "", "", "", "text", "false", "true", Employee.EMPLOYMENT_CONTRACT));
+        dataList.add(new Data("Ugovor o radu *", "employmentContract", "", "", "", "text", required, "true", Employee.EMPLOYMENT_CONTRACT));
         ;
-        dataList.add(new Data("Razlog - na određeno:", "reasonForDefinite", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Razlog - na određeno", "reasonForDefinite", "", "", "", "text", "false", "", items));
         ;
-        dataList.add(new Data("Dodatni rad:", "additionalWork", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Dodatni rad *", "additionalWork", "", "", "", "checkbox", required, "", items));
         ;
-        dataList.add(new Data("Dodatni rad - sati:", "additionalWorkHours", "", "", "", "number", "false", "", items));
+        dataList.add(new Data("Dodatni rad - sati*", "additionalWorkHours", "", "", "", "number", required, "", items));
         ;
-        dataList.add(new Data("Radno vrijeme:", "workingHours", "", "", "", "text", "false", "", Employee.WORKING_HOURS));
+        dataList.add(new Data("Radno vrijeme *", "workingHours", "", "", "", "text", required, "", Employee.WORKING_HOURS));
         ;
-        dataList.add(new Data("Sati nepuno:", "hoursForPartTime", "", "", "", "number", "false", "", items));
+        dataList.add(new Data("Sati nepuno *", "hoursForPartTime", "", "", "", "number", required, "", items));
         ;
-        dataList.add(new Data("Neradni dan(i) u tjednu:", "nonWorkingDays", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", required, "", items));
         ;
-        dataList.add(new Data("Datum prijave:", "dateOfSignUp", "", "", "", "date", "false", "", items));
+        dataList.add(new Data("Datum prijave *", "dateOfSignUp", "", "", "", "date", required, "", items));
         ;
-        dataList.add(new Data("Datum odjave - za određeno:", "dateOfSignOut", "", "", "", "date", "false", "", items));
+        dataList.add(new Data("Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date", "false", "", items));
         ;
-        dataList.add(new Data("Bruto / Neto:", "salaryType", "", "", "", "text", "false", "", Employee.SALARY_TYPE));
+        dataList.add(new Data("Bruto / Neto *", "salaryType", "", "", "", "text", required, "", Employee.SALARY_TYPE));
         ;
-        dataList.add(new Data("Iznos osnovne plaće:", "basicSalary", "", "", "", "myDecimal", "false", "", items));
+        dataList.add(new Data("Iznos osnovne plaće *", "basicSalary", "", "", "", "myDecimal", required, "", items));
         ;
-        dataList.add(new Data("Strani državljanin:", "foreignNational", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", "", items));
         ;
-        dataList.add(new Data("Radna dozvola vrijedi do:", "expiryDateOfWorkPermit", "", "", "", "date", "false", "", items));
+        dataList.add(new Data("Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date", "false", "", items));
         ;
-        dataList.add(new Data("Umirovljenik:", "retiree", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Umirovljenik *", "retiree", "", "", "", "checkbox", "false", "", items));
         ;
-        dataList.add(new Data("Mlađi od 30 godina:", "youngerThanThirty", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", "", items));
         ;
-        dataList.add(new Data("Prvo zaposlenje:", "firstEmployment", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", "", items));
         ;
-        dataList.add(new Data("Invalid:", "disability", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Invalid *", "disability", "", "", "", "checkbox", "false", "", items));
         ;
-        dataList.add(new Data("Napomena:", "note", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Napomena", "note", "", "", "", "text", "false", "", items));
         ;
 
         return dataList;

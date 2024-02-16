@@ -111,7 +111,7 @@ public class UserController {
             model.addAttribute("class", new UserDto());
         }
 
-        model.addAttribute("dataList", defineDataList(false));
+        model.addAttribute("dataList", defineDataList(false, false));
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
@@ -128,7 +128,7 @@ public class UserController {
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
-            model.addAttribute("dataList", defineDataList(true));
+            model.addAttribute("dataList", defineDataList(true, false));
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Ažuriraj");
@@ -186,26 +186,43 @@ public class UserController {
         return "access-denied";
     }
 
-    private List<Data> defineDataList(boolean update) {
+    public static List<Data> defineDataList(boolean update, boolean emplUpdate) {
+
+        String enabled = emplUpdate ? "false" : "true";
 
         List<Data> dataList = new ArrayList<>();
 
         List<String> items = new ArrayList<>();
 
-        dataList.add(new Data("Naziv tvrtke:", "company","", "","","text", "true", "", items));;
-        dataList.add(new Data("OIB:", "oib","", "","","text", "true", "", items));;
-        dataList.add(new Data("Adresa:", "address","", "","","text", "true", "", items));;
-        dataList.add(new Data("Grad i poštanski broj:", "city","", "","","text", "false", "", items));;
-        dataList.add(new Data("Ime:", "firstName","", "","","text", "true", "", items));;
-        dataList.add(new Data("Prezime:", "lastName","", "","","text", "true", "", items));;
-        dataList.add(new Data("Telefon:", "telephone","", "","","text", "true", "", items));;
-        dataList.add(new Data("e-mail:", "email","", "","","text", "true", "", items));;
-        dataList.add(new Data("e-mail za prijavu:", "emailToSend","", "","","text", "true", "", items));;
-        dataList.add(new Data("e-mail za slanje:", "smtpMail","", "","","text", "true", "", items));;
-        dataList.add(new Data("lozinka za slanje:", "smtpPass","", "","","text", "true", "", items));;
+        dataList.add(new Data("Naziv tvrtke *", "company", "", "", "", "text", "true", enabled, items));
+        ;
+        dataList.add(new Data("OIB *", "oib", "", "", "", "text", "true", enabled, items));
+        ;
+        dataList.add(new Data("Adresa *", "address", "", "", "", "text", "true", "", items));
+        ;
+        dataList.add(new Data("Grad i poštanski broj *", "city", "", "", "", "text", "false", "", items));
+        ;
+        dataList.add(new Data("Ime *", "firstName", "", "", "", "text", "true", "", items));
+        ;
+        dataList.add(new Data("Prezime *", "lastName", "", "", "", "text", "true", "", items));
+        ;
+        dataList.add(new Data("Telefon *", "telephone", "", "", "", "text", "true", "", items));
+        ;
+        dataList.add(new Data("e-mail *", "email", "", "", "", "text", "true", "", items));
+        ;
+        dataList.add(new Data("e-mail za prijavu *", "emailToSend", "", "", "", "text", "true", "", items));
+        ;
+        if (!emplUpdate) {
+            dataList.add(new Data("e-mail za slanje *", "smtpMail", "", "", "", "text", "true", "", items));
+            ;
+            dataList.add(new Data("Lozinka za slanje *", "smtpPass", "", "", "", "text", "true", "", items));
+            ;
+        }
         if (!update) {
-            dataList.add(new Data("Korisničko ime:", "username","", "","","text", "true", "", items));;
-            dataList.add(new Data("Lozinka:", "password","", "","","text", "true", "", items));;
+            dataList.add(new Data("Korisničko ime *", "username", "", "", "", "text", "true", "", items));
+            ;
+            dataList.add(new Data("Lozinka *", "password", "", "", "", "text", "true", "", items));
+            ;
         }
         return dataList;
     }
