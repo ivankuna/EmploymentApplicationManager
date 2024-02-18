@@ -25,9 +25,9 @@ $(document).ready(function() {
                 "targets": "_all",
                 "render": function (data, type, row) {
                 if (data === "true") {
-                                        return '<i class="fas fa-circle"></i>';
-                                    } else if (data === "false") {
                                         return '<i class="fas fa-envelope"></i>';
+                                    } else if (data === "false") {
+                                        return '<i class="fas fa-circle"></i>';
                                     } else {
                    if (data) {
                        if (moment(data, 'YYYY-MM-DD').isValid() && !/[a-zA-Z]/.test(data) && data.length === 10 && data.indexOf('-') !== 2) {
