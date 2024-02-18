@@ -93,7 +93,7 @@
 <!--                    <button type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}" >Pošalji</button>-->
 
 <!--                </div>-->
-                <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}" >Pošalji</button>
+                <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}" >Pošalji nalog</button>
                 <button type="submit" class="btn btn-primary" th:text="${btnName}"></button>
                 <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${pathShow}]]">Odustani</button>
 

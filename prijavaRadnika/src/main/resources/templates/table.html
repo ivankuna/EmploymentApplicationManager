@@ -67,13 +67,17 @@
                     <table id="myTable" class="table table-striped table-hover" data-locale="hr-HR">
                         <thead>
                         <tr>
-                            <th></th>
+
                             <th th:each="column : ${columnList}" th:text="${column.name}"></th>
+                            <th></th>
 
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="data : ${dataList}" >
+
+                            <td th:each="column : ${columnList}" th:text="${data[column.field]}"  th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[columnList[0].id]})} + '\''">
+                            </td>
                             <td>
                                 <div>
                                     <a th:href="@{${deleteLink}(id=${data[columnList[0].id]})}"
@@ -84,9 +88,6 @@
 
                                 </div>
                             </td>
-                            <td th:each="column : ${columnList}" th:text="${data[column.field]}"  th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[columnList[0].id]})} + '\''">
-                            </td>
-
 
                         </tr>
                         </tbody>

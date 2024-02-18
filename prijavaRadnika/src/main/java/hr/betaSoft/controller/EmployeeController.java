@@ -63,11 +63,11 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
+            columnList.add(new Column("S", "signUpSent", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
             columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
-            columnList.add(new Column("S", "signUpSent", "id"));
         } else {
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
@@ -112,7 +112,7 @@ public class EmployeeController {
         }
 
         model.addAttribute("dataList", defineDataList(false));
-        model.addAttribute("title", "Radnik");
+        model.addAttribute("title", "Nalog za prijavu");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
         model.addAttribute("pathSave", "/employees/save");
@@ -138,7 +138,7 @@ public class EmployeeController {
             }
 
             model.addAttribute("dataList", defineDataList(true));
-            model.addAttribute("title", "Radnik");
+            model.addAttribute("title", "Nalog za prijavu");
             model.addAttribute("dataId", "id");
             model.addAttribute("btnName", "Spremi");
             model.addAttribute("pathSave", "/employees/save");
@@ -316,7 +316,7 @@ public class EmployeeController {
             }
 
             String recipient = employeeToSignUp.getUser().getEmailToSend();
-            SendMail.sendMail(recipient, "Prijava radnika", employeeToSignUp.toString());
+            SendMail.sendMail(recipient, "Nalog za prijava radnika", employeeToSignUp.toString());
             ra.addFlashAttribute("successMessage", "Nalog za prijavu radnika je poslan.");
 
             Date date = new Date(Calendar.getInstance().getTime().getTime());
