@@ -72,7 +72,6 @@ public class UserController {
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("columnList", columnList);
-        model.addAttribute("sendMail", "NO");
         model.addAttribute("script", "/js/script-table-users.js");
 
         return "table";
@@ -93,8 +92,10 @@ public class UserController {
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
-        model.addAttribute("path_save", "/users/save");
-        model.addAttribute("path_show", "/users/show");
+        model.addAttribute("pathSave", "/users/save");
+        model.addAttribute("pathShow", "/users/show");
+        model.addAttribute("sendLink", "");
+        model.addAttribute("pathSaveSend", "");
         model.addAttribute("script", "/js/script-form-users.js");
         return "form";
     }
@@ -109,9 +110,11 @@ public class UserController {
             model.addAttribute("dataList", defineDataList(true, false));
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Ažuriraj");
-            model.addAttribute("path_save", "/users/save");
-            model.addAttribute("path_show", "/users/show");
+            model.addAttribute("btnName", "Spremi");
+            model.addAttribute("pathSave", "/users/save");
+            model.addAttribute("pathShow", "/users/show");
+            model.addAttribute("sendLink", "");
+            model.addAttribute("pathSaveSend", "");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {

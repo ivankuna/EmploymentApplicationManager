@@ -26,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
 import java.time.ZoneId;
+import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -66,12 +67,11 @@ public class EmployeeController {
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
             columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
-            columnList.add(new Column("Status", "signUpSent", "id"));
+            columnList.add(new Column("S", "signUpSent", "id"));
         } else {
-
-            columnList.add(new Column("OIB", "oib", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
+            columnList.add(new Column("OIB", "oib", "id"));
             columnList.add(new Column("Grad", "city", "id"));
             columnList.add(new Column("Adresa", "address", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
@@ -90,14 +90,14 @@ public class EmployeeController {
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("columnList", columnList);
-        model.addAttribute("sendMail", "YES");
         model.addAttribute("script", "/js/script-table-employees.js");
 
-        if (isMobile) {
-            return "table_mobile";
-        } else {
-            return "table";
-        }
+//        if (isMobile) {
+//            return "table_mobile";
+//        } else {
+//            return "table";
+//        }
+        return "table";
     }
 
     @GetMapping("/employees/new")
@@ -115,8 +115,10 @@ public class EmployeeController {
         model.addAttribute("title", "Radnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("btnName", "Spremi");
-        model.addAttribute("path_save", "/employees/save");
-        model.addAttribute("path_show", "/employees/show");
+        model.addAttribute("pathSave", "/employees/save");
+        model.addAttribute("pathShow", "/employees/show");
+        model.addAttribute("sendLink", "/employees/send/{id}");
+        model.addAttribute("pathSaveSend", "/employees/send");
         model.addAttribute("script", "/js/script-form-employees.js");
 
         return "form";
@@ -138,9 +140,11 @@ public class EmployeeController {
             model.addAttribute("dataList", defineDataList(true));
             model.addAttribute("title", "Radnik");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Ažuriraj");
-            model.addAttribute("path_save", "/employees/save");
-            model.addAttribute("path_show", "/employees/show");
+            model.addAttribute("btnName", "Spremi");
+            model.addAttribute("pathSave", "/employees/save");
+            model.addAttribute("pathShow", "/employees/show");
+            model.addAttribute("sendLink", "/employees/send/{id}");
+            model.addAttribute("pathSaveSend", "/employees/send");
             model.addAttribute("script", "/js/script-form-employees.js");
             return "form";
         } catch (EmployeeNotFoundException e) {
@@ -149,34 +153,7 @@ public class EmployeeController {
         }
     }
 
-    @PostMapping("/employees/save")
-    public String addGrad(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
 
-        if (!employeeService.checkOib(employee.getOib())) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
-
-            if (employee.getId() != null) {
-                return "redirect:/employees/update/" + employee.getId();
-            }
-            return "redirect:/employees/new";
-        }
-
-        if (employee.getId() != null) {
-            Employee tempEmployee = employeeService.findById(employee.getId());
-            employee.setSignUpSent(tempEmployee.isSignUpSent());
-            employee.setDateOfSignUpSent(tempEmployee.getDateOfSignUpSent());
-            employee.setTimeOfSignUpSent(tempEmployee.getTimeOfSignUpSent());
-            employee.setSignOutSent(tempEmployee.isSignOutSent());
-            employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
-            employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
-        }
-
-        employee.setUser(userService.getAuthenticatedUser());
-        employeeService.saveEmployee(employee);
-
-        return "redirect:/employees/show";
-    }
 
     @GetMapping("/employees/delete/{id}")
     public String deleteEmployee(@PathVariable Long id, RedirectAttributes ra) {
@@ -199,9 +176,12 @@ public class EmployeeController {
             model.addAttribute("dataList", UserController.defineDataList(true, true));
             model.addAttribute("title", "Postavke");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Ažuriraj");
-            model.addAttribute("path_save", "/employees/user/save");
-            model.addAttribute("path_show", "/employees");
+            model.addAttribute("btnName", "Spremi");
+            model.addAttribute("pathSave", "/employees/user/save");
+            model.addAttribute("pathShow", "/employees");
+            model.addAttribute("sendLink", "");
+            model.addAttribute("pathSaveSend", "");
+            model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
@@ -237,47 +217,14 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    @GetMapping("/employees/send/{id}")
-    public String sendEmployeeMail(@PathVariable Long id, RedirectAttributes ra) {
 
-        try {
-            Employee employeeToSignUp = employeeService.findById(id);
 
-            if (employeeToSignUp.hasEmptyAttributes()) {
-                ra.addFlashAttribute("message", "Popunite sva obavezna polja u nalogu radnika: "
-                        + employeeToSignUp.getFirstName() + " " + employeeToSignUp.getLastName() + ", " + employeeToSignUp.getOib());
-                return "redirect:/employees/show";
-            }
-            if (employeeToSignUp.isSignUpSent()) {
-                ra.addFlashAttribute("message", "Radnik je već prijavljen");
-                return "redirect:/employees/show";
-            }
 
-            String recipient = employeeToSignUp.getUser().getEmailToSend();
-            SendMail.sendMail(recipient, "Prijava radnika", employeeToSignUp.toString());
-            ra.addFlashAttribute("successMessage", "Šaljem mail");
-
-            Date date = new Date(Calendar.getInstance().getTime().getTime());
-
-            LocalTime currentTime = LocalTime.now();
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss");
-            String time = currentTime.format(formatter);
-
-            employeeToSignUp.setSignUpSent(true);
-            employeeToSignUp.setDateOfSignUpSent(date);
-            employeeToSignUp.setTimeOfSignUpSent(time);
-
-            employeeService.saveEmployee(employeeToSignUp);
-
-        } catch (EmployeeNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/employees/show";
-    }
 
     private List<Data> defineDataList(boolean isRequired) {
 
-        String required = isRequired ? "true" : "false";
+//        String required = isRequired ? "true" : "false";
+        String required = "false";
 
         List<Data> dataList = new ArrayList<>();
 
@@ -315,9 +262,9 @@ public class EmployeeController {
         ;
         dataList.add(new Data("Razlog - na određeno", "reasonForDefinite", "", "", "", "text", "false", "", items));
         ;
-        dataList.add(new Data("Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("Dodatni rad", "additionalWork", "", "", "", "checkbox", "false", "", items));
         ;
-        dataList.add(new Data("Dodatni rad - sati*", "additionalWorkHours", "", "", "", "number", required, "", items));
+        dataList.add(new Data("Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number", required, "", items));
         ;
         dataList.add(new Data("Radno vrijeme *", "workingHours", "", "", "", "text", required, "", Employee.WORKING_HOURS));
         ;
@@ -349,5 +296,105 @@ public class EmployeeController {
         ;
 
         return dataList;
+    }
+
+    @GetMapping("/employees/send/{id}")
+    public String sendEmployeeMail(@PathVariable Long id, RedirectAttributes ra) {
+
+        try {
+
+            Employee employeeToSignUp = employeeService.findById(id);
+
+            if (employeeToSignUp.hasEmptyAttributes()) {
+                ra.addFlashAttribute("message", "Popunite sva obavezna polja u nalogu radnika: "
+                        + employeeToSignUp.getFirstName() + " " + employeeToSignUp.getLastName() + ", " + employeeToSignUp.getOib());
+                return "redirect:/employees/update/"+id;
+            }
+            if (employeeToSignUp.isSignUpSent()) {
+                ra.addFlashAttribute("message", "Nalog za prijavu radnika je već poslan.");
+                return "redirect:/employees/update/"+id;
+            }
+
+            String recipient = employeeToSignUp.getUser().getEmailToSend();
+            SendMail.sendMail(recipient, "Prijava radnika", employeeToSignUp.toString());
+            ra.addFlashAttribute("successMessage", "Nalog za prijavu radnika je poslan.");
+
+            Date date = new Date(Calendar.getInstance().getTime().getTime());
+
+//            LocalTime currentTime = LocalTime.now();
+            ZoneId zoneId = ZoneId.of("Europe/Zagreb");
+            ZonedDateTime currentTime = ZonedDateTime.now(zoneId);
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
+            String time = currentTime.format(formatter);
+
+            employeeToSignUp.setSignUpSent(true);
+            employeeToSignUp.setDateOfSignUpSent(date);
+            employeeToSignUp.setTimeOfSignUpSent(time);
+
+            employeeService.saveEmployee(employeeToSignUp);
+
+        } catch (EmployeeNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/employees/show";
+    }
+
+    @PostMapping("/employees/save")
+    public String addEmployee(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
+
+        if (!employeeService.checkOib(employee.getOib())) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return "redirect:/employees/new";
+        }
+
+        if (employee.getId() != null) {
+            Employee tempEmployee = employeeService.findById(employee.getId());
+            employee.setSignUpSent(tempEmployee.isSignUpSent());
+            employee.setDateOfSignUpSent(tempEmployee.getDateOfSignUpSent());
+            employee.setTimeOfSignUpSent(tempEmployee.getTimeOfSignUpSent());
+            employee.setSignOutSent(tempEmployee.isSignOutSent());
+            employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
+            employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
+        }
+
+        employee.setUser(userService.getAuthenticatedUser());
+        employeeService.saveEmployee(employee);
+
+        return "redirect:/employees/show";
+    }
+
+
+    @PostMapping("/employees/send")
+    public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
+
+        if (!employeeService.checkOib(employee.getOib())) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return "redirect:/employees/new";
+        }
+
+        if (employee.getId() != null) {
+            Employee tempEmployee = employeeService.findById(employee.getId());
+            employee.setSignUpSent(tempEmployee.isSignUpSent());
+            employee.setDateOfSignUpSent(tempEmployee.getDateOfSignUpSent());
+            employee.setTimeOfSignUpSent(tempEmployee.getTimeOfSignUpSent());
+            employee.setSignOutSent(tempEmployee.isSignOutSent());
+            employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
+            employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
+        }
+
+        employee.setUser(userService.getAuthenticatedUser());
+        employeeService.saveEmployee(employee);
+
+        return "redirect:/employees/send/"+employee.getId();
     }
 }
