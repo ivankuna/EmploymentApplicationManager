@@ -90,13 +90,10 @@ public class EmployeeController {
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("columnList", columnList);
+        model.addAttribute("showLink", "");
         model.addAttribute("script", "/js/script-table-employees.js");
 
-//        if (isMobile) {
-//            return "table_mobile";
-//        } else {
-//            return "table";
-//        }
+
         return "table";
     }
 

@@ -71,6 +71,7 @@
 
                             <th th:each="column : ${columnList}" th:text="${column.name}"></th>
                             <th></th>
+                            <th  th:if="${showLink != ''}"></th>
 
                         </tr>
                         </thead>
@@ -86,6 +87,7 @@
                                        onclick="return confirm('Jeste li sigurni da želite obrisati?') ? true : false">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
+                                    <a th:if="${showLink != ''}" th:href="@{${showLink}(id=${data[columnList[0].id]})}">Proširi</a>
 
                                 </div>
                             </td>

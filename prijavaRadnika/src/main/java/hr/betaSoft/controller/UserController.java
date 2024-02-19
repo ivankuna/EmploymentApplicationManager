@@ -57,21 +57,21 @@ public class UserController {
             columnList.add(new Column("Telefon", "telephone", "id"));
             columnList.add(new Column("e-mail", "email", "id"));
             columnList.add(new Column("e-mail za slanje", "emailToSend", "id"));
-//            columnList.add(new Column("e-mail za slanje", "smtpMail", "id"));
-//            columnList.add(new Column("lozinka za slanje", "smtpPass", "id"));
+
         }
 
         List<User> userList = userService.findAll();
-        model.addAttribute("dataList", userList);
-
         model.addAttribute("title", "Popis korisnika");
+        model.addAttribute("columnList", columnList);
+        model.addAttribute("dataList", userList);
         model.addAttribute("dodajNaziv", "Dodaj korisnika");
+
         model.addAttribute("path", "/users");
         model.addAttribute("addLink", "/users/new");
         model.addAttribute("sendLink", "");
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
-        model.addAttribute("columnList", columnList);
+        model.addAttribute("showLink", "/users/employees/show/{id}");
         model.addAttribute("script", "/js/script-table-users.js");
 
         return "table";
@@ -163,6 +163,9 @@ public class UserController {
         return "redirect:/users/show";
     }
 
+
+
+
     @GetMapping("/access-denied")
     public String showAccessDenied() {
 
@@ -209,4 +212,18 @@ public class UserController {
         }
         return dataList;
     }
+
+    @GetMapping("/users/employees/show/{id}")
+    public String showEmployeesFromUsers(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+
+            ra.addFlashAttribute("message", "Eto me: " + id.toString()) ;
+
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/users/show";
+    }
+
+
 }
