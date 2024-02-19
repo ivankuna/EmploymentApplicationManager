@@ -10,6 +10,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.sql.Date;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Stream;
@@ -19,14 +21,14 @@ import java.util.stream.Stream;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name="employees")
+@Table(name = "employees")
 public class Employee {
 
     private static final long serialVersionUID = 1L;
 
     public static final List<String> GENDER = Arrays.asList("Muško", "Žensko");
 
-    public static final List<String>  PROFESSIONAL_QUALIFICATION = Arrays.asList("NKV", "PKV", "NSS", "KV", "SSS", "VKV", "VŠS", "VSS");
+    public static final List<String> PROFESSIONAL_QUALIFICATION = Arrays.asList("NKV", "PKV", "NSS", "KV", "SSS", "VKV", "VŠS", "VSS");
 
     public static final List<String> EMPLOYMENT_CONTRACT = Arrays.asList("Određeno", "Neodređeno");
 
@@ -38,10 +40,10 @@ public class Employee {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String firstName;
 
-    @Column(nullable=false)
+    @Column(nullable = false)
     private String lastName;
 
     @Column
@@ -163,59 +165,149 @@ public class Employee {
     private User user;
 
 
+    @Override
+    public String toString() {
 
-@Override
-public String toString() {
-    return  "\nPOSLODAVAC" +
-            "\n Tvrtka: " + getUser().getCompany() +
-            "\n OIB: " + getUser().getOib() +
-            "\n\nPODACI O RADNIKU" +
-            "\n OIB: " + oib +
-            "\n Ime: " + firstName +
-            "\n Prezime: " + lastName +
-            "\n Spol: " + gender +
-            "\n Datum rođenja: " + dateOfBirth +
-            "\n Adresa - Ulica i broj: " + address +
-            "\n Grad i poštanski broj: " + city +
-            "\n Stvarna stručna sprema: " + professionalQualification +
-            "\n Radno mjesto: " + employmentPosition +
-            "\n Mjesto rada - Grad: " + cityOfEmployment +
-            "\n Potrebna stručna sprema: " + requiredProfessionalQualification +
-            "\n Ugovor o radu: " + employmentContract +
-            "\n Dodatni rad: " + additionalWork +
-            "\n Dodatni rad - sati: " + additionalWorkHours +
-            "\n Radno vrijeme: " + workingHours +
-            "\n Sati nepuno: " + hoursForPartTime +
-            "\n Neradni dani u tjednu: " + nonWorkingDays +
-            "\n Datum prijave: " + dateOfSignUp +
-            "\n Datum odjave - za određeno: " + dateOfSignOut +
-            "\n Iznos osnovne plaće: " + basicSalary + "€" +
-            "\n Strani državljanin: " + foreignNational +
-            "\n Radna dozvola vrijedi do: " + expiryDateOfWorkPermit +
-            "\n Umirovljenik: " + retiree +
-            "\n Mladi od 30 godina: " + youngerThanThirty +
-            "\n Prvo zaposlenje: " + firstEmployment +
-            "\n Invalid: " + disability
-            ;
-}
+        SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        String formattedDateOfBirth = "";
+        String formattedDateOfSignUp = "";
+        String formattedDateOfSignOut = "";
+        String formattedExpiryDateOfWorkPermit = "";
 
-    public boolean hasEmptyAttributes() {
-        boolean isEmpty = Stream.of(oib, firstName, lastName, gender, dateOfBirth, address, city,
-                        professionalQualification, employmentPosition, cityOfEmployment,
-                        requiredProfessionalQualification, employmentContract, additionalWork,
-                        workingHours, nonWorkingDays, dateOfSignUp, basicSalary, salaryType,
-                        foreignNational, retiree, youngerThanThirty,firstEmployment, disability)
-                .anyMatch(value -> value == null || (value instanceof String && ((String) value).isEmpty()));
-
-        if (employmentContract.equals("Određeno") && ((dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())
-                || (reasonForDefinite == null || reasonForDefinite.trim().isEmpty()))) {
-            isEmpty = true;
-        }        else if (additionalWork && (additionalWorkHours == null || additionalWorkHours == 0)) {
-            isEmpty = true;
-        } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
-            isEmpty = true;
+        if (dateOfBirth != null) {
+            formattedDateOfBirth = sdf.format(dateOfBirth);
+        }
+        if (dateOfSignUp != null) {
+            formattedDateOfSignUp = sdf.format(dateOfSignUp);
+        }
+        if (dateOfSignOut != null) {
+            formattedDateOfSignOut = sdf.format(dateOfSignOut);
+        }
+        if (expiryDateOfWorkPermit != null) {
+            formattedExpiryDateOfWorkPermit = sdf.format(expiryDateOfWorkPermit);
         }
 
-        return isEmpty;
+        String emailTxt =
+                "\nPOSLODAVAC" +
+                "\n Tvrtka: " + getUser().getCompany() +
+                "\n OIB: " + getUser().getOib() +
+                "\n\nPODACI O RADNIKU" +
+                "\n OIB: " + oib +
+                "\n Ime: " + firstName +
+                "\n Prezime: " + lastName +
+                "\n Spol: " + gender +
+                "\n Datum rođenja: " + formattedDateOfBirth +
+                "\n Adresa - Ulica i broj: " + address +
+                "\n Grad i poštanski broj: " + city +
+                "\n Stvarna stručna sprema: " + professionalQualification +
+                "\n Naziv najviše završene škole: " + highestLevelOfEducation +
+                "\n IBAN - tekuću račun - redovni: " + ibanRegular +
+                "\n IBAN - tekuću račun - zaštićeni: " + ibanProtected +
+                "\n Radno mjesto: " + employmentPosition +
+                "\n Mjesto rada - Grad: " + cityOfEmployment +
+                "\n Potrebna stručna sprema: " + requiredProfessionalQualification +
+                "\n Ugovor o radu: " + employmentContract +
+                "\n Razlog - na određeno: " + reasonForDefinite +
+                "\n Dodatni rad: " + additionalWork +
+                "\n Dodatni rad - sati: " + additionalWorkHours +
+                "\n Radno vrijeme: " + workingHours +
+                "\n Sati nepuno: " + hoursForPartTime +
+                "\n Neradni dani u tjednu: " + nonWorkingDays +
+                "\n Datum prijave: " + formattedDateOfSignUp +
+                "\n Datum odjave - za određeno: " + formattedDateOfSignOut +
+                "\n Iznos osnovne plaće: " + basicSalary +
+                "\n Vruto / Neto: " + salaryType +
+                "\n Strani državljanin: " + foreignNational +
+                "\n Radna dozvola vrijedi do: " + formattedExpiryDateOfWorkPermit +
+                "\n Umirovljenik: " + retiree +
+                "\n Mladi od 30 godina: " + youngerThanThirty +
+                "\n Prvo zaposlenje: " + firstEmployment +
+                "\n Invalid: " + disability +
+                "\n Napomena: " + note
+                ;
+
+        String result = emailTxt.replaceAll("\\bnull\\b", "").replaceAll("\\btrue\\b", "DA").replaceAll("\\bfalse\\b", "NE");
+        return result;
+    }
+
+    public List<String> hasEmptyAttributes() {
+
+        List<String> emptyAttributes = new ArrayList<>();
+
+        Stream.of("OIB", "Ime", "Prezime", "Spol", "Datum rođenja", "Adresa", "Grad i poštanski broj", "Stvarna stručna sprema",
+                        "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu", "Radno vrijeme",
+                        "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto")
+                .filter(attributeName -> {
+                    Object value = getValueByName(attributeName);
+                    return value == null || (value instanceof String && ((String) value).isEmpty());
+                })
+                .forEach(emptyAttributes::add);
+
+        if (employmentContract.equals("Određeno") && (dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())) {
+            emptyAttributes.add("Datum odjave");
+        }
+        if (employmentContract.equals("Određeno") && (reasonForDefinite == null || reasonForDefinite.trim().isEmpty())) {
+            emptyAttributes.add("Razlog - na određeno");
+        }
+        if (additionalWork && (additionalWorkHours == null || additionalWorkHours == 0)) {
+            emptyAttributes.add("Dodatni rad - sati");
+        } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
+            emptyAttributes.add("Radna dozvola vrijedi do");
+        }
+
+        return emptyAttributes;
+    }
+
+    private Object getValueByName(String attributeName) {
+        switch (attributeName) {
+            case "OIB":
+                return oib;
+            case "Ime":
+                return firstName;
+            case "Prezime":
+                return lastName;
+            case "Spol":
+                return gender;
+            case "Datum rođenja":
+                return dateOfBirth;
+            case "Adresa":
+                return address;
+            case "Grad i poštanski broj":
+                return city;
+            case "Stvarna stručna sprema":
+                return professionalQualification;
+            case "Radno mjesto":
+                return employmentPosition;
+            case "Mjesto rada - Grad":
+                return cityOfEmployment;
+            case "Potrebna stručna sprema":
+                return requiredProfessionalQualification;
+            case "Ugovor o radu":
+                return employmentContract;
+            case "Dodatni rad":
+                return additionalWork;
+            case "Radno vrijeme":
+                return workingHours;
+            case "Neradni dani u tjednu":
+                return nonWorkingDays;
+            case "Datum prijave":
+                return dateOfSignUp;
+            case "Iznos osnovne plaće":
+                return basicSalary;
+            case "Bruto / Neto":
+                return salaryType;
+            case "Strani državljanin":
+                return foreignNational;
+            case "Umirovljenik":
+                return retiree;
+            case "Mladi od 30 godina":
+                return youngerThanThirty;
+            case "Prvo zaposlenje":
+                return firstEmployment;
+            case "Invalid":
+                return disability;
+            default:
+                throw new IllegalArgumentException("Unknown attribute name: " + attributeName);
+        }
     }
 }

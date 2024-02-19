@@ -55,10 +55,7 @@ User {
     private String password;
 
     @Column(nullable=false)
-    private String smtpMail;
-
-    @Column(nullable=false)
-    private String smtpPass;
+    private boolean showAllApplications;
 
     @OneToMany(mappedBy = "user")
     private List<Employee> employees;

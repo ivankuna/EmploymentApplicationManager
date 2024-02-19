@@ -51,9 +51,8 @@ public class UserServiceImpl implements UserService {
         user.setTelephone(userDto.getTelephone());
         user.setEmail(userDto.getEmail());
         user.setEmailToSend(userDto.getEmailToSend());
-        user.setSmtpMail(userDto.getSmtpMail());
-        user.setSmtpPass(userDto.getSmtpPass());
         user.setUsername(userDto.getUsername());
+        user.setShowAllApplications(userDto.isShowAllApplications());
 
         if (userDto.getId() != null) {
             user.setId(userDto.getId());
@@ -138,8 +137,7 @@ public class UserServiceImpl implements UserService {
         userDto.setTelephone(user.getTelephone());
         userDto.setEmail(user.getEmail());
         userDto.setEmailToSend(user.getEmailToSend());
-        userDto.setSmtpMail(user.getSmtpMail());
-        userDto.setSmtpPass(user.getSmtpPass());
+        userDto.setShowAllApplications(user.isShowAllApplications());
 
         return userDto;
     }

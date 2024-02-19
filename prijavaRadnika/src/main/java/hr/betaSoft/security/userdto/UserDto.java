@@ -1,5 +1,6 @@
 package hr.betaSoft.security.userdto;
 
+import jakarta.persistence.Column;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
@@ -50,10 +51,5 @@ public class UserDto
     @NotEmpty(message = "Lozinka mora biti upisana!")
     private String password;
 
-    @NotEmpty(message = "Email za slanje mora biti upisan!")
-    @Email
-    private String smtpMail;
-
-    @NotEmpty(message = "Lozinka za slanje mora biti upisana!")
-    private String smtpPass;
+    private boolean showAllApplications;
 }

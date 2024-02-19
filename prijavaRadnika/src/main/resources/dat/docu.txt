@@ -6,11 +6,10 @@ USER/KORISNIK:
     firstName -> Ime
     lastName -> Prezime
     telephone -> Telefon
-    emailTosend -> e-mail za prijavu (e-mail računovodstvenog servisa)
-    smtpMail -> e-mail za slanje
-    smtpPass -> Lozinka za slanje
+    emailTosend -> e-mail za slanje (e-mail računovodstvenog servisa)
     username -> Korisničko ime
     password -> Lozinka
+    showAllApplications -> Prikaz svih naloga
 
 EMPLOYEE/RADNIK:
 

@@ -57,6 +57,7 @@ public class UserController {
             columnList.add(new Column("Telefon", "telephone", "id"));
             columnList.add(new Column("e-mail", "email", "id"));
             columnList.add(new Column("e-mail za slanje", "emailToSend", "id"));
+//            columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
 
         }
 
@@ -88,7 +89,7 @@ public class UserController {
             model.addAttribute("class", new UserDto());
         }
 
-        model.addAttribute("dataList", defineDataList(false, false));
+        model.addAttribute("dataList", defineDataList(false));
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/users/save");
@@ -106,7 +107,7 @@ public class UserController {
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
-            model.addAttribute("dataList", defineDataList(true, false));
+            model.addAttribute("dataList", defineDataList(true));
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/users/save");
@@ -139,8 +140,6 @@ public class UserController {
         if (userDto.getId() != null) {
             userDto.setUsername(userService.findById(userDto.getId()).getUsername());
             userDto.setPassword(userService.findById(userDto.getId()).getPassword());
-            userDto.setSmtpMail(userService.findById(userDto.getId()).getSmtpMail());
-            userDto.setSmtpPass(userService.findById(userDto.getId()).getSmtpPass());
         }
 
         userService.saveUser(userDto);
@@ -172,21 +171,19 @@ public class UserController {
         return "access-denied";
     }
 
-    public static List<Data> defineDataList(boolean update, boolean emplUpdate) {
-
-        String enabled = emplUpdate ? "false" : "true";
+    public static List<Data> defineDataList(boolean update) {
 
         List<Data> dataList = new ArrayList<>();
 
         List<String> items = new ArrayList<>();
 
-        dataList.add(new Data("Naziv tvrtke *", "company", "", "", "", "text", "true", enabled, items));
+        dataList.add(new Data("Naziv tvrtke *", "company", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("OIB *", "oib", "", "", "", "text", "true", enabled, items));
+        dataList.add(new Data("OIB *", "oib", "", "", "", "text", "true", "", items));
         ;
         dataList.add(new Data("Adresa *", "address", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("Grad i poštanski broj *", "city", "", "", "", "text", "false", "", items));
+        dataList.add(new Data("Grad i poštanski broj *", "city", "", "", "", "text", "true", "", items));
         ;
         dataList.add(new Data("Ime *", "firstName", "", "", "", "text", "true", "", items));
         ;
@@ -198,12 +195,8 @@ public class UserController {
         ;
         dataList.add(new Data("e-mail za slanje *", "emailToSend", "", "", "", "text", "true", "", items));
         ;
-//        if (!emplUpdate) {
-//            dataList.add(new Data("e-mail za slanje *", "smtpMail", "", "", "", "text", "true", "", items));
-//            ;
-//            dataList.add(new Data("Lozinka za slanje *", "smtpPass", "", "", "", "text", "true", "", items));
-//            ;
-//        }
+        dataList.add(new Data("Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items));
+        ;
         if (!update) {
             dataList.add(new Data("Korisničko ime *", "username", "", "", "", "text", "true", "", items));
             ;
