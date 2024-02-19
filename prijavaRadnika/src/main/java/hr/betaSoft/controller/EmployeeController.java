@@ -114,7 +114,6 @@ public class EmployeeController {
         model.addAttribute("dataList", defineDataList(false));
         model.addAttribute("title", "Nalog za prijavu");
         model.addAttribute("dataId", "id");
-        model.addAttribute("btnName", "Spremi");
         model.addAttribute("pathSave", "/employees/save");
         model.addAttribute("pathShow", "/employees/show");
         model.addAttribute("sendLink", "/employees/send/{id}");
@@ -131,20 +130,34 @@ public class EmployeeController {
             Employee employee = employeeService.findById(id);
             Employee tempEmployee = (Employee) model.getAttribute("employee");
 
+            String pathSave = "/employees/save";
+            String sendLink = "/employees/send/{id}";
+            String pathSaveSend = "/employees/send";
+
             if (tempEmployee != null) {
                 model.addAttribute("class", tempEmployee);
+                if (tempEmployee.isSignUpSent()) {
+                    pathSave = "";
+                    sendLink = "";
+                    pathSaveSend = "";
+                }
             } else {
                 model.addAttribute("class", employee);
+                if (employee.isSignUpSent()) {
+                    pathSave = "";
+                    sendLink = "";
+                    pathSaveSend = "";
+                }
             }
+
 
             model.addAttribute("dataList", defineDataList(true));
             model.addAttribute("title", "Nalog za prijavu");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Spremi");
-            model.addAttribute("pathSave", "/employees/save");
+            model.addAttribute("pathSave", pathSave);
             model.addAttribute("pathShow", "/employees/show");
-            model.addAttribute("sendLink", "/employees/send/{id}");
-            model.addAttribute("pathSaveSend", "/employees/send");
+            model.addAttribute("sendLink", sendLink);
+            model.addAttribute("pathSaveSend", pathSaveSend);
             model.addAttribute("script", "/js/script-form-employees.js");
             return "form";
         } catch (EmployeeNotFoundException e) {
@@ -152,7 +165,6 @@ public class EmployeeController {
             return "redirect:/employees/show";
         }
     }
-
 
 
     @GetMapping("/employees/delete/{id}")
@@ -176,7 +188,6 @@ public class EmployeeController {
             model.addAttribute("dataList", UserController.defineDataList(true, true));
             model.addAttribute("title", "Postavke");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Spremi");
             model.addAttribute("pathSave", "/employees/user/save");
             model.addAttribute("pathShow", "/employees");
             model.addAttribute("sendLink", "");
@@ -216,9 +227,6 @@ public class EmployeeController {
         userService.saveUser(userDto);
         return "redirect:/employees";
     }
-
-
-
 
 
     private List<Data> defineDataList(boolean isRequired) {
@@ -306,13 +314,12 @@ public class EmployeeController {
             Employee employeeToSignUp = employeeService.findById(id);
 
             if (employeeToSignUp.hasEmptyAttributes()) {
-                ra.addFlashAttribute("message", "Popunite sva obavezna polja u nalogu radnika: "
-                        + employeeToSignUp.getFirstName() + " " + employeeToSignUp.getLastName() + ", " + employeeToSignUp.getOib());
-                return "redirect:/employees/update/"+id;
+                ra.addFlashAttribute("message", "Popunite sva obavezna polja u nalogu radnika: " + employeeToSignUp.getFirstName() + " " + employeeToSignUp.getLastName() + ", " + employeeToSignUp.getOib());
+                return "redirect:/employees/update/" + id;
             }
             if (employeeToSignUp.isSignUpSent()) {
                 ra.addFlashAttribute("message", "Nalog za prijavu radnika je već poslan.");
-                return "redirect:/employees/update/"+id;
+                return "redirect:/employees/update/" + id;
             }
 
             String recipient = employeeToSignUp.getUser().getEmailToSend();
@@ -395,6 +402,6 @@ public class EmployeeController {
         employee.setUser(userService.getAuthenticatedUser());
         employeeService.saveEmployee(employee);
 
-        return "redirect:/employees/send/"+employee.getId();
+        return "redirect:/employees/send/" + employee.getId();
     }
 }

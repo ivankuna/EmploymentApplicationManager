@@ -9,7 +9,7 @@ $(document).ready(function() {
             "info": "Stranica _PAGE_ od _PAGES_",
             "infoEmpty": "Nema dostupnih zapisa",
             "infoFiltered": "",
-            "search": "Filtriraj:",
+            "search": "Traži:",
             "paginate": {
                 "first": "Prva",
                 "previous": "Prethodna",

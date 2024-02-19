@@ -88,13 +88,11 @@
             </div>
             <div class="col-sm-9">
             <div class="form-group">
-<!--                <div th:if="${sendLink != ''}">-->
 
-<!--                    <button type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}" >Pošalji</button>-->
+                <button th:if="${pathSave != ''}" type="submit" class="btn btn-primary">Spremi</button>
 
-<!--                </div>-->
-                <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}" >Pošalji nalog</button>
-                <button type="submit" class="btn btn-primary" th:text="${btnName}"></button>
+                <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}">Pošalji nalog</button>
+
                 <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${pathShow}]]">Odustani</button>
 
 

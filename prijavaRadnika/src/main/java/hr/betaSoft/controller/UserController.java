@@ -56,9 +56,9 @@ public class UserController {
             columnList.add(new Column("Osoba", "name", "id"));
             columnList.add(new Column("Telefon", "telephone", "id"));
             columnList.add(new Column("e-mail", "email", "id"));
-            columnList.add(new Column("e-mail za prijavu", "emailToSend", "id"));
-            columnList.add(new Column("e-mail za slanje", "smtpMail", "id"));
-            columnList.add(new Column("lozinka za slanje", "smtpPass", "id"));
+            columnList.add(new Column("e-mail za slanje", "emailToSend", "id"));
+//            columnList.add(new Column("e-mail za slanje", "smtpMail", "id"));
+//            columnList.add(new Column("lozinka za slanje", "smtpPass", "id"));
         }
 
         List<User> userList = userService.findAll();
@@ -91,7 +91,6 @@ public class UserController {
         model.addAttribute("dataList", defineDataList(false, false));
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
-        model.addAttribute("btnName", "Spremi");
         model.addAttribute("pathSave", "/users/save");
         model.addAttribute("pathShow", "/users/show");
         model.addAttribute("sendLink", "");
@@ -110,7 +109,6 @@ public class UserController {
             model.addAttribute("dataList", defineDataList(true, false));
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
-            model.addAttribute("btnName", "Spremi");
             model.addAttribute("pathSave", "/users/save");
             model.addAttribute("pathShow", "/users/show");
             model.addAttribute("sendLink", "");
@@ -141,6 +139,8 @@ public class UserController {
         if (userDto.getId() != null) {
             userDto.setUsername(userService.findById(userDto.getId()).getUsername());
             userDto.setPassword(userService.findById(userDto.getId()).getPassword());
+            userDto.setSmtpMail(userService.findById(userDto.getId()).getSmtpMail());
+            userDto.setSmtpPass(userService.findById(userDto.getId()).getSmtpPass());
         }
 
         userService.saveUser(userDto);
@@ -193,14 +193,14 @@ public class UserController {
         ;
         dataList.add(new Data("e-mail *", "email", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("e-mail za prijavu *", "emailToSend", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("e-mail za slanje *", "emailToSend", "", "", "", "text", "true", "", items));
         ;
-        if (!emplUpdate) {
-            dataList.add(new Data("e-mail za slanje *", "smtpMail", "", "", "", "text", "true", "", items));
-            ;
-            dataList.add(new Data("Lozinka za slanje *", "smtpPass", "", "", "", "text", "true", "", items));
-            ;
-        }
+//        if (!emplUpdate) {
+//            dataList.add(new Data("e-mail za slanje *", "smtpMail", "", "", "", "text", "true", "", items));
+//            ;
+//            dataList.add(new Data("Lozinka za slanje *", "smtpPass", "", "", "", "text", "true", "", items));
+//            ;
+//        }
         if (!update) {
             dataList.add(new Data("Korisničko ime *", "username", "", "", "", "text", "true", "", items));
             ;
