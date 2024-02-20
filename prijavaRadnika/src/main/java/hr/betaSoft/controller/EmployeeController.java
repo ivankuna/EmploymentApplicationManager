@@ -190,7 +190,7 @@ public class EmployeeController {
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
-            model.addAttribute("dataList", UserController.defineDataList(true));
+            model.addAttribute("dataList", UserController.defineDataList(true, true));
             model.addAttribute("title", "Postavke");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/employees/user/save");

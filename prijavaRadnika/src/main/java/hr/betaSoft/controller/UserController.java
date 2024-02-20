@@ -89,7 +89,7 @@ public class UserController {
             model.addAttribute("class", new UserDto());
         }
 
-        model.addAttribute("dataList", defineDataList(false));
+        model.addAttribute("dataList", defineDataList(false, false));
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/users/save");
@@ -107,7 +107,7 @@ public class UserController {
             UserDto user = userService.convertEntityToDto(userService.findById(id));
 
             model.addAttribute("class", user);
-            model.addAttribute("dataList", defineDataList(true));
+            model.addAttribute("dataList", defineDataList(true, false));
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/users/save");
@@ -171,15 +171,17 @@ public class UserController {
         return "access-denied";
     }
 
-    public static List<Data> defineDataList(boolean update) {
+    public static List<Data> defineDataList(boolean update, boolean emplUpdate) {
+
+        String fieldStatus = emplUpdate ? "false" : "true";
 
         List<Data> dataList = new ArrayList<>();
 
         List<String> items = new ArrayList<>();
 
-        dataList.add(new Data("Naziv tvrtke *", "company", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("Naziv tvrtke *", "company", "", "", "", "text", "true", fieldStatus, items));
         ;
-        dataList.add(new Data("OIB *", "oib", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("OIB *", "oib", "", "", "", "text", "true", fieldStatus, items));
         ;
         dataList.add(new Data("Adresa *", "address", "", "", "", "text", "true", "", items));
         ;
