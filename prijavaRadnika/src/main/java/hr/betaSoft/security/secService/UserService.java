@@ -24,4 +24,6 @@ public interface UserService {
     UserDto convertEntityToDto(User user);
 
     boolean checkIfEmployeeUnderUserExist(long userId);
+
+    User findByOib(String oib);
 }

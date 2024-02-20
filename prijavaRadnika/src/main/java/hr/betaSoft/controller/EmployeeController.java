@@ -353,9 +353,19 @@ public class EmployeeController {
     @PostMapping("/employees/save")
     public String addEmployee(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
 
-        if (!employeeService.checkOib(employee.getOib())) {
+        if (!OibHandler.checkOib(employee.getOib())) {
             ra.addFlashAttribute("employee", employee);
             ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return "redirect:/employees/new";
+        }
+
+        if (employeeService.findByOib(employee.getOib()) != null) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
 
             if (employee.getId() != null) {
                 return "redirect:/employees/update/" + employee.getId();
@@ -371,9 +381,11 @@ public class EmployeeController {
             employee.setSignOutSent(tempEmployee.isSignOutSent());
             employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
             employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
+            employee.setUpdateSent(tempEmployee.isUpdateSent());
+            employee.setDateOfUpdateSent(tempEmployee.getDateOfUpdateSent());
+            employee.setTimeOfUpdateSent(tempEmployee.getTimeOfUpdateSent());
         }
 
-//        employee.setUser(userService.getAuthenticatedUser());
         employee.setUser(userService.findById(UserIdTracker.getUserId()));
 
         employeeService.saveEmployee(employee);
@@ -385,7 +397,7 @@ public class EmployeeController {
     @PostMapping("/employees/send")
     public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
 
-        if (!employeeService.checkOib(employee.getOib())) {
+        if (!OibHandler.checkOib(employee.getOib())) {
             ra.addFlashAttribute("employee", employee);
             ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
 

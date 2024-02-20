@@ -5,10 +5,7 @@ import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
 import hr.betaSoft.security.userdto.UserDto;
-import hr.betaSoft.tools.Column;
-import hr.betaSoft.tools.Data;
-import hr.betaSoft.tools.DeviceDetector;
-import hr.betaSoft.tools.UserIdTracker;
+import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -130,6 +127,20 @@ public class UserController {
         if (usernameExists != null) {
             ra.addFlashAttribute("userDto", userDto);
             ra.addFlashAttribute("message", "Već postoji račun registriran s tim korisničkim imenom.");
+
+            if (userDto.getId() != null) {
+                return "redirect:/users/update/" + userDto.getId();
+            }
+            return "redirect:/users/new";
+        }
+
+        if (!OibHandler.checkOib(userDto.getOib())) {
+            ra.addFlashAttribute("userDto", userDto);
+            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+
+            if (userDto.getId() != null) {
+                return "redirect:/users/update/" + userDto.getId();
+            }
             return "redirect:/users/new";
         }
 

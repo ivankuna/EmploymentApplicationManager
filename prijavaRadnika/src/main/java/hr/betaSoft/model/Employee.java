@@ -168,7 +168,7 @@ public class Employee {
     private Date dateOfUpdateSent;
 
     @Column
-    private String timeUpdateSent;
+    private String timeOfUpdateSent;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

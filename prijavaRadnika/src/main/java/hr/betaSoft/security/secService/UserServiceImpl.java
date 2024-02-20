@@ -169,4 +169,10 @@ public class UserServiceImpl implements UserService {
         }
         return employeeExist;
     }
+
+    @Override
+    public User findByOib(String oib) {
+
+        return userRepository.findByOib(oib);
+    }
 }
