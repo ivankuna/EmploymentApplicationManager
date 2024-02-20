@@ -4,6 +4,7 @@ package hr.betaSoft.controller;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
 import hr.betaSoft.security.userdto.UserDto;
+import hr.betaSoft.tools.UserIdTracker;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -65,6 +66,9 @@ public class MainController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+
+        // TEST //
+        UserIdTracker.setUserId(userService.getAuthenticatedUser().getId());
 
         List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
         if (authorityList.get(0).getAuthority().equals("ROLE_ADMIN")) {

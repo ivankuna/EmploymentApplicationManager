@@ -7,10 +7,7 @@ import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
-import hr.betaSoft.tools.Column;
-import hr.betaSoft.tools.Data;
-import hr.betaSoft.tools.DeviceDetector;
-import hr.betaSoft.tools.SendMail;
+import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -77,7 +74,9 @@ public class EmployeeController {
             columnList.add(new Column("Status", "signUpSent", "id"));
         }
 
-        User authenticatedUser = userService.getAuthenticatedUser();
+//        User authenticatedUser = userService.getAuthenticatedUser();
+        User authenticatedUser = userService.findById(UserIdTracker.getUserId());
+
         List<Employee> employeeListTemp = employeeService.findByUser(authenticatedUser);
         List<Employee> employeeList = new ArrayList<>();
 
@@ -91,13 +90,15 @@ public class EmployeeController {
             employeeList = employeeListTemp;
         }
 
-
-
         model.addAttribute("title", "PRIJAVA RADNIKA");
         model.addAttribute("columnList", columnList);
         model.addAttribute("dataList", employeeList);
         model.addAttribute("addBtnText", "Novi nalog");
-        model.addAttribute("path", "/employees");
+
+        String path = userService.getAuthenticatedUser().getId().equals(UserIdTracker.getADMIN_ID()) ? "/redirect" : "/employees";
+        model.addAttribute("path", path);
+//        model.addAttribute("path", "/employees");
+
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
         model.addAttribute("pdfLink", "/employees/pdf/{id}");
@@ -105,7 +106,6 @@ public class EmployeeController {
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("showLink", "");
         model.addAttribute("script", "/js/script-table-employees.js");
-
 
         return "table";
     }
@@ -373,7 +373,9 @@ public class EmployeeController {
             employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
         }
 
-        employee.setUser(userService.getAuthenticatedUser());
+//        employee.setUser(userService.getAuthenticatedUser());
+        employee.setUser(userService.findById(UserIdTracker.getUserId()));
+
         employeeService.saveEmployee(employee);
 
         return "redirect:/employees/show";
@@ -403,10 +405,20 @@ public class EmployeeController {
             employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
         }
 
-        employee.setUser(userService.getAuthenticatedUser());
+//        employee.setUser(userService.getAuthenticatedUser());
+        employee.setUser(userService.findById(UserIdTracker.getUserId()));
+
         employeeService.saveEmployee(employee);
 
         return "redirect:/employees/send/" + employee.getId();
+    }
+
+    @GetMapping("/redirect")
+    public String redirect() {
+
+        UserIdTracker.setUserId(UserIdTracker.getADMIN_ID());
+
+        return "redirect:/users/show";
     }
     @GetMapping("/employees/pdf/{id}")
     public String showEmployessPdf(@PathVariable Long id, RedirectAttributes ra) {
@@ -419,5 +431,4 @@ public class EmployeeController {
         }
         return "redirect:/employees/show";
     }
-
 }

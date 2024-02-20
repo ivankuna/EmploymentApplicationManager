@@ -8,6 +8,7 @@ import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.Column;
 import hr.betaSoft.tools.Data;
 import hr.betaSoft.tools.DeviceDetector;
+import hr.betaSoft.tools.UserIdTracker;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -58,7 +59,6 @@ public class UserController {
             columnList.add(new Column("e-mail", "email", "id"));
             columnList.add(new Column("e-mail za slanje", "emailToSend", "id"));
             columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
-
         }
 
         List<User> userList = userService.findAll();
@@ -162,9 +162,6 @@ public class UserController {
         return "redirect:/users/show";
     }
 
-
-
-
     @GetMapping("/access-denied")
     public String showAccessDenied() {
 
@@ -210,14 +207,17 @@ public class UserController {
 
     @GetMapping("/users/employees/show/{id}")
     public String showEmployeesFromUsers(@PathVariable Long id, RedirectAttributes ra) {
-        try {
+//        try {
+//
+//            ra.addFlashAttribute("message", "Show employees for user_id = " + id.toString()) ;
+//
+//        } catch (UserNotFoundException e) {
+//            ra.addFlashAttribute("message", e.getMessage());
+//        }
 
-            ra.addFlashAttribute("message", "Show employees for user_id = " + id.toString()) ;
+        UserIdTracker.setUserId(id);
 
-        } catch (UserNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/users/show";
+        return "redirect:/employees/show";
     }
 
     @GetMapping("/users/pdf/{id}")
