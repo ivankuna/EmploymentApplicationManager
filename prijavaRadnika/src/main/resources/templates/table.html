@@ -60,7 +60,7 @@
                     <div th:if="${successMessage}" class="alert alert-success" th:text="${successMessage}"></div>
                 </div>
                 <div class="col-md-12">
-                    <a th:href="@{${addLink}}" class="btn btn-primary" th:text="${dodajNaziv}">Dodaj</a>
+                    <a th:href="@{${addLink}}" class="btn btn-primary" th:text="${addBtnText}">Dodaj</a>
                 </div>
                 <br>
                 <div class="table-responsive">
@@ -68,11 +68,8 @@
                     <table id="myTable" class="table table-striped table-hover" data-locale="hr-HR">
                         <thead>
                         <tr>
-
                             <th th:each="column : ${columnList}" th:text="${column.name}"></th>
                             <th></th>
-                            <th  th:if="${showLink != ''}"></th>
-
                         </tr>
                         </thead>
                         <tbody>
@@ -87,7 +84,13 @@
                                        onclick="return confirm('Jeste li sigurni da želite obrisati?') ? true : false">
                                         <i class="fas fa-trash-alt"></i>
                                     </a>
-                                    <a th:if="${showLink != ''}" th:href="@{${showLink}(id=${data[columnList[0].id]})}">Proširi</a>
+                                    <a th:if="${showLink != ''}" th:href="@{${showLink}(id=${data[columnList[0].id]})}">
+                                        <i class="fas fa-list"></i>
+                                    </a>
+                                    <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}"
+                                        onclick="return confirm('Jeste li sigurni da želite kreirati PDF?') ? true : false">
+                                        <i class="fas fa-file-pdf"></i>
+                                    </a>
 
                                 </div>
                             </td>

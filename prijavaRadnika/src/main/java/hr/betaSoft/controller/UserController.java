@@ -57,7 +57,7 @@ public class UserController {
             columnList.add(new Column("Telefon", "telephone", "id"));
             columnList.add(new Column("e-mail", "email", "id"));
             columnList.add(new Column("e-mail za slanje", "emailToSend", "id"));
-//            columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
+            columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
 
         }
 
@@ -65,11 +65,11 @@ public class UserController {
         model.addAttribute("title", "Popis korisnika");
         model.addAttribute("columnList", columnList);
         model.addAttribute("dataList", userList);
-        model.addAttribute("dodajNaziv", "Dodaj korisnika");
-
+        model.addAttribute("addBtnText", "Novi korisnik");
         model.addAttribute("path", "/users");
         model.addAttribute("addLink", "/users/new");
         model.addAttribute("sendLink", "");
+        model.addAttribute("pdfLink", "/users/pdf/{id}");
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("showLink", "/users/employees/show/{id}");
@@ -210,7 +210,19 @@ public class UserController {
     public String showEmployeesFromUsers(@PathVariable Long id, RedirectAttributes ra) {
         try {
 
-            ra.addFlashAttribute("message", "Eto me: " + id.toString()) ;
+            ra.addFlashAttribute("message", "Show employees for user_id = " + id.toString()) ;
+
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/users/show";
+    }
+
+    @GetMapping("/users/pdf/{id}")
+    public String showUsersPdf(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+
+            ra.addFlashAttribute("message", "Create PDF for user_id = " + id.toString()) ;
 
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());

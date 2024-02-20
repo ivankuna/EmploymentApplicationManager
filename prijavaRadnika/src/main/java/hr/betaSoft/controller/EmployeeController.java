@@ -91,16 +91,18 @@ public class EmployeeController {
             employeeList = employeeListTemp;
         }
 
-        model.addAttribute("dataList", employeeList);
+
 
         model.addAttribute("title", "PRIJAVA RADNIKA");
-        model.addAttribute("dodajNaziv", "Novi nalog");
+        model.addAttribute("columnList", columnList);
+        model.addAttribute("dataList", employeeList);
+        model.addAttribute("addBtnText", "Novi nalog");
         model.addAttribute("path", "/employees");
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
+        model.addAttribute("pdfLink", "/employees/pdf/{id}");
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
-        model.addAttribute("columnList", columnList);
         model.addAttribute("showLink", "");
         model.addAttribute("script", "/js/script-table-employees.js");
 
@@ -315,7 +317,7 @@ public class EmployeeController {
                 StringBuilder message = new StringBuilder();
                 message.append("Popunite sva obavezna polja u nalogu radnika: ");
                 for (String emptyAttribute : emptyAttributes) {
-                    message.append("\n -" + emptyAttribute);
+                    message.append(" * " + emptyAttribute);
                 }
                 ra.addFlashAttribute("message", message);
                 return "redirect:/employees/update/" + id;
@@ -406,4 +408,16 @@ public class EmployeeController {
 
         return "redirect:/employees/send/" + employee.getId();
     }
+    @GetMapping("/employees/pdf/{id}")
+    public String showEmployessPdf(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+
+            ra.addFlashAttribute("message", "Create PDF for employees_id = " + id.toString()) ;
+
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/employees/show";
+    }
+
 }

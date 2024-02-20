@@ -192,38 +192,37 @@ public class Employee {
                 "\n Tvrtka: " + getUser().getCompany() +
                 "\n OIB: " + getUser().getOib() +
                 "\n\nPODACI O RADNIKU" +
-                "\n OIB: " + oib +
-                "\n Ime: " + firstName +
-                "\n Prezime: " + lastName +
-                "\n Spol: " + gender +
-                "\n Datum rođenja: " + formattedDateOfBirth +
-                "\n Adresa - Ulica i broj: " + address +
-                "\n Grad i poštanski broj: " + city +
-                "\n Stvarna stručna sprema: " + professionalQualification +
-                "\n Naziv najviše završene škole: " + highestLevelOfEducation +
-                "\n IBAN - tekuću račun - redovni: " + ibanRegular +
-                "\n IBAN - tekuću račun - zaštićeni: " + ibanProtected +
-                "\n Radno mjesto: " + employmentPosition +
-                "\n Mjesto rada - Grad: " + cityOfEmployment +
-                "\n Potrebna stručna sprema: " + requiredProfessionalQualification +
-                "\n Ugovor o radu: " + employmentContract +
-                "\n Razlog - na određeno: " + reasonForDefinite +
-                "\n Dodatni rad: " + additionalWork +
-                "\n Dodatni rad - sati: " + additionalWorkHours +
-                "\n Radno vrijeme: " + workingHours +
-                "\n Sati nepuno: " + hoursForPartTime +
-                "\n Neradni dani u tjednu: " + nonWorkingDays +
-                "\n Datum prijave: " + formattedDateOfSignUp +
-                "\n Datum odjave - za određeno: " + formattedDateOfSignOut +
-                "\n Iznos osnovne plaće: " + basicSalary +
-                "\n Vruto / Neto: " + salaryType +
-                "\n Strani državljanin: " + foreignNational +
-                "\n Radna dozvola vrijedi do: " + formattedExpiryDateOfWorkPermit +
-                "\n Umirovljenik: " + retiree +
-                "\n Mladi od 30 godina: " + youngerThanThirty +
-                "\n Prvo zaposlenje: " + firstEmployment +
-                "\n Invalid: " + disability +
-                "\n Napomena: " + note
+                "\n  1.  OIB: " + oib +
+                "\n  2.  Ime: " + firstName +
+                "\n  3.  Prezime: " + lastName +
+                "\n  4.  Spol: " + gender +
+                "\n  5.  Datum rođenja: " + formattedDateOfBirth +
+                "\n  6.  Adresa - Ulica i broj: " + address +
+                "\n  7.  Grad i poštanski broj: " + city +
+                "\n  8.  Stvarna stručna sprema: " + professionalQualification +
+                "\n  9.  Naziv najviše završene škole: " + highestLevelOfEducation +
+                "\n 10.  IBAN - tekuću račun - redovni: " + ibanRegular +
+                "\n 11.  IBAN - tekuću račun - zaštićeni: " + ibanProtected +
+                "\n 12.  Radno mjesto: " + employmentPosition +
+                "\n 13.  Mjesto rada - Grad: " + cityOfEmployment +
+                "\n 14.  Potrebna stručna sprema: " + requiredProfessionalQualification +
+                "\n 15.  Ugovor o radu: " + employmentContract +
+                "\n 16.  Razlog - na određeno: " + reasonForDefinite +
+                "\n 17.  Dodatni radi: " + additionalWork +
+                "\n 17a. Dodatni rad - sati: " + additionalWorkHours +
+                "\n 18.  Radno vrijeme: " + workingHours +
+                "\n 18a. Sati nepuno: " + hoursForPartTime +
+                "\n 19.  Neradni dani u tjednu: " + nonWorkingDays +
+                "\n 20.  Datum prijave: " + formattedDateOfSignUp +
+                "\n 21.  Datum odjave - za određeno: " + formattedDateOfSignOut +
+                "\n 22.  Iznos osnovne plaće: " + basicSalary + " " + salaryType +
+                "\n 23.  Strani državljanin: " + foreignNational +
+                "\n 23a. Radna dozvola vrijedi do: " + formattedExpiryDateOfWorkPermit +
+                "\n 24.  Umirovljenik: " + retiree +
+                "\n 25.  Mladi od 30 godina: " + youngerThanThirty +
+                "\n 26.  Prvo zaposlenje: " + firstEmployment +
+                "\n 27.  Invalid: " + disability +
+                "\n 28.  Napomena: " + note
                 ;
 
         String result = emailTxt.replaceAll("\\bnull\\b", "").replaceAll("\\btrue\\b", "DA").replaceAll("\\bfalse\\b", "NE");
