@@ -67,7 +67,6 @@ public class MainController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        // TEST //
         UserIdTracker.setUserId(userService.getAuthenticatedUser().getId());
 
         List<GrantedAuthority> authorityList = new ArrayList<>(authorities);

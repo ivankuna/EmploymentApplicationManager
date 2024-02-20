@@ -49,7 +49,7 @@ public class Employee {
     @Column
     private String gender;
 
-    @Column
+    @Column(unique=true)
     private String oib;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -143,15 +143,15 @@ public class Employee {
     @Column
     private boolean signUpSent;
 
-    @Column
-    private boolean signOutSent;
-
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfSignUpSent;
 
     @Column
     private String timeOfSignUpSent;
+
+    @Column
+    private boolean signOutSent;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
@@ -160,9 +160,28 @@ public class Employee {
     @Column
     private String timeOfSignOutSent;
 
+    @Column
+    private boolean updateSent;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfUpdateSent;
+
+    @Column
+    private String timeUpdateSent;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
+
+    @Column
+    private boolean fromSignUp;
+
+    @Column
+    private boolean fromSignOut;
+
+    @Column
+    private boolean fromUpdate;
 
 
     @Override
