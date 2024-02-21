@@ -1,7 +1,5 @@
 package hr.betaSoft.tools;
 
-import java.util.List;
-
 public class OibHandler {
 
     public static boolean checkOib(String oib) {
@@ -27,16 +25,4 @@ public class OibHandler {
         control = control % 10;
         return (control == (chars[10] - '0'));
     }
-
-//    public static boolean checkIfOibExists(List<String> oibList, String oib) {
-//
-//        boolean exists = false;
-//
-//        for (String tempOib : oibList) {
-//            if (tempOib.equals(oib)) {
-//                exists = true;
-//            }
-//        }
-//        return exists;
-//    }
 }

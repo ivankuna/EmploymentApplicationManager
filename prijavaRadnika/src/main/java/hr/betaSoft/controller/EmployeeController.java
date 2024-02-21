@@ -74,7 +74,6 @@ public class EmployeeController {
             columnList.add(new Column("Status", "signUpSent", "id"));
         }
 
-//        User authenticatedUser = userService.getAuthenticatedUser();
         User authenticatedUser = userService.findById(UserIdTracker.getUserId());
 
         List<Employee> employeeListTemp = employeeService.findByUser(authenticatedUser);
@@ -90,14 +89,23 @@ public class EmployeeController {
             employeeList = employeeListTemp;
         }
 
+        //////////// TEST ////////////
+        List<Employee> employeeListFromSignUp = new ArrayList<>();
+        for (Employee employee : employeeList) {
+            if (employee.isFromSignUp()) {
+                employeeListFromSignUp.add(employee);
+            }
+        }
+        model.addAttribute("dataList", employeeListFromSignUp);
+        //////////////////////////////
+
         model.addAttribute("title", "PRIJAVA RADNIKA");
         model.addAttribute("columnList", columnList);
-        model.addAttribute("dataList", employeeList);
+//        model.addAttribute("dataList", employeeList);
         model.addAttribute("addBtnText", "Novi nalog");
 
         String path = userService.getAuthenticatedUser().getId().equals(UserIdTracker.getADMIN_ID()) ? "/redirect" : "/employees";
         model.addAttribute("path", path);
-//        model.addAttribute("path", "/employees");
 
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
@@ -126,8 +134,7 @@ public class EmployeeController {
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/employees/save");
         model.addAttribute("pathShow", "/employees/show");
-        model.addAttribute("sendLink", "/employees/send/{id}");
-        model.addAttribute("pathSaveSend", "/employees/send");
+        model.addAttribute("sendLink", "/employees/send}");
         model.addAttribute("script", "/js/script-form-employees.js");
 
         return "form";
@@ -141,8 +148,8 @@ public class EmployeeController {
             Employee tempEmployee = (Employee) model.getAttribute("employee");
 
             String pathSave = "/employees/save";
-            String sendLink = "/employees/send/{id}";
-            String pathSaveSend = "/employees/send";
+            String sendLink = "/employees/send";
+
 
             if (tempEmployee != null) {
                 model.addAttribute("class", tempEmployee);
@@ -153,7 +160,7 @@ public class EmployeeController {
             if (employee.isSignUpSent()) {
                 pathSave = "";
                 sendLink = "";
-                pathSaveSend = "";
+
             }
 
             model.addAttribute("dataList", defineDataList());
@@ -162,7 +169,6 @@ public class EmployeeController {
             model.addAttribute("pathSave", pathSave);
             model.addAttribute("pathShow", "/employees/show");
             model.addAttribute("sendLink", sendLink);
-            model.addAttribute("pathSaveSend", pathSaveSend);
             model.addAttribute("script", "/js/script-form-employees.js");
             return "form";
         } catch (EmployeeNotFoundException e) {
@@ -196,7 +202,6 @@ public class EmployeeController {
             model.addAttribute("pathSave", "/employees/user/save");
             model.addAttribute("pathShow", "/employees");
             model.addAttribute("sendLink", "");
-            model.addAttribute("pathSaveSend", "");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
@@ -209,12 +214,6 @@ public class EmployeeController {
     public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) {
 
         User usernameExists = userService.findByUsername(userDto.getUsername());
-
-        if (usernameExists != null) {
-            ra.addFlashAttribute("userDto", userDto);
-            ra.addFlashAttribute("message", "Već postoji račun registriran s tim korisničkim imenom.");
-            return "redirect:/users/new";
-        }
 
         if (result.hasErrors()) {
             return showAddForm(model);
@@ -353,25 +352,10 @@ public class EmployeeController {
     @PostMapping("/employees/save")
     public String addEmployee(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
 
-        if (!OibHandler.checkOib(employee.getOib())) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+        String path = checkOib(employee, ra);
 
-            if (employee.getId() != null) {
-                return "redirect:/employees/update/" + employee.getId();
-            }
-            return "redirect:/employees/new";
-        }
-
-        if (employeeService.findByOib(employee.getOib()) != null) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
-
-            if (employee.getId() != null) {
-                return "redirect:/employees/update/" + employee.getId();
-            }
-            return "redirect:/employees/new";
-        }
+        // TEST //
+        employee.setFromSignUp(true);
 
         if (employee.getId() != null) {
             Employee tempEmployee = employeeService.findById(employee.getId());
@@ -384,28 +368,27 @@ public class EmployeeController {
             employee.setUpdateSent(tempEmployee.isUpdateSent());
             employee.setDateOfUpdateSent(tempEmployee.getDateOfUpdateSent());
             employee.setTimeOfUpdateSent(tempEmployee.getTimeOfUpdateSent());
+
+            // TEST //
+            employee.setFromSignUp(tempEmployee.isFromSignUp());
         }
 
         employee.setUser(userService.findById(UserIdTracker.getUserId()));
 
         employeeService.saveEmployee(employee);
 
-        return "redirect:/employees/show";
+        if (path.isEmpty()) {
+            return "redirect:/employees/show";
+        } else {
+            return path;
+        }
     }
 
 
     @PostMapping("/employees/send")
     public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
 
-        if (!OibHandler.checkOib(employee.getOib())) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
-
-            if (employee.getId() != null) {
-                return "redirect:/employees/update/" + employee.getId();
-            }
-            return "redirect:/employees/new";
-        }
+        String path = checkOib(employee, ra);
 
         if (employee.getId() != null) {
             Employee tempEmployee = employeeService.findById(employee.getId());
@@ -417,12 +400,15 @@ public class EmployeeController {
             employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
         }
 
-//        employee.setUser(userService.getAuthenticatedUser());
         employee.setUser(userService.findById(UserIdTracker.getUserId()));
 
         employeeService.saveEmployee(employee);
 
-        return "redirect:/employees/send/" + employee.getId();
+        if (path.isEmpty()) {
+            return "redirect:/employees/send/" + employee.getId();
+        } else {
+            return path;
+        }
     }
 
     @GetMapping("/redirect")
@@ -442,5 +428,33 @@ public class EmployeeController {
             ra.addFlashAttribute("message", e.getMessage());
         }
         return "redirect:/employees/show";
+    }
+
+    private String checkOib(Employee employee, RedirectAttributes ra) {
+
+        String path = "";
+
+        if (!OibHandler.checkOib(employee.getOib())) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+            path = "redirect:/employees/new";
+
+            if (employee.getId() != null) {
+                path = "redirect:/employees/update/" + employee.getId();
+            }
+        }
+
+        Employee tempEmployee = employeeService.findByOib(employee.getOib());
+
+        if (tempEmployee != null && employee.getId() != tempEmployee.getId()) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
+            path = "redirect:/employees/new";
+
+            if (employee.getId() != null) {
+                path = "redirect:/employees/update/" + employee.getId();
+            }
+        }
+        return path;
     }
 }

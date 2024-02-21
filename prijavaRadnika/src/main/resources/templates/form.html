@@ -91,7 +91,7 @@
 
                 <button th:if="${pathSave != ''}" type="submit" class="btn btn-primary">Spremi</button>
 
-                <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary" th:formaction="@{${pathSaveSend}}">Pošalji nalog</button>
+                <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary" th:formaction="@{${sendLink}}">Pošalji nalog</button>
 
                 <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${pathShow}]]">Odustani</button>
 

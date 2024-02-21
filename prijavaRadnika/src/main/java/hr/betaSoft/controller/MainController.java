@@ -87,11 +87,19 @@ public class MainController {
         return "employees";
     }
 
+    @GetMapping("/prijava")
+    public String prijavaRadnika() {
+        return "/employees/show";
+    }
+
     @GetMapping("/promjena")
     public String promjenaRadnika() {
         return "work-in-progress";
     }
-
+    @GetMapping("/odjava")
+    public String odjavaRadnika() {
+        return "work-in-progress";
+    }
     @GetMapping("/postavke")
     public String postavkeFirme() {
 
@@ -103,8 +111,5 @@ public class MainController {
         }
     }
 
-    @GetMapping("/odjava")
-    public String odjavaRadnika() {
-        return "work-in-progress";
-    }
+
 }
