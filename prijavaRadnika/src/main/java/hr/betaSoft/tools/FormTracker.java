@@ -5,10 +5,14 @@ import lombok.Setter;
 
 public class FormTracker {
 
-    // GUIDE:
-    // Prijava -> 1
-    // Promjena -> 2
-    // Odjava -> 3
+    @Getter
+    private static final int SIGN_UP = 1;
+
+    @Getter
+    private static final int UPDATE = 2;
+
+    @Getter
+    private static final int SIGN_OUT = 3;
 
     @Getter
     @Setter

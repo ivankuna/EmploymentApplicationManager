@@ -90,7 +90,7 @@ public class EmployeeController {
         }
 
         //////////// TEST ////////////
-        if (FormTracker.getFormId() == 1) {
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             List<Employee> employeeListFromSignUp = new ArrayList<>();
             for (Employee employee : employeeList) {
                 if (employee.isFromSignUp()) {
@@ -170,7 +170,6 @@ public class EmployeeController {
             if (employee.isSignUpSent()) {
                 pathSave = "";
                 sendLink = "";
-
             }
 
             model.addAttribute("dataList", defineDataList());
@@ -188,13 +187,34 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/save")
-    public String addEmployee(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
-
-        String path = checkOib(employee, ra);
+    public String addEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes ra) {
 
         // TEST //
-        if (FormTracker.getFormId() == 1) {
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             employee.setFromSignUp(true);
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            employee.setFromUpdate(true);
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            employee.setFromSignOut(true);
+        }
+
+        if (checkOibExists(employee)) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return "redirect:/employees/new";
+        }
+        else if (!OibHandler.checkOib(employee.getOib())) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return  "redirect:/employees/new";
         }
 
 
@@ -209,22 +229,24 @@ public class EmployeeController {
             employee.setUpdateSent(tempEmployee.isUpdateSent());
             employee.setDateOfUpdateSent(tempEmployee.getDateOfUpdateSent());
             employee.setTimeOfUpdateSent(tempEmployee.getTimeOfUpdateSent());
-
+            employee.setFromSignUp(tempEmployee.isFromSignUp());
+            employee.setFromUpdate(tempEmployee.isFromUpdate());
+            employee.setFromSignOut(tempEmployee.isFromSignOut());
             // TEST //
-            if (FormTracker.getFormId() == 1) {
-                employee.setFromSignUp(tempEmployee.isFromSignUp());
-            }
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//                employee.setFromSignUp(tempEmployee.isFromSignUp());
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//                employee.setFromUpdate(tempEmployee.isFromUpdate());
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//                employee.setFromSignOut(tempEmployee.isFromSignOut());
+//            }
         }
 
         employee.setUser(userService.findById(UserIdTracker.getUserId()));
 
         employeeService.saveEmployee(employee);
 
-        if (path.isEmpty()) {
-            return "redirect:/employees/show";
-        } else {
-            return path;
-        }
+        return "redirect:/employees/show";
     }
 
 
@@ -237,6 +259,70 @@ public class EmployeeController {
             ra.addFlashAttribute("message", e.getMessage());
         }
         return "redirect:/employees/show";
+    }
+
+    @PostMapping("/employees/send")
+    public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
+
+        // TEST //
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            employee.setFromSignUp(true);
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            employee.setFromUpdate(true);
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            employee.setFromSignOut(true);
+        }
+
+        if (checkOibExists(employee)) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return "redirect:/employees/new";
+        }
+        else if (!OibHandler.checkOib(employee.getOib())) {
+            ra.addFlashAttribute("employee", employee);
+            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+
+            if (employee.getId() != null) {
+                return "redirect:/employees/update/" + employee.getId();
+            }
+            return  "redirect:/employees/new";
+        }
+
+
+        if (employee.getId() != null) {
+            Employee tempEmployee = employeeService.findById(employee.getId());
+            employee.setSignUpSent(tempEmployee.isSignUpSent());
+            employee.setDateOfSignUpSent(tempEmployee.getDateOfSignUpSent());
+            employee.setTimeOfSignUpSent(tempEmployee.getTimeOfSignUpSent());
+            employee.setSignOutSent(tempEmployee.isSignOutSent());
+            employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
+            employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
+            employee.setUpdateSent(tempEmployee.isUpdateSent());
+            employee.setDateOfUpdateSent(tempEmployee.getDateOfUpdateSent());
+            employee.setTimeOfUpdateSent(tempEmployee.getTimeOfUpdateSent());
+            employee.setFromSignUp(tempEmployee.isFromSignUp());
+            employee.setFromUpdate(tempEmployee.isFromUpdate());
+            employee.setFromSignOut(tempEmployee.isFromSignOut());
+
+            // TEST //
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//                employee.setFromSignUp(tempEmployee.isFromSignUp());
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//                employee.setFromUpdate(tempEmployee.isFromUpdate());
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//                employee.setFromSignOut(tempEmployee.isFromSignOut());
+//            }
+        }
+
+        employee.setUser(userService.findById(UserIdTracker.getUserId()));
+
+        employeeService.saveEmployee(employee);
+
+        return "redirect:/employees/send/" + employee.getId();
     }
 
     @GetMapping("/employees/send/{id}")
@@ -284,32 +370,6 @@ public class EmployeeController {
         return "redirect:/employees/show";
     }
 
-    @PostMapping("/employees/send")
-    public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
-
-        String path = checkOib(employee, ra);
-
-        if (employee.getId() != null) {
-            Employee tempEmployee = employeeService.findById(employee.getId());
-            employee.setSignUpSent(tempEmployee.isSignUpSent());
-            employee.setDateOfSignUpSent(tempEmployee.getDateOfSignUpSent());
-            employee.setTimeOfSignUpSent(tempEmployee.getTimeOfSignUpSent());
-            employee.setSignOutSent(tempEmployee.isSignOutSent());
-            employee.setDateOfSignOutSent(tempEmployee.getDateOfSignOutSent());
-            employee.setTimeOfSignOutSent(tempEmployee.getTimeOfSignOutSent());
-        }
-
-        employee.setUser(userService.findById(UserIdTracker.getUserId()));
-
-        employeeService.saveEmployee(employee);
-
-        if (path.isEmpty()) {
-            return "redirect:/employees/send/" + employee.getId();
-        } else {
-            return path;
-        }
-    }
-
     @GetMapping("employees/user/update/{id}")
     public String showEditUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
@@ -351,34 +411,6 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
-    private String checkOib(Employee employee, RedirectAttributes ra) {
-
-        String path = "";
-
-        if (!OibHandler.checkOib(employee.getOib())) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
-            path = "redirect:/employees/new";
-
-            if (employee.getId() != null) {
-                path = "redirect:/employees/update/" + employee.getId();
-            }
-        }
-
-        Employee tempEmployee = employeeService.findByOib(employee.getOib());
-
-        if (tempEmployee != null && employee.getId() != tempEmployee.getId()) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
-            path = "redirect:/employees/new";
-
-            if (employee.getId() != null) {
-                path = "redirect:/employees/update/" + employee.getId();
-            }
-        }
-        return path;
-    }
-
     @GetMapping("/employees/pdf/{id}")
     public String showEmployessPdf(@PathVariable Long id, RedirectAttributes ra) {
         try {
@@ -389,6 +421,19 @@ public class EmployeeController {
             ra.addFlashAttribute("message", e.getMessage());
         }
         return "redirect:/employees/show";
+    }
+
+    private boolean checkOibExists(Employee employee) {
+
+        Employee tempEmployee = employeeService.findByOib(employee.getOib());
+
+        boolean oibExist = false;
+
+        if (tempEmployee != null && employee.getId() != tempEmployee.getId()) {
+
+            oibExist = true;
+        }
+        return oibExist;
     }
 
     private List<Data> defineDataList() {

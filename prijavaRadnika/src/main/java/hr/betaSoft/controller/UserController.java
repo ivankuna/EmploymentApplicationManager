@@ -76,7 +76,7 @@ public class UserController {
     }
 
     @GetMapping("/users/employees/show/{id}")
-    public String showEmployeesFromUsers(@PathVariable Long id, RedirectAttributes ra) {
+    public String showEmployeesFromUsers(@PathVariable Long id) {
 
         UserIdTracker.setUserId(id);
 

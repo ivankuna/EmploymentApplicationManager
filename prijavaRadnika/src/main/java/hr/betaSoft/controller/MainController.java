@@ -90,7 +90,7 @@ public class MainController {
 
     @GetMapping("/prijava")
     public String prijavaRadnika() {
-        FormTracker.setFormId(1);
+        FormTracker.setFormId(FormTracker.getSIGN_UP());
         return "redirect:/employees/show";
     }
 
@@ -100,7 +100,8 @@ public class MainController {
     }
     @GetMapping("/odjava")
     public String odjavaRadnika() {
-        return "work-in-progress";
+        FormTracker.setFormId(FormTracker.getSIGN_OUT());
+        return "redirect:/employees/show";
     }
     @GetMapping("/postavke")
     public String postavkeFirme() {
