@@ -58,11 +58,11 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("S", "signUpSent", "id"));
+            columnList.add(new Column("", "signUpSent", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
-            columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
+//            columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
         } else {
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
@@ -99,11 +99,19 @@ public class EmployeeController {
             }
             model.addAttribute("dataList", employeeListFromSignUp);
         }
-        //////////////////////////////
 
-        model.addAttribute("title", "PRIJAVA RADNIKA");
+        String title = "";
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            title = "PRIJAVA RADNIKA";
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()){
+            title = "PROMJENA KOD RADNIKA";
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            title = "ODJAVA RADNIKA";
+        }
+
+
+        model.addAttribute("title", title);
         model.addAttribute("columnList", columnList);
-//        model.addAttribute("dataList", employeeList);
         model.addAttribute("addBtnText", "Novi nalog");
 
         String path = userService.getAuthenticatedUser().getId().equals(UserIdTracker.getADMIN_ID()) ? "/redirect" : "/employees";

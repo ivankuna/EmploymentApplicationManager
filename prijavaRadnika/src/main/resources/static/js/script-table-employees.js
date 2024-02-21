@@ -25,7 +25,7 @@ $(document).ready(function() {
                 "targets": "_all",
                 "render": function (data, type, row) {
                 if (data === "true") {
-                                        return '<i class="fas fa-envelope"></i>';
+                                        return '<i class="far fa-circle"></i>';
                                     } else if (data === "false") {
                                         return '<i class="fas fa-circle"></i>';
                                     } else {

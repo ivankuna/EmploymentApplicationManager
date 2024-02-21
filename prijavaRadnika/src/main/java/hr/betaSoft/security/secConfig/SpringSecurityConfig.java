@@ -34,13 +34,15 @@ public class SpringSecurityConfig {
                                 .requestMatchers("/js/**").permitAll()
                                 .requestMatchers("/access-denied").permitAll()
                                 .requestMatchers("/users/**").hasRole("ADMIN")
-//                                .requestMatchers("/employees/**").hasRole("USER")
                                 .requestMatchers("/employees/**").permitAll()
                                 .requestMatchers("/prijava/**").hasRole("USER")
                                 .requestMatchers("/promjena/**").hasRole("USER")
                                 .requestMatchers("/odjava/**").hasRole("USER")
                                 .requestMatchers("/postavke/**").hasRole("USER")
                                 .requestMatchers("/**").hasRole("ADMIN")
+                                .requestMatchers("/favicon.png").permitAll()
+                                .requestMatchers("/favicon.ico").permitAll()
+
                 ).formLogin(
                         form -> form
                                 .loginPage("/login")
