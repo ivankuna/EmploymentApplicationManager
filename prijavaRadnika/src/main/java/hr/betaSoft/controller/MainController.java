@@ -4,6 +4,7 @@ package hr.betaSoft.controller;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
 import hr.betaSoft.security.userdto.UserDto;
+import hr.betaSoft.tools.FormTracker;
 import hr.betaSoft.tools.UserIdTracker;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
@@ -89,7 +90,8 @@ public class MainController {
 
     @GetMapping("/prijava")
     public String prijavaRadnika() {
-        return "/employees/show";
+        FormTracker.setFormId(1);
+        return "redirect:/employees/show";
     }
 
     @GetMapping("/promjena")
@@ -110,6 +112,4 @@ public class MainController {
             return "page-not-found";
         }
     }
-
-
 }

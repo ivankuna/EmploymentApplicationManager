@@ -75,6 +75,14 @@ public class UserController {
         return "table";
     }
 
+    @GetMapping("/users/employees/show/{id}")
+    public String showEmployeesFromUsers(@PathVariable Long id, RedirectAttributes ra) {
+
+        UserIdTracker.setUserId(id);
+
+        return "redirect:/employees/show";
+    }
+
     @GetMapping("/users/new")
     public String showAddForm(Model model) {
 
@@ -178,6 +186,17 @@ public class UserController {
 
         return "access-denied";
     }
+    @GetMapping("/users/pdf/{id}")
+    public String showUsersPdf(@PathVariable Long id, RedirectAttributes ra) {
+        try {
+
+            ra.addFlashAttribute("message", "Create PDF for user_id = " + id.toString()) ;
+
+        } catch (UserNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        }
+        return "redirect:/users/show";
+    }
 
     public static List<Data> defineDataList(boolean update, boolean emplUpdate) {
 
@@ -215,33 +234,4 @@ public class UserController {
         }
         return dataList;
     }
-
-    @GetMapping("/users/employees/show/{id}")
-    public String showEmployeesFromUsers(@PathVariable Long id, RedirectAttributes ra) {
-//        try {
-//
-//            ra.addFlashAttribute("message", "Show employees for user_id = " + id.toString()) ;
-//
-//        } catch (UserNotFoundException e) {
-//            ra.addFlashAttribute("message", e.getMessage());
-//        }
-
-        UserIdTracker.setUserId(id);
-
-        return "redirect:/employees/show";
-    }
-
-    @GetMapping("/users/pdf/{id}")
-    public String showUsersPdf(@PathVariable Long id, RedirectAttributes ra) {
-        try {
-
-            ra.addFlashAttribute("message", "Create PDF for user_id = " + id.toString()) ;
-
-        } catch (UserNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        }
-        return "redirect:/users/show";
-    }
-
-
 }
