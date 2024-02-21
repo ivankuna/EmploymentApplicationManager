@@ -43,7 +43,7 @@ public class UserController {
 
         if (isMobile) {
             columnList.add(new Column("Naziv tvrtke", "company", "id"));
-            columnList.add(new Column("Korisničko ime", "username", "id"));
+
         } else {
             columnList.add(new Column("ID", "id", "id"));
             columnList.add(new Column("Korisničko ime", "username", "id"));

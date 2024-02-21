@@ -49,6 +49,7 @@ public class EmployeeController {
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, true));
     }
 
+
     @GetMapping("/employees/show")
     public String showEmployees(Model model, HttpServletRequest request) {
 
@@ -58,10 +59,11 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("", "signUpSent", "id"));
+
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
+            columnList.add(new Column("", "signUpSent", "id"));
 //            columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
         } else {
             columnList.add(new Column("Prezime", "lastName", "id"));
