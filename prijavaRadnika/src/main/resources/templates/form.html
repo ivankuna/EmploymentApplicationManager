@@ -19,21 +19,18 @@
              }
         .fixed-bottom-buttons {
                 position: fixed;
-                bottom: 20px;
+                bottom: 0px;
                 left: 0;
                 right: 0;
                 z-index: 1030;
                 display: flex;
                 justify-content: center;
-                background-color: #343a40; /* Dodajte ovu liniju */
-                padding: 10px 0; /* Dodajte ovu liniju */
+                background-color: #343a40; /* grey color */
+                padding: 10px 0;
             }
-
         .fixed-bottom-buttons .btn {
           margin: 0 5px;
         }
-
-
     </style>
 </head>
 <body>
@@ -67,12 +64,9 @@
         <hr>
         <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
         <form id="myForm" th:object="${class}" th:action="@{${pathSave}}" method="POST">
-
             <input type="hidden" th:field="*{__${dataId}__}">
-
             <div th:each="data : ${dataList}" class="form-group-row">
                 <div class="col-sm-9">
-
                     <label th:for="${data.field}" th:text="${data.name}"></label>
                     <div th:if="${#lists.isEmpty(data.items) and #strings.isEmpty(data.model)}">
                         <input class="form-control" th:id="${data.field}"
@@ -84,7 +78,6 @@
                                th:title="${data.required == 'true'} ? 'Molimo Vas da popunite ovo polje.' : null"
                         >
                     </div>
-
                     <div th:unless="${#strings.isEmpty(data.model)}">
                         <select class="form-control" th:id="${data.field}" th:field="*{__${data.id}__}"
                                 th:required="${data.required == 'true'} ? 'required' : null"
@@ -93,7 +86,6 @@
                                     th:text="${item[data.option]}"></option>
                         </select>
                     </div>
-
                     <div th:if="${data.items != null and data.items.size() > 0}">
                         <select class="form-control" th:id="${data.field}"
                                 th:field="*{__${data.field}__}"
@@ -111,15 +103,14 @@
                 <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary"
                         onclick="return confirm('Jeste li sigurni da želite poslati nalog?');"
                         th:formaction="@{${sendLink}}">
-                    Pošalji nalog
+                    Pošalji
                 </button>
-
                 <form th:if="${pathSave != ''}">
-                <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"
-                        onclick="cancelForm()"
-                        th:formaction="@{${cancelLink}}">
-                    Odustani
-                </button>
+                    <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"
+                            onclick="cancelForm()"
+                            th:formaction="@{${cancelLink}}">
+                        Odustani
+                    </button>
                 </form>
                 <form th:if="${pathSave == ''}">
                     <button type="button" class="btn btn-primary" th:onclick="window.location=[[${pathShow}]]">
@@ -134,7 +125,6 @@
     </div>
 </div>
 </div>
-
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
@@ -152,8 +142,5 @@
         }
     }
 </script>
-
 </body>
-
-
 </html>

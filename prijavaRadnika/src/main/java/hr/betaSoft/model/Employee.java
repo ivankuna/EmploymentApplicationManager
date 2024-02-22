@@ -2,6 +2,7 @@ package hr.betaSoft.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import hr.betaSoft.security.secModel.User;
+import hr.betaSoft.tools.FormTracker;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -35,6 +36,14 @@ public class Employee {
     public static final List<String> WORKING_HOURS = Arrays.asList("Puno", "Nepuno");
 
     public static final List<String> SALARY_TYPE = Arrays.asList("Bruto", "Neto");
+
+    // Item, pored ponuđenih,  može biti slobodan unos teksta
+    public static final List<String> REASON_FOR_SIGN_OUT = Arrays.asList("Istek Ugovora o radu ", "Sporazumni raskid", "Otkaz - poslovno uvjetovani", "Otkaz - osobno uvjetovani",
+            "Ostvareno pravo na mirovinu", "Otkaz radnika", "Otkaz uvjetovan skrivljenim ponašanjem radnika", "Izvanredni otkaz", "Gubitak državljanstva ili istek radne dozvole");
+
+    // Item, pored ponuđenih,  može biti slobodan unos teksta
+    public static final List<String> REASON_FOR_UPDATE = Arrays.asList("određeno-neodređeno", "neodređeno-određeno", "nepuno-puno", "puno-nepuno", "broj sati nepuno",
+            "stjecanje državljanstva", "stjecanje mirovine", "invalidnost", "mlađi od 30 godina");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -138,9 +147,6 @@ public class Employee {
     private boolean disability;
 
     @Column
-    private String note;
-
-    @Column
     private boolean signUpSent;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -170,6 +176,20 @@ public class Employee {
     @Column
     private String timeOfUpdateSent;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfUpdateSentReal;
+
+    @Column
+    private String reasonForUpdate;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfSignOutSentReal;
+
+    @Column
+    private String reasonForSignOut;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     private User user;
@@ -183,6 +203,14 @@ public class Employee {
     @Column
     private boolean fromUpdate;
 
+    @Column
+    private String noteSignUp;
+
+    @Column
+    private String noteSignOut;
+
+    @Column
+    private String noteUpdate;
 
     @Override
     public String toString() {
@@ -241,36 +269,49 @@ public class Employee {
                 "\n 25.  Mladi od 30 godina: " + youngerThanThirty +
                 "\n 26.  Prvo zaposlenje: " + firstEmployment +
                 "\n 27.  Invalid: " + disability +
-                "\n 28.  Napomena: " + note
+                "\n 28.  Napomena: " + noteSignUp
                 ;
 
         String result = emailTxt.replaceAll("\\bnull\\b", "").replaceAll("\\btrue\\b", "DA").replaceAll("\\bfalse\\b", "NE");
         return result;
     }
 
-    public List<String> hasEmptyAttributes() {
+    public List<String> hasEmptyAttributes(int formId) {
+
+        String[] attributeValues = new String[]{};
+
+        if (formId == FormTracker.getSIGN_UP()) {
+            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Spol", "Datum rođenja", "Adresa", "Grad i poštanski broj", "Stvarna stručna sprema",
+                    "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu", "Radno vrijeme",
+                    "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto"};
+        } else if (formId == FormTracker.getSIGN_OUT()) {
+            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum zadnje promjene", "Datum odjave - iz Prijave",
+                    "Datum odjave - stvarni", "Razlog odjave"};
+        } else if (formId == FormTracker.getUPDATE()) {
+            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum zadnje promjene", "Datum promjene", "Razlog promjene"};
+        }
 
         List<String> emptyAttributes = new ArrayList<>();
 
-        Stream.of("OIB", "Ime", "Prezime", "Spol", "Datum rođenja", "Adresa", "Grad i poštanski broj", "Stvarna stručna sprema",
-                        "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu", "Radno vrijeme",
-                        "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto")
+        Stream.of(attributeValues)
                 .filter(attributeName -> {
                     Object value = getValueByName(attributeName);
                     return value == null || (value instanceof String && ((String) value).isEmpty());
                 })
                 .forEach(emptyAttributes::add);
 
-        if (employmentContract.equals("Određeno") && (dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())) {
-            emptyAttributes.add("Datum odjave");
-        }
-        if (employmentContract.equals("Određeno") && (reasonForDefinite == null || reasonForDefinite.trim().isEmpty())) {
-            emptyAttributes.add("Razlog - na određeno");
-        }
-        if (additionalWork && (additionalWorkHours == null || additionalWorkHours == 0)) {
-            emptyAttributes.add("Dodatni rad - sati");
-        } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
-            emptyAttributes.add("Radna dozvola vrijedi do");
+        if (formId == FormTracker.getSIGN_UP()) {
+            if (employmentContract.equals("Određeno") && (dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())) {
+                emptyAttributes.add("Datum odjave");
+            }
+            if (employmentContract.equals("Određeno") && (reasonForDefinite == null || reasonForDefinite.trim().isEmpty())) {
+                emptyAttributes.add("Razlog - na određeno");
+            }
+            if (additionalWork && (additionalWorkHours == null || additionalWorkHours == 0)) {
+                emptyAttributes.add("Dodatni rad - sati");
+            } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
+                emptyAttributes.add("Radna dozvola vrijedi do");
+            }
         }
 
         return emptyAttributes;
@@ -324,6 +365,18 @@ public class Employee {
                 return firstEmployment;
             case "Invalid":
                 return disability;
+            case "Datum zadnje promjene":
+                return dateOfUpdateSent;
+            case "Datum odjave - iz Prijave":
+                return dateOfSignOut;
+            case "Datum odjave - stvarni":
+                return dateOfSignOutSent;
+            case "Razlog odjave":
+                return reasonForSignOut;
+            case "Datum promjene":
+                return dateOfUpdateSentReal;
+            case "Razlog promjene":
+                return reasonForUpdate;
             default:
                 throw new IllegalArgumentException("Unknown attribute name: " + attributeName);
         }

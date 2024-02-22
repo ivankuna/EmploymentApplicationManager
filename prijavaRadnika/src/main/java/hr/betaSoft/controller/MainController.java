@@ -69,6 +69,7 @@ public class MainController {
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
         UserIdTracker.setUserId(userService.getAuthenticatedUser().getId());
+        FormTracker.setFormId(FormTracker.getSIGN_UP());
 
         List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
         if (authorityList.get(0).getAuthority().equals("ROLE_ADMIN")) {
@@ -97,15 +98,13 @@ public class MainController {
     @GetMapping("/promjena")
     public String promjenaRadnika() {
         FormTracker.setFormId(FormTracker.getUPDATE());
-//        return "redirect:/employees/show";
-        return "work-in-progress";
+        return "redirect:/employees/show";
     }
 
     @GetMapping("/odjava")
     public String odjavaRadnika() {
         FormTracker.setFormId(FormTracker.getSIGN_OUT());
-//        return "redirect:/employees/show";
-        return "work-in-progress";
+        return "redirect:/employees/show";
     }
 
     @GetMapping("/postavke")
