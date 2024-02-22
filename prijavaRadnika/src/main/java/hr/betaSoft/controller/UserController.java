@@ -101,6 +101,7 @@ public class UserController {
         model.addAttribute("pathShow", "/users/show");
         model.addAttribute("sendLink", "");
         model.addAttribute("pathSaveSend", "");
+        model.addAttribute("cancelLink", "/users/cancel");
         model.addAttribute("script", "/js/script-form-users.js");
         return "form";
     }
@@ -119,6 +120,7 @@ public class UserController {
             model.addAttribute("pathShow", "/users/show");
             model.addAttribute("sendLink", "");
             model.addAttribute("pathSaveSend", "");
+            model.addAttribute("cancelLink", "/users/cancel");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
@@ -127,6 +129,11 @@ public class UserController {
         }
     }
 
+    @PostMapping("/users/cancel")
+    public String cancelUser(@ModelAttribute("employee") Employee employee, RedirectAttributes ra) {
+
+        return "redirect:/users/show";
+    }
     @PostMapping("/users/save")
     public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) {
 

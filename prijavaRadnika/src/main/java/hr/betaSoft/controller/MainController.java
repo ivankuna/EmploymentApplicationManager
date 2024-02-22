@@ -97,13 +97,15 @@ public class MainController {
     @GetMapping("/promjena")
     public String promjenaRadnika() {
         FormTracker.setFormId(FormTracker.getUPDATE());
-        return "redirect:/employees/show";
+//        return "redirect:/employees/show";
+        return "work-in-progress";
     }
 
     @GetMapping("/odjava")
     public String odjavaRadnika() {
         FormTracker.setFormId(FormTracker.getSIGN_OUT());
-        return "redirect:/employees/show";
+//        return "redirect:/employees/show";
+        return "work-in-progress";
     }
 
     @GetMapping("/postavke")

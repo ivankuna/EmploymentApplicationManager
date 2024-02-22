@@ -60,10 +60,11 @@ public class EmployeeController {
 
         if (isMobile) {
 
+            columnList.add(new Column("", "signUpSent", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
-            columnList.add(new Column("", "signUpSent", "id"));
+
 //            columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
         } else {
             columnList.add(new Column("Prezime", "lastName", "id"));
@@ -121,7 +122,10 @@ public class EmployeeController {
 
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
-        model.addAttribute("pdfLink", "/employees/pdf/{id}");
+        //  Privrmeno Siniša start
+//        model.addAttribute("pdfLink", "/employees/pdf/{id}");
+        model.addAttribute("pdfLink", "");
+        //  Privrmeno Siniša start
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("showLink", "");
@@ -154,7 +158,8 @@ public class EmployeeController {
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/employees/save");
         model.addAttribute("pathShow", "/employees/show");
-        model.addAttribute("sendLink", "/employees/send}");
+        model.addAttribute("sendLink", "/employees/send");
+        model.addAttribute("cancelLink", "/employees/cancel");
         model.addAttribute("script", "/js/script-form-employees.js");
 
         return "form";
@@ -188,12 +193,25 @@ public class EmployeeController {
             model.addAttribute("pathSave", pathSave);
             model.addAttribute("pathShow", "/employees/show");
             model.addAttribute("sendLink", sendLink);
+            model.addAttribute("cancelLink", "/employees/cancel");
             model.addAttribute("script", "/js/script-form-employees.js");
             return "form";
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
             return "redirect:/employees/show";
         }
+    }
+
+    @PostMapping("/employees/cancel")
+    public String cancelEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes ra) {
+
+        return "redirect:/employees/show";
+    }
+
+    @PostMapping("/employees/user/cancel")
+    public String cancelUserEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes ra) {
+
+        return "redirect:/employees";
     }
 
     @PostMapping("/employees/save")
@@ -242,14 +260,15 @@ public class EmployeeController {
             employee.setFromSignUp(tempEmployee.isFromSignUp());
             employee.setFromUpdate(tempEmployee.isFromUpdate());
             employee.setFromSignOut(tempEmployee.isFromSignOut());
-            // TEST //
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-//                employee.setFromSignUp(tempEmployee.isFromSignUp());
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-//                employee.setFromUpdate(tempEmployee.isFromUpdate());
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-//                employee.setFromSignOut(tempEmployee.isFromSignOut());
-//            }
+
+        } else {
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                employee.setFromSignUp(true);
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                employee.setFromUpdate(true);
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                employee.setFromSignOut(true);
+            }
         }
 
         employee.setUser(userService.findById(UserIdTracker.getUserId()));
@@ -317,16 +336,16 @@ public class EmployeeController {
             employee.setFromSignUp(tempEmployee.isFromSignUp());
             employee.setFromUpdate(tempEmployee.isFromUpdate());
             employee.setFromSignOut(tempEmployee.isFromSignOut());
-
-            // TEST //
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-//                employee.setFromSignUp(tempEmployee.isFromSignUp());
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-//                employee.setFromUpdate(tempEmployee.isFromUpdate());
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-//                employee.setFromSignOut(tempEmployee.isFromSignOut());
-//            }
+        } else {
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                employee.setFromSignUp(true);
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                employee.setFromUpdate(true);
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                employee.setFromSignOut(true);
+            }
         }
+
 
         employee.setUser(userService.findById(UserIdTracker.getUserId()));
 
@@ -380,6 +399,8 @@ public class EmployeeController {
         return "redirect:/employees/show";
     }
 
+
+
     @GetMapping("employees/user/update/{id}")
     public String showEditUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
@@ -393,6 +414,7 @@ public class EmployeeController {
             model.addAttribute("pathSave", "/employees/user/save");
             model.addAttribute("pathShow", "/employees");
             model.addAttribute("sendLink", "");
+            model.addAttribute("cancelLink", "/employees/user/cancel");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {

@@ -86,14 +86,14 @@
                                     <a th:href="@{${deleteLink}(id=${data[columnList[0].id]})}"
                                        class="text-danger"
                                        onclick="return confirm('Jeste li sigurni da želite obrisati?') ? true : false">
-                                        <i class="fas fa-trash-alt fa-2x"></i>
+                                        <i class="fas fa-trash-alt fa-1x"></i>
                                     </a>
                                     <a th:if="${showLink != ''}" th:href="@{${showLink}(id=${data[columnList[0].id]})}">
-                                        <i class="fas fa-list fa-2x"></i>
+                                        <i class="fas fa-list fa-1x"></i>
                                     </a>
                                     <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}"
                                         onclick="return confirm('Jeste li sigurni da želite kreirati PDF?') ? true : false">
-                                        <i class="fas fa-file-pdf fa-2x"></i>
+                                        <i class="fas fa-file-pdf fa-1x"></i>
                                     </a>
 
                                 </div>
