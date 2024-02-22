@@ -60,7 +60,7 @@ public class EmployeeController {
 
         if (isMobile) {
 
-            columnList.add(new Column("", "signUpSent", "id"));
+            columnList.add(new Column("S", "signUpSent", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
@@ -120,10 +120,15 @@ public class EmployeeController {
 
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
-        //  Temporary start
-        //  model.addAttribute("pdfLink", "/employees/pdf/{id}");
-        model.addAttribute("pdfLink", "");
-        //  Temporary start
+
+        if (isMobile) {
+            model.addAttribute("pdfLink", "");
+        } else {
+              model.addAttribute("pdfLink", "/employees/pdf/{id}");
+        }
+
+
+
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("showLink", "");
