@@ -53,8 +53,8 @@ public class UserController {
             columnList.add(new Column("Naziv grada", "city", "id"));
             columnList.add(new Column("Osoba", "name", "id"));
             columnList.add(new Column("Telefon", "telephone", "id"));
-            columnList.add(new Column("e-mail", "email", "id"));
-            columnList.add(new Column("e-mail za slanje", "emailToSend", "id"));
+            columnList.add(new Column("e-mail korisnika", "email", "id"));
+            columnList.add(new Column("e-mail primatelja naloga", "emailToSend", "id"));
             columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
         }
 
@@ -227,9 +227,9 @@ public class UserController {
         ;
         dataList.add(new Data("Telefon *", "telephone", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("e-mail *", "email", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("e-mail korisnika *", "email", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("e-mail za slanje *", "emailToSend", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("e-mail primatelja naloga *", "emailToSend", "", "", "", "text", "true", "", items));
         ;
         dataList.add(new Data("Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items));
         ;
