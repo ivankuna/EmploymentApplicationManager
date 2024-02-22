@@ -64,8 +64,6 @@ public class EmployeeController {
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
-
-//            columnList.add(new Column("Vrijeme", "timeOfSignUpSent", "id"));
         } else {
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
@@ -122,10 +120,10 @@ public class EmployeeController {
 
         model.addAttribute("addLink", "/employees/new");
         model.addAttribute("sendLink", "/employees/send/{id}");
-        //  Privrmeno Siniša start
-//        model.addAttribute("pdfLink", "/employees/pdf/{id}");
+        //  Temporary start
+        //  model.addAttribute("pdfLink", "/employees/pdf/{id}");
         model.addAttribute("pdfLink", "");
-        //  Privrmeno Siniša start
+        //  Temporary start
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("showLink", "");

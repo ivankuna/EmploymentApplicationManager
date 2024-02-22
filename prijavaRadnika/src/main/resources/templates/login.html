@@ -9,22 +9,14 @@
     <title>Prijava korisnika</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
 
-
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="https://icons.iconarchive.com/icons/fa-team/fontawesome/16/FontAwesome-Helmet-Safety-icon.png">
     <link rel="shortcut icon" type="image/png" sizes="32x32" href="https://icons.iconarchive.com/icons/fa-team/fontawesome/32/FontAwesome-Helmet-Safety-icon.png">
     <link rel="icon" type="image/png" sizes="16x16" href="https://icons.iconarchive.com/icons/fa-team/fontawesome/16/FontAwesome-Helmet-Safety-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="https://icons.iconarchive.com/icons/fa-team/fontawesome/32/FontAwesome-Helmet-Safety-icon.png">
-    <!--  Privremeno Siniša start -->
+    <!--  Temporary start -->
     <link rel="apple-touch-icon" sizes="180x180" href="https://cdn.oaistatic.com/_next/static/media/apple-touch-icon.59f2e898.png">
-    <!--  Privremeno Siniša end -->
-
-
-
-
-
-
-
-
+    <!--  Temporary end -->
     <style>
         * {
              font-size: 16px;
@@ -46,7 +38,7 @@
 <br/>
 <div class="container-fluid">
     <div class="row">
-        <div class="col-md-6 offset-md-3">
+        <div class="col-md-4 offset-md-4">
             <br>
             <br>
             <div th:if="${param.success}">
@@ -82,12 +74,20 @@
 
                         <div class="mb-3">
                             <label for="password" class="control-label">Lozinka *</label>
-                            <input type="password"
-                                   id="password"
-                                   name="password"
-                                   class="form-control"
-                                   placeholder="Lozinka"
-                            />
+                            <div class="input-group">
+                                <input type="password"
+                                       id="password"
+                                       name="password"
+                                       class="form-control"
+                                       placeholder="Lozinka"
+                                />
+                                <div class="input-group-append">
+                                    <span class="input-group-text" id="togglePasswordVisibility">
+                                        <i class="far fa-eye-slash fa-1x"></i>
+<!--                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path d="M12 3c-4.97 0-9 4.03-9 9s4.03 9 9 9 9-4.03 9-9-4.03-9-9-9zm0 16c-3.87 0-7-3.13-7-7s3.13-7 7-7 7 3.13 7 7-3.13 7-7 7zm0-5c-.55 0-1 .45-1 1s.45 1 1 1 1-.45 1-1-.45-1-1-1z"/></svg>-->
+                                    </span>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="mb-3">
@@ -102,5 +102,15 @@
 <!--<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>-->
 <!--<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>-->
 <!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
+<script>
+    document.getElementById('togglePasswordVisibility').addEventListener('click', function() {
+        var passwordInput = document.getElementById('password');
+        if (passwordInput.type === 'password') {
+            passwordInput.type = 'text';
+        } else {
+            passwordInput.type = 'password';
+        }
+    });
+</script>
 </body>
 </html>
