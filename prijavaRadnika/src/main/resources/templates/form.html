@@ -106,11 +106,14 @@
                     Pošalji
                 </button>
                 <form th:if="${pathSave != ''}">
-                    <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"
-                            onclick="cancelForm()"
-                            th:formaction="@{${cancelLink}}">
-                        Odustani
-                    </button>
+
+<!--                    <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"-->
+<!--                            onclick="cancelForm()"-->
+<!--                            th:formaction="@{${cancelLink}}">-->
+<!--                        Odustani-->
+<!--                    </button>-->
+                    <button type="button" class="btn btn-danger" th:onclick="showConfirmation()">Odustani</button>
+
                 </form>
                 <form th:if="${pathSave == ''}">
                     <button type="button" class="btn btn-primary" th:onclick="window.location=[[${pathShow}]]">
@@ -129,18 +132,30 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script type="text/javascript" th:src="@{${script}}"></script>
-<script th:inline="javascript">
-    function cancelForm() {
-        var confirmed = confirm('Jeste li sigurni da želite prekinuti?');
-        if (confirmed) {
-            var form = document.getElementById('myForm');
-            var requiredFields = form.querySelectorAll('[required]');
-            for (var i = 0; i < requiredFields.length; i++) {
-                requiredFields[i].removeAttribute('required');
-            }
-            form.submit();
+<!--<script th:inline="javascript">-->
+<!--    function cancelForm() {-->
+<!--        var confirmed = confirm('Jeste li sigurni da želite prekinuti?');-->
+<!--        if (confirmed) {-->
+<!--            var form = document.getElementById('myForm');-->
+<!--            var requiredFields = form.querySelectorAll('[required]');-->
+<!--            for (var i = 0; i < requiredFields.length; i++) {-->
+<!--                requiredFields[i].removeAttribute('required');-->
+<!--            }-->
+<!--            form.submit();-->
+<!--        }-->
+<!--    }-->
+<!--</script>-->
+<script>
+    function showConfirmation() {
+        if (confirm("Želite li prekinuti unos?")) {
+            // Ako korisnik pritisne "OK", preusmjeri ih na putanju
+            window.location = "[[${pathShow}]]";
+        } else {
+            // Ako korisnik pritisne "Cancel", ne preusmjeravaj ih
+            return false; // Dodajte ovo da spriječite preusmjeravanje
         }
     }
 </script>
+
 </body>
 </html>

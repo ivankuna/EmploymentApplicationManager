@@ -59,11 +59,10 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-
-            columnList.add(new Column("S", "signUpSent", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
+            columnList.add(new Column("", "signUpSent", "id"));
         } else {
             columnList.add(new Column("Status", "signUpSent", "id"));
             columnList.add(new Column("Prezime", "lastName", "id"));
@@ -158,17 +157,17 @@ public class EmployeeController {
         return "table";
     }
 
-    @PostMapping("/employees/cancel")
-    public String cancelEmployee() {
-
-        return "redirect:/employees/show";
-    }
-
-    @PostMapping("/employees/user/cancel")
-    public String cancelUserEmployee() {
-
-        return "redirect:/employees";
-    }
+//    @PostMapping("/employees/cancel")
+//    public String cancelEmployee() {
+//
+//        return "redirect:/employees/show";
+//    }
+//
+//    @PostMapping("/employees/user/cancel")
+//    public String cancelUserEmployee() {
+//
+//        return "redirect:/employees";
+//    }
 
     @GetMapping("/redirect")
     public String redirect() {
@@ -195,7 +194,7 @@ public class EmployeeController {
         model.addAttribute("pathSave", "/employees/save");
         model.addAttribute("pathShow", "/employees/show");
         model.addAttribute("sendLink", "/employees/send");
-        model.addAttribute("cancelLink", "/employees/cancel");
+//        model.addAttribute("cancelLink", "/employees/cancel");
         model.addAttribute("script", "/js/script-form-employees.js");
 
         return "form";
@@ -232,7 +231,7 @@ public class EmployeeController {
             model.addAttribute("pathSave", pathSave);
             model.addAttribute("pathShow", "/employees/show");
             model.addAttribute("sendLink", sendLink);
-            model.addAttribute("cancelLink", "/employees/cancel");
+//            model.addAttribute("cancelLink", "/employees/cancel");
             model.addAttribute("script", "/js/script-form-employees.js");
             return "form";
         } catch (EmployeeNotFoundException e) {
@@ -435,7 +434,7 @@ public class EmployeeController {
             model.addAttribute("pathSave", "/employees/user/save");
             model.addAttribute("pathShow", "/employees");
             model.addAttribute("sendLink", "");
-            model.addAttribute("cancelLink", "/employees/user/cancel");
+//            model.addAttribute("cancelLink", "/employees/user/cancel");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {

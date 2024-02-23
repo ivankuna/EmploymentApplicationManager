@@ -49,8 +49,9 @@ $(document).ready(function() {
                 }
             }
         ],
-                 "paging": false,
-                 "searching": false,
-                 "info": false
+         "paging": false,
+         "searching": false,
+         "info": false
+//         ,"ordering": false
     } );
 } );
