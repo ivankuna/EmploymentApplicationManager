@@ -81,6 +81,7 @@
                     <div th:unless="${#strings.isEmpty(data.model)}">
                         <select class="form-control" th:id="${data.field}" th:field="*{__${data.id}__}"
                                 th:required="${data.required == 'true'} ? 'required' : null"
+                                th:disabled="${data.enabled == 'false'} ? 'disabled' : null"
                                 title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
                             <option th:each="item : ${__${data.model}__}" th:value="${item[data.field]}"
                                     th:text="${item[data.option]}"></option>
@@ -90,6 +91,7 @@
                         <select class="form-control" th:id="${data.field}"
                                 th:field="*{__${data.field}__}"
                                 th:required="${data.required == 'true'} ? 'required' : null"
+                                th:disabled="${data.enabled == 'false'} ? 'disabled' : null"
                                 title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
                             <option th:each="item : ${data.items}" th:value="${item}"
                                     th:text="${item}"></option>
@@ -107,11 +109,11 @@
                 </button>
                 <form th:if="${pathSave != ''}">
 
-<!--                    <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"-->
-<!--                            onclick="cancelForm()"-->
-<!--                            th:formaction="@{${cancelLink}}">-->
-<!--                        Odustani-->
-<!--                    </button>-->
+                    <!--                    <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"-->
+                    <!--                            onclick="cancelForm()"-->
+                    <!--                            th:formaction="@{${cancelLink}}">-->
+                    <!--                        Odustani-->
+                    <!--                    </button>-->
                     <button type="button" class="btn btn-danger" th:onclick="showConfirmation()">Odustani</button>
 
                 </form>

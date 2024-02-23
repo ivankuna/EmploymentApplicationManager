@@ -58,7 +58,7 @@ public class Employee {
     @Column
     private String gender;
 
-    @Column(unique=true)
+    @Column(unique = true)
     private String oib;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -216,10 +216,14 @@ public class Employee {
     public String toString() {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
+        String emailTxt = "";
         String formattedDateOfBirth = "";
         String formattedDateOfSignUp = "";
         String formattedDateOfSignOut = "";
         String formattedExpiryDateOfWorkPermit = "";
+        String formattedDateOfUpdateSent = "";
+        String formattedDateOfSignOutSentReal = "";
+        String formattedDateOfUpdateSentReal = "";
 
         if (dateOfBirth != null) {
             formattedDateOfBirth = sdf.format(dateOfBirth);
@@ -233,44 +237,87 @@ public class Employee {
         if (expiryDateOfWorkPermit != null) {
             formattedExpiryDateOfWorkPermit = sdf.format(expiryDateOfWorkPermit);
         }
+        if (dateOfUpdateSent != null) {
+            formattedDateOfUpdateSent = sdf.format(dateOfUpdateSent);
+        }
+        if (dateOfSignOutSentReal != null) {
+            formattedDateOfSignOutSentReal = sdf.format(dateOfSignOutSentReal);
+        }
+        if (dateOfUpdateSentReal != null) {
+            formattedDateOfUpdateSentReal = sdf.format(dateOfUpdateSentReal);
+        }
 
-        String emailTxt =
-                "\nPOSLODAVAC" +
-                "\n Tvrtka: " + getUser().getCompany() +
-                "\n OIB: " + getUser().getOib() +
-                "\n\nPODACI O RADNIKU" +
-                "\n  1.  OIB: " + oib +
-                "\n  2.  Ime: " + firstName +
-                "\n  3.  Prezime: " + lastName +
-                "\n  4.  Spol: " + gender +
-                "\n  5.  Datum rođenja: " + formattedDateOfBirth +
-                "\n  6.  Adresa - Ulica i broj: " + address +
-                "\n  7.  Grad i poštanski broj: " + city +
-                "\n  8.  Stvarna stručna sprema: " + professionalQualification +
-                "\n  9.  Naziv najviše završene škole: " + highestLevelOfEducation +
-                "\n 10.  IBAN - tekuću račun - redovni: " + ibanRegular +
-                "\n 11.  IBAN - tekuću račun - zaštićeni: " + ibanProtected +
-                "\n 12.  Radno mjesto: " + employmentPosition +
-                "\n 13.  Mjesto rada - Grad: " + cityOfEmployment +
-                "\n 14.  Potrebna stručna sprema: " + requiredProfessionalQualification +
-                "\n 15.  Ugovor o radu: " + employmentContract +
-                "\n 16.  Razlog - na određeno: " + reasonForDefinite +
-                "\n 17.  Dodatni radi: " + additionalWork +
-                "\n 17a. Dodatni rad - sati: " + additionalWorkHours +
-                "\n 18.  Radno vrijeme: " + workingHours +
-                "\n 18a. Sati nepuno: " + hoursForPartTime +
-                "\n 19.  Neradni dani u tjednu: " + nonWorkingDays +
-                "\n 20.  Datum prijave: " + formattedDateOfSignUp +
-                "\n 21.  Datum odjave - za određeno: " + formattedDateOfSignOut +
-                "\n 22.  Iznos osnovne plaće: " + basicSalary + " " + salaryType +
-                "\n 23.  Strani državljanin: " + foreignNational +
-                "\n 23a. Radna dozvola vrijedi do: " + formattedExpiryDateOfWorkPermit +
-                "\n 24.  Umirovljenik: " + retiree +
-                "\n 25.  Mladi od 30 godina: " + youngerThanThirty +
-                "\n 26.  Prvo zaposlenje: " + firstEmployment +
-                "\n 27.  Invalid: " + disability +
-                "\n 28.  Napomena: " + noteSignUp
-                ;
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            emailTxt =
+                    "\nPOSLODAVAC" +
+                            "\n Tvrtka: " + getUser().getCompany() +
+                            "\n OIB: " + getUser().getOib() +
+                            "\n\nPODACI O RADNIKU" +
+                            "\n  1.  OIB: " + oib +
+                            "\n  2.  Ime: " + firstName +
+                            "\n  3.  Prezime: " + lastName +
+                            "\n  4.  Spol: " + gender +
+                            "\n  5.  Datum rođenja: " + formattedDateOfBirth +
+                            "\n  6.  Adresa - Ulica i broj: " + address +
+                            "\n  7.  Grad i poštanski broj: " + city +
+                            "\n  8.  Stvarna stručna sprema: " + professionalQualification +
+                            "\n  9.  Naziv najviše završene škole: " + highestLevelOfEducation +
+                            "\n 10.  IBAN - tekuću račun - redovni: " + ibanRegular +
+                            "\n 11.  IBAN - tekuću račun - zaštićeni: " + ibanProtected +
+                            "\n 12.  Radno mjesto: " + employmentPosition +
+                            "\n 13.  Mjesto rada - Grad: " + cityOfEmployment +
+                            "\n 14.  Potrebna stručna sprema: " + requiredProfessionalQualification +
+                            "\n 15.  Ugovor o radu: " + employmentContract +
+                            "\n 16.  Razlog - na određeno: " + reasonForDefinite +
+                            "\n 17.  Dodatni radi: " + additionalWork +
+                            "\n 17a. Dodatni rad - sati: " + additionalWorkHours +
+                            "\n 18.  Radno vrijeme: " + workingHours +
+                            "\n 18a. Sati nepuno: " + hoursForPartTime +
+                            "\n 19.  Neradni dani u tjednu: " + nonWorkingDays +
+                            "\n 20.  Datum prijave: " + formattedDateOfSignUp +
+                            "\n 21.  Datum odjave - za određeno: " + formattedDateOfSignOut +
+                            "\n 22.  Iznos osnovne plaće: " + basicSalary + " " + salaryType +
+                            "\n 23.  Strani državljanin: " + foreignNational +
+                            "\n 23a. Radna dozvola vrijedi do: " + formattedExpiryDateOfWorkPermit +
+                            "\n 24.  Umirovljenik: " + retiree +
+                            "\n 25.  Mladi od 30 godina: " + youngerThanThirty +
+                            "\n 26.  Prvo zaposlenje: " + firstEmployment +
+                            "\n 27.  Invalid: " + disability +
+                            "\n 28.  Napomena: " + noteSignUp
+            ;
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            emailTxt =
+                    "\nPOSLODAVAC" +
+                            "\n Tvrtka: " + getUser().getCompany() +
+                            "\n OIB: " + getUser().getOib() +
+                            "\n\nPODACI O RADNIKU" +
+                            "\n  1.  OIB: " + oib +
+                            "\n  2.  Ime: " + firstName +
+                            "\n  3.  Prezime: " + lastName +
+                            "\n  4.  Datum prijave: " + formattedDateOfSignUp +
+                            "\n  5.  Datum zadnje promjene: " + formattedDateOfUpdateSent +
+                            "\n  6.  Datum odjave - iz Prijave: " + formattedDateOfSignOut +
+                            "\n  7.  Datum odjave - stvarni: " + formattedDateOfSignOutSentReal +
+                            "\n  8.  Razlog odjave: " + reasonForSignOut +
+                            "\n  9.  Napomena: " + noteSignOut
+            ;
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            emailTxt =
+                    "\nPOSLODAVAC" +
+                            "\n Tvrtka: " + getUser().getCompany() +
+                            "\n OIB: " + getUser().getOib() +
+                            "\n\nPODACI O RADNIKU" +
+                            "\n  1.  OIB: " + oib +
+                            "\n  2.  Ime: " + firstName +
+                            "\n  3.  Prezime: " + lastName +
+                            "\n  4.  Datum prijave: " + formattedDateOfSignUp +
+                            "\n  5.  Datum zadnje promjene: " + formattedDateOfUpdateSent +
+                            "\n  6.  Datum promjene: " + formattedDateOfUpdateSentReal +
+                            "\n  7.  Razlog promjene: " + reasonForUpdate +
+                            "\n  8.  Napomena: " + noteUpdate
+            ;
+        }
+
 
         String result = emailTxt.replaceAll("\\bnull\\b", "").replaceAll("\\btrue\\b", "DA").replaceAll("\\bfalse\\b", "NE");
         return result;
@@ -370,7 +417,7 @@ public class Employee {
             case "Datum odjave - iz Prijave":
                 return dateOfSignOut;
             case "Datum odjave - stvarni":
-                return dateOfSignOutSent;
+                return dateOfSignOutSentReal;
             case "Razlog odjave":
                 return reasonForSignOut;
             case "Datum promjene":
