@@ -332,10 +332,12 @@ public class Employee {
                     "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu", "Radno vrijeme",
                     "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto"};
         } else if (formId == FormTracker.getSIGN_OUT()) {
-            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum zadnje promjene", "Datum odjave - iz Prijave",
-                    "Datum odjave - stvarni", "Razlog odjave"};
+//            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum zadnje promjene", "Datum odjave - iz Prijave",
+//                    "Datum odjave - stvarni", "Razlog odjave"};
+            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum odjave - stvarni", "Razlog odjave"};
         } else if (formId == FormTracker.getUPDATE()) {
-            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum zadnje promjene", "Datum promjene", "Razlog promjene"};
+//            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum zadnje promjene", "Datum promjene", "Razlog promjene"};
+            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum promjene", "Razlog promjene"};
         }
 
         List<String> emptyAttributes = new ArrayList<>();

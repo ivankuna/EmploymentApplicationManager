@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.lang.annotation.Annotation;
+import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -93,15 +95,15 @@ public class UserController {
         } else {
             model.addAttribute("class", new UserDto());
         }
-
+        List<String> dummyHidden = new ArrayList<>();
         model.addAttribute("dataList", defineDataList(false, false));
+        model.addAttribute("hiddenList", dummyHidden);
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/users/save");
         model.addAttribute("pathShow", "/users/show");
         model.addAttribute("sendLink", "");
         model.addAttribute("pathSaveSend", "");
-//        model.addAttribute("cancelLink", "/users/cancel");
         model.addAttribute("script", "/js/script-form-users.js");
         return "form";
     }
@@ -111,16 +113,16 @@ public class UserController {
 
         try {
             UserDto user = userService.convertEntityToDto(userService.findById(id));
-
+            List<String> dummyHidden = new ArrayList<>();
             model.addAttribute("class", user);
             model.addAttribute("dataList", defineDataList(true, false));
+            model.addAttribute("hiddenList", dummyHidden);
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/users/save");
             model.addAttribute("pathShow", "/users/show");
             model.addAttribute("sendLink", "");
             model.addAttribute("pathSaveSend", "");
-//            model.addAttribute("cancelLink", "/users/cancel");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
@@ -129,11 +131,6 @@ public class UserController {
         }
     }
 
-//    @PostMapping("/users/cancel")
-//    public String cancelUser(@ModelAttribute("employee") Employee employee, RedirectAttributes ra) {
-//
-//        return "redirect:/users/show";
-//    }
 
     @PostMapping("/users/save")
     public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) {
@@ -242,4 +239,6 @@ public class UserController {
         }
         return dataList;
     }
+
+
 }

@@ -20,6 +20,7 @@ $(document).ready(function() {
         "columnDefs": [ {
             "targets": "_all",
             "render": function ( data, type, row ) {
+                if (data != null) {
                 if (data === "true") {
                     return "DA";
                 } else if (data === "false") {
@@ -27,6 +28,7 @@ $(document).ready(function() {
                 } else {
                     return data;
                 }
+            }
             }
         } ]
     } );
