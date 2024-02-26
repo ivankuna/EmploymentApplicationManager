@@ -412,6 +412,25 @@ public class EmployeeController {
 
         Employee tempEmployee = employeeService.findById(id);
 
+        String message = "Nemoguće obrisati poslani nalog!";
+
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (tempEmployee.isSignUpSent()) {
+                ra.addFlashAttribute("message", message);
+                return "redirect:/employees/show";
+            }
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            if (tempEmployee.isSignOutSent()) {
+                ra.addFlashAttribute("message", message);
+                return "redirect:/employees/show";
+            }
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            if (tempEmployee.isUpdateSent()) {
+                ra.addFlashAttribute("message", message);
+                return "redirect:/employees/show";
+            }
+        }
+
         int counter = 0;
 
         if (tempEmployee.isFromSignUp()) {
