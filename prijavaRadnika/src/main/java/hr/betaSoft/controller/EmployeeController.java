@@ -74,8 +74,10 @@ public class EmployeeController {
         if (isMobile) {
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
-            columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
-            columnList.add(new Column("", "signUpSent", "id"));
+            if (!isAdmin) {
+                columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
+                columnList.add(new Column("", statusField, "id"));
+            }
         } else {
             // OBRATI PAŽNJU!
             // dateOfSignUp/dateOfSignOut/dateOfUpdate I dateOfUpdateSentReal/dateOfSignOutSentReal SU RUČNO UPISANI U NALOGE
@@ -100,7 +102,7 @@ public class EmployeeController {
             if (isAdmin) {
                 columnList.add(new Column("mail prijava", "signUpSent", "id"));
                 columnList.add(new Column("mail promjena", "updateSent", "id"));
-                columnList.add(new Column("mail odjava", "updateSent", "id"));
+                columnList.add(new Column("mail odjava", "signOutSent", "id"));
             }
 
 //            //// SVE KOLONE ////
@@ -237,9 +239,10 @@ public class EmployeeController {
 
         model.addAttribute("sendLink", "/employees/send/{id}");
 
-        if (isMobile) {
+        if (isMobile && !isAdmin) {
             model.addAttribute("pdfLink", "");
-        } else {
+        }
+        else {
             model.addAttribute("pdfLink", "/employees/pdf/{id}");
         }
 
@@ -308,19 +311,28 @@ public class EmployeeController {
             String pathSave = "";
             String sendLink = "";
             String title = "";
-
+            boolean appSend = false;
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
                 sendLink = employee.isSignUpSent() ? "" : "/employees/send";
                 title = "Nalog za prijavu";
+                if (employee.isSignUpSent()) {
+                    appSend = true;
+                }
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
                 sendLink = employee.isSignOutSent() ? "" : "/employees/send";
                 title = "Nalog za odjavu";
+                if (employee.isSignOutSent()) {
+                    appSend = true;
+                }
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 pathSave = employee.isUpdateSent() ? "" : "/employees/save";
                 sendLink = employee.isUpdateSent() ? "" : "/employees/send";
                 title = "Nalog za promjenu";
+                if (employee.isUpdateSent()) {
+                    appSend = true;
+                }
             }
 
             if (tempEmployee != null) {
@@ -340,7 +352,9 @@ public class EmployeeController {
             model.addAttribute("pathSave", pathSave);
             model.addAttribute("pathShow", "/employees/show");
             model.addAttribute("sendLink", sendLink);
-            model.addAttribute("script", "/js/script-form-employees.js");
+            if (!appSend) {
+                model.addAttribute("script", "/js/script-form-employees.js");
+            }
             return "form";
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
