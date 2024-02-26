@@ -169,7 +169,6 @@ public class EmployeeController {
 
         User authenticatedUser = userService.findById(UserIdTracker.getUserId());
 
-
         List<Employee> employeeListTemp = employeeService.findByUser(authenticatedUser);
         List<Employee> employeeList = new ArrayList<>();
 
@@ -341,8 +340,6 @@ public class EmployeeController {
                 model.addAttribute("class", employee);
             }
 
-
-//            model.addAttribute("dataList", defineDataList(id));
             List<Data> dataList = defineDataList(id);
             model.addAttribute("dataList", dataList);
             List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
@@ -413,6 +410,32 @@ public class EmployeeController {
     @GetMapping("/employees/delete/{id}")
     public String deleteEmployee(@PathVariable Long id, RedirectAttributes ra) {
 
+        Employee tempEmployee = employeeService.findById(id);
+
+        int counter = 0;
+
+        if (tempEmployee.isFromSignUp()) {
+            counter++;
+        }
+        if (tempEmployee.isFromSignOut()) {
+            counter++;
+        }
+        if (tempEmployee.isFromUpdate()) {
+            counter++;
+        }
+        if (counter > 1) {
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                tempEmployee.setFromSignUp(false);
+                employeeService.saveEmployee(tempEmployee);
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                tempEmployee.setFromSignOut(false);
+                employeeService.saveEmployee(tempEmployee);
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                tempEmployee.setFromUpdate(false);
+                employeeService.saveEmployee(tempEmployee);
+            }
+            return "redirect:/employees/show";
+        }
         try {
             employeeService.deleteEmployee(id);
         } catch (EmployeeNotFoundException e) {
