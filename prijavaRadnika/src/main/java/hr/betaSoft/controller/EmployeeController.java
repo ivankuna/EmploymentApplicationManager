@@ -2,6 +2,7 @@ package hr.betaSoft.controller;
 
 import hr.betaSoft.exception.EmployeeNotFoundException;
 import hr.betaSoft.model.Employee;
+import hr.betaSoft.pdf.PdfAppGenerator;
 import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
@@ -9,6 +10,8 @@ import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.pdfbox.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -18,6 +21,9 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Date;
@@ -412,7 +418,7 @@ public class EmployeeController {
 
         Employee tempEmployee = employeeService.findById(id);
 
-        String message = "Nemoguće obrisati poslani nalog!";
+        String message = "Nije moguće obrisati poslani nalog!";
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (tempEmployee.isSignUpSent()) {
@@ -615,15 +621,29 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/pdf/{id}")
-    public String showEmployessPdf(@PathVariable Long id, RedirectAttributes ra) {
+    public void showEmployessPdf(@PathVariable Long id, RedirectAttributes ra, HttpServletResponse response) {
+
         try {
+            PdfAppGenerator pdfAppGenerator = new PdfAppGenerator(employeeService);
+            pdfAppGenerator.generateApplication(id);
 
-            ra.addFlashAttribute("message", "Create PDF for employees_id = " + id.toString());
+            // Postavi odgovarajuće zaglavlje
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=employee.pdf");
 
-        } catch (UserNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
+            // Učitaj generisani PDF dokument
+            File pdfFile = new File("pdf/employee.pdf");
+            FileInputStream fileInputStream = new FileInputStream(pdfFile);
+
+            // Kopiraj PDF sadržaj u odgovor
+            IOUtils.copy(fileInputStream, response.getOutputStream());
+
+            // Zatvori tokove
+            fileInputStream.close();
+            response.getOutputStream().flush();
+        } catch (IOException | EmployeeNotFoundException e) {
+            // Handlaj izuzetak
         }
-        return "redirect:/employees/show";
     }
 
     private boolean checkOibExists(Employee employee) {
@@ -727,20 +747,20 @@ public class EmployeeController {
         } else {
             dataList.add(new Data("Datum prijave *", "dateOfSignUp", "", "", "", "date", "false", fieldStatus, items));
             ;
-            dataList.add(new Data("Datum zadnje promjene *", "dateOfUpdateSent", "", "", "", "date", "false", fieldStatus, items));
+            dataList.add(new Data("Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date", "false", fieldStatus, items));
             ;
         }
         if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             dataList.add(new Data("Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date", "false", fieldStatus, items));
             ;
-            dataList.add(new Data("Datum odjave - stvarni *", "dateOfSignOutSentReal", "", "", "", "date", "false", fieldStatus, items));
+            dataList.add(new Data("Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date", "false", fieldStatus, items));
             ;
             dataList.add(new Data("Razlog odjave *", "reasonForSignOut", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_SIGN_OUT));
             ;
             dataList.add(new Data("Napomena", "noteSignOut", "", "", "", "text", "false", fieldStatus, items));
             ;
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            dataList.add(new Data("Datum promjene  *", "dateOfUpdateSentReal", "", "", "", "date", "false", fieldStatus, items));
+            dataList.add(new Data("Datum promjene  *", "dateOfUpdateReal", "", "", "", "date", "false", fieldStatus, items));
             ;
             dataList.add(new Data("Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_UPDATE));
             ;

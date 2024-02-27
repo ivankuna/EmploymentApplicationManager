@@ -174,9 +174,9 @@ public class UserController {
     public String deleteUser(@PathVariable Long id, RedirectAttributes ra) {
         try {
             if (id == 1) {
-                ra.addFlashAttribute("message", "Nemoguće obrisati administratora!");
+                ra.addFlashAttribute("message", "Nije moguće obrisati administratora!");
             } else if (userService.checkIfEmployeeUnderUserExist(id)) {
-                ra.addFlashAttribute("message", "Nemoguće obrisati korisnika s unešenim radnicima!");
+                ra.addFlashAttribute("message", "Nije moguće obrisati korisnika s unešenim radnicima!");
             } else {
                 userService.deleteUser(id);
             }

@@ -121,6 +121,10 @@ public class Employee {
     @Temporal(TemporalType.DATE)
     private Date dateOfSignOut;
 
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfUpdate;
+
     @Column
     private BigDecimal basicSalary;
 
@@ -178,14 +182,14 @@ public class Employee {
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date dateOfUpdateSentReal;
+    private Date dateOfUpdateReal;
 
     @Column
     private String reasonForUpdate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
-    private Date dateOfSignOutSentReal;
+    private Date dateOfSignOutReal;
 
     @Column
     private String reasonForSignOut;
@@ -221,9 +225,9 @@ public class Employee {
         String formattedDateOfSignUp = "";
         String formattedDateOfSignOut = "";
         String formattedExpiryDateOfWorkPermit = "";
-        String formattedDateOfUpdateSent = "";
-        String formattedDateOfSignOutSentReal = "";
-        String formattedDateOfUpdateSentReal = "";
+        String formattedDateOfUpdate = "";
+        String formattedDateOfSignOutReal = "";
+        String formattedDateOfUpdateReal = "";
 
         if (dateOfBirth != null) {
             formattedDateOfBirth = sdf.format(dateOfBirth);
@@ -238,13 +242,13 @@ public class Employee {
             formattedExpiryDateOfWorkPermit = sdf.format(expiryDateOfWorkPermit);
         }
         if (dateOfUpdateSent != null) {
-            formattedDateOfUpdateSent = sdf.format(dateOfUpdateSent);
+            formattedDateOfUpdate = sdf.format(dateOfUpdate);
         }
-        if (dateOfSignOutSentReal != null) {
-            formattedDateOfSignOutSentReal = sdf.format(dateOfSignOutSentReal);
+        if (dateOfSignOutReal != null) {
+            formattedDateOfSignOutReal = sdf.format(dateOfSignOutReal);
         }
-        if (dateOfUpdateSentReal != null) {
-            formattedDateOfUpdateSentReal = sdf.format(dateOfUpdateSentReal);
+        if (dateOfUpdateReal != null) {
+            formattedDateOfUpdateReal = sdf.format(dateOfUpdateReal);
         }
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
@@ -295,9 +299,9 @@ public class Employee {
                             "\n  2.  Ime: " + firstName +
                             "\n  3.  Prezime: " + lastName +
                             "\n  4.  Datum prijave: " + formattedDateOfSignUp +
-                            "\n  5.  Datum zadnje promjene: " + formattedDateOfUpdateSent +
+                            "\n  5.  Datum zadnje promjene: " + formattedDateOfUpdate +
                             "\n  6.  Datum odjave - iz Prijave: " + formattedDateOfSignOut +
-                            "\n  7.  Datum odjave - stvarni: " + formattedDateOfSignOutSentReal +
+                            "\n  7.  Datum odjave - stvarni: " + formattedDateOfSignOutReal +
                             "\n  8.  Razlog odjave: " + reasonForSignOut +
                             "\n  9.  Napomena: " + noteSignOut
             ;
@@ -311,13 +315,12 @@ public class Employee {
                             "\n  2.  Ime: " + firstName +
                             "\n  3.  Prezime: " + lastName +
                             "\n  4.  Datum prijave: " + formattedDateOfSignUp +
-                            "\n  5.  Datum zadnje promjene: " + formattedDateOfUpdateSent +
-                            "\n  6.  Datum promjene: " + formattedDateOfUpdateSentReal +
+                            "\n  5.  Datum zadnje promjene: " + formattedDateOfUpdate +
+                            "\n  6.  Datum promjene: " + formattedDateOfUpdateReal +
                             "\n  7.  Razlog promjene: " + reasonForUpdate +
                             "\n  8.  Napomena: " + noteUpdate
             ;
         }
-
 
         String result = emailTxt.replaceAll("\\bnull\\b", "").replaceAll("\\btrue\\b", "DA").replaceAll("\\bfalse\\b", "NE");
         return result;
@@ -415,15 +418,15 @@ public class Employee {
             case "Invalid":
                 return disability;
             case "Datum zadnje promjene":
-                return dateOfUpdateSent;
+                return dateOfUpdate;
             case "Datum odjave - iz Prijave":
                 return dateOfSignOut;
             case "Datum odjave - stvarni":
-                return dateOfSignOutSentReal;
+                return dateOfSignOutReal;
             case "Razlog odjave":
                 return reasonForSignOut;
             case "Datum promjene":
-                return dateOfUpdateSentReal;
+                return dateOfUpdateReal;
             case "Razlog promjene":
                 return reasonForUpdate;
             default:
