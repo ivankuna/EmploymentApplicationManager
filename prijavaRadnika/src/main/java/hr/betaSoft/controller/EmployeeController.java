@@ -2,6 +2,7 @@ package hr.betaSoft.controller;
 
 import hr.betaSoft.exception.EmployeeNotFoundException;
 import hr.betaSoft.model.Employee;
+import hr.betaSoft.pdf.PDFGenerator;
 import hr.betaSoft.pdf.PdfAppGenerator;
 import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
@@ -246,8 +247,7 @@ public class EmployeeController {
 
         if (isMobile && !isAdmin) {
             model.addAttribute("pdfLink", "");
-        }
-        else {
+        } else {
             model.addAttribute("pdfLink", "/employees/pdf/{id}");
         }
 
@@ -623,25 +623,34 @@ public class EmployeeController {
     @GetMapping("/employees/pdf/{id}")
     public void showEmployessPdf(@PathVariable Long id, RedirectAttributes ra, HttpServletResponse response) {
 
+//        try {
+//            PdfAppGenerator pdfAppGenerator = new PdfAppGenerator(employeeService);
+//            pdfAppGenerator.generateApplication(id);
+//
+//            // Postavi odgovarajuće zaglavlje
+//            response.setContentType("application/pdf");
+//            response.setHeader("Content-Disposition", "inline; filename=employee.pdf");
+//
+//            // Učitaj generisani PDF dokument
+//            File pdfFile = new File("pdf/employee.pdf");
+//            FileInputStream fileInputStream = new FileInputStream(pdfFile);
+//
+//            // Kopiraj PDF sadržaj u odgovor
+//            IOUtils.copy(fileInputStream, response.getOutputStream());
+//
+//            // Zatvori tokove
+//            fileInputStream.close();
+//            response.getOutputStream().flush();
+//        } catch (IOException | EmployeeNotFoundException e) {
+//            // Handlaj izuzetak
+//        }
+
         try {
-            PdfAppGenerator pdfAppGenerator = new PdfAppGenerator(employeeService);
-            pdfAppGenerator.generateApplication(id);
+            String filePath = "pdf/employee.pdf";
 
-            // Postavi odgovarajuće zaglavlje
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "inline; filename=employee.pdf");
-
-            // Učitaj generisani PDF dokument
-            File pdfFile = new File("pdf/employee.pdf");
-            FileInputStream fileInputStream = new FileInputStream(pdfFile);
-
-            // Kopiraj PDF sadržaj u odgovor
-            IOUtils.copy(fileInputStream, response.getOutputStream());
-
-            // Zatvori tokove
-            fileInputStream.close();
-            response.getOutputStream().flush();
-        } catch (IOException | EmployeeNotFoundException e) {
+            // Generate the PDF
+            PDFGenerator.generatePDF(employeeService.findById(id), filePath);
+        } catch (EmployeeNotFoundException e) {
             // Handlaj izuzetak
         }
     }
