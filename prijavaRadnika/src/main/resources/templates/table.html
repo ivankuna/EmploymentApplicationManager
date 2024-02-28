@@ -128,12 +128,14 @@
                         <thead>
                         <tr>
                             <th th:each="column : ${columnList}" th:text="${column.name}" class="text-center"></th>
+<!--                            <th th:each="column : ${columnList}" th:text="${column.name}"></th>-->
                             <th></th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr th:each="data : ${dataList}" >
                             <td th:each="column : ${columnList}" th:text="${data[column.field]}" th:classappend="${#strings.equals(data[column.field], 'true') == false and #strings.equals(data[column.field], 'false') == false} ? 'text-center' : ''" th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[columnList[0].id]})} + '\''">
+<!--                            <td th:each="column : ${columnList}" th:text="${data[column.field]}"  th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[columnList[0].id]})} + '\''">-->
 
                             </td>
                             <td>

@@ -79,11 +79,13 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
+            if (!isAdmin) {
+                columnList.add(new Column("", statusField, "id"));
+            }
             columnList.add(new Column("Prezime", "lastName", "id"));
             columnList.add(new Column("Ime", "firstName", "id"));
             if (!isAdmin) {
-                columnList.add(new Column("Datum", "dateOfSignUpSent", "id"));
-                columnList.add(new Column("", statusField, "id"));
+                columnList.add(new Column("Poslano", "dateOfSignUpSent", "id"));
             }
         } else {
             // OBRATI PAŽNJU!
