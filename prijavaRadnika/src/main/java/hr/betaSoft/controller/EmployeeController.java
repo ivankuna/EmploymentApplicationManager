@@ -2,8 +2,7 @@ package hr.betaSoft.controller;
 
 import hr.betaSoft.exception.EmployeeNotFoundException;
 import hr.betaSoft.model.Employee;
-import hr.betaSoft.pdf.PDFGenerator;
-import hr.betaSoft.pdf.PdfAppGenerator;
+import hr.betaSoft.pdf.PdfSignOutLose;
 import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
@@ -12,7 +11,6 @@ import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.apache.pdfbox.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -22,9 +20,6 @@ import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.IOException;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Date;
@@ -651,7 +646,7 @@ public class EmployeeController {
             String filePath = "pdf/employee.pdf";
 
             // Generate the PDF
-            PDFGenerator.generatePDF(employeeService.findById(id), filePath);
+            PdfSignOutLose.generatePDF(employeeService.findById(id), filePath);
         } catch (EmployeeNotFoundException e) {
             // Handlaj izuzetak
         }
