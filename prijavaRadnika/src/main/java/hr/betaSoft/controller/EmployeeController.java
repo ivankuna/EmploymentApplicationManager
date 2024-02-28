@@ -308,6 +308,7 @@ public class EmployeeController {
 
         System.out.println("ovo je test");
         System.out.println("a ovo je moj test");
+        System.out.println("test");
 
         try {
             Employee employee = employeeService.findById(id);
