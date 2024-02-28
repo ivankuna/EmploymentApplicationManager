@@ -306,6 +306,8 @@ public class EmployeeController {
     @GetMapping("/employees/update/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
+        System.out.println("ovo je test");
+
         try {
             Employee employee = employeeService.findById(id);
             Employee tempEmployee = (Employee) model.getAttribute("employee");
