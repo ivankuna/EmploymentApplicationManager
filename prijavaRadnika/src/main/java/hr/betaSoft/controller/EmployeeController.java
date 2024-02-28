@@ -307,6 +307,7 @@ public class EmployeeController {
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         System.out.println("ovo je test");
+        System.out.println("a ovo je moj test");
 
         try {
             Employee employee = employeeService.findById(id);
