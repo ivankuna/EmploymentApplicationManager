@@ -32,12 +32,40 @@
         .fixed-bottom-buttons .btn {
           margin: 0 5px;
         }
+        .navbar {
+          position: fixed;
+          top: 0;
+          z-index: 1000;
+          width: 100%;
+          background-color: #343a40; /* siva boja */
+          padding: 10px 0;
+          padding-left: 2px;
+        }
+
+        .navbar .nav-item {
+          margin-right: 15px;
+        }
+
+        .navbar .nav-link {
+          color: #fff; /* bijela boja */
+          font-size: 16px;
+          font-weight: bold;
+        }
+
+        .navbar .nav-link:hover {
+          color: #f8f9fa; /* svijetlo siva boja */
+        }
+        body {
+          padding-top: 40px; /* Dodatni padding na vrhu body elementa */
+        }
+
+
     </style>
 </head>
 <body>
 <div class="content">
     <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <a class="navbar-brand" href="#">Sustav za prijavu radnika - betaSoft (c)</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

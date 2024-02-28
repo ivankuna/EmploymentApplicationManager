@@ -217,7 +217,7 @@ public class UserController {
         ;
         dataList.add(new Data("Adresa *", "address", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("Grad i poštanski broj *", "city", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("Poštanski broj i grad *", "city", "", "", "", "text", "true", "", items));
         ;
         dataList.add(new Data("Ime *", "firstName", "", "", "", "text", "true", "", items));
         ;

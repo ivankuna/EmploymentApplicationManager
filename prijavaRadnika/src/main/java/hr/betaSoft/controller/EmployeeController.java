@@ -700,7 +700,7 @@ public class EmployeeController {
             ;
             dataList.add(new Data("Adresa *", "address", "", "", "", "text", "false", fieldStatus, items));
             ;
-            dataList.add(new Data("Grad i poštanski broj *", "city", "", "", "", "text", "false", fieldStatus, items));
+            dataList.add(new Data("Poštanski broj i grad *", "city", "", "", "", "text", "false", fieldStatus, items));
             ;
             dataList.add(new Data("Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION));
             ;
