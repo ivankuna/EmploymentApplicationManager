@@ -1,13 +1,11 @@
 <!DOCTYPE html>
 <html lang="hr"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
-
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
     <title>Prikaz podataka</title>
-
     <style>
         * {  font-size: 15px; }
 	    body {
@@ -18,7 +16,6 @@
 		}
         table {
             width: 100%;
-
             border-collapse: collapse;
         }
         th, td {
@@ -39,6 +36,7 @@
         .double-width {
             width: 45%;
         }
+
 
 
 
@@ -67,7 +65,7 @@
         <td class="double-width" th:text="${companyOib}">companyOib</td>
     </tr>
 </table>
-<br/>
+<br>
 <table>
     <tr>
         <th class="small-width"></th>
@@ -75,13 +73,13 @@
         <th class="double-width">Opis</th>
     </tr>
 
-    <div th:each="data : ${dataList}">
-        <tr>
+<!--    <div th:each="data : ${dataList}">-->
+        <tr th:each="data : ${dataList}">
             <th class="small-width" th:text="${data.ordinal}">rb</th>
             <td class="half-width" th:text="${data.name}">name</td>
             <td class="double-width" th:text="${class[data.field]}">data</td>
         </tr>
-    </div>
+<!--    </div>-->
 
 
 </table>

@@ -39,7 +39,7 @@ public class HtmlToPdfConverter {
 
 
         public static void main(String[] args) throws DocumentException, IOException {
-        String htmlFilePath = "prijavaRadnika/html/input.html";
+        String htmlFilePath = "prijavaRadnika/html/test.html";
         String pdfFilePath = "prijavaRadnika/pdf/output.pdf";
         convertHtmlToPdf(htmlFilePath, pdfFilePath);
         System.out.println("Conversion completed. PDF file is created at: " + pdfFilePath);
