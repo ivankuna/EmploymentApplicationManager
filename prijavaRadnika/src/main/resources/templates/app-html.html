@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <html lang="hr"
       xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
     <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
@@ -37,10 +36,6 @@
             width: 45%;
         }
 
-
-
-
-
     </style>
 </head>
 <body style="font-family:calibri">
@@ -65,24 +60,54 @@
         <td class="double-width" th:text="${companyOib}">companyOib</td>
     </tr>
 </table>
-<br>
-<table>
+<br/>
+<table id="myTable">
     <tr>
         <th class="small-width"></th>
         <th class="half-width">Podaci o radniku</th>
         <th class="double-width">Opis</th>
     </tr>
-
-<!--    <div th:each="data : ${dataList}">-->
-        <tr th:each="data : ${dataList}">
-            <th class="small-width" th:text="${data.ordinal}">rb</th>
-            <td class="half-width" th:text="${data.name}">name</td>
-            <td class="double-width" th:text="${class[data.field]}">data</td>
-        </tr>
-<!--    </div>-->
-
-
+    <tr th:each="data : ${dataList}">
+        <th class="small-width" th:text="${data.ordinal}">rb</th>
+        <td class="half-width" th:text="${data.name}">name</td>
+        <td class="double-width" th:text="${class[data.field]}">data</td>
+    </tr>
 </table>
+
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"
+        integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+
+
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $("td").each(function() {-->
+<!--            var originalText = $(this).text();-->
+<!--            if (/^\d{4}-\d{2}-\d{2}$/.test(originalText)) {-->
+<!--                var formattedDatum = moment(originalText).format("DD.MM.YYYY.");-->
+<!--                $(this).text(formattedDatum);-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
+<script>
+    $(document).ready(function () {
+        $("td").each(function() {
+            var originalText = $(this).text();
+            if (/^\d{4}-\d{2}-\d{2}$/.test(originalText)) {
+                var formattedDatum = moment(originalText).format("DD.MM.YYYY.");
+                $(this).text(formattedDatum);
+            } else if (originalText.toLowerCase() === 'true') {
+                $(this).text('DA');
+            } else if (originalText.toLowerCase() === 'false') {
+                $(this).text('NE');
+            }
+        });
+    });
+
+</script>
+
 
 </body>
 </html>

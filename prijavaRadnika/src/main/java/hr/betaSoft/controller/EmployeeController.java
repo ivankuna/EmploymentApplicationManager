@@ -2,7 +2,6 @@ package hr.betaSoft.controller;
 
 import hr.betaSoft.exception.EmployeeNotFoundException;
 import hr.betaSoft.model.Employee;
-import hr.betaSoft.pdf.PdfSignOutLose;
 import hr.betaSoft.security.exception.UserNotFoundException;
 import hr.betaSoft.security.secModel.User;
 import hr.betaSoft.security.secService.UserService;
@@ -10,7 +9,6 @@ import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -18,8 +16,12 @@ import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.WebDataBinder;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
+import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.servlet.support.RequestContextUtils;
 
+import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Date;
@@ -30,6 +32,7 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Locale;
 
 @Controller
 public class EmployeeController {
@@ -653,16 +656,11 @@ public class EmployeeController {
 //        }
 //    }
 
-
-
-
     @GetMapping("/employees/pdf/{id}")
-    public String showemployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
-
+    public String showemployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletRequest request) {
 
         try {
             Employee employee = employeeService.findById(id);
-
 
             String title = "";
             boolean appSend = false;
@@ -674,28 +672,59 @@ public class EmployeeController {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO -HZZO";
             }
 
-            String NazivPoslodavca = "dummy MALA TVRTKA d.o.o.";
-            String OibPoslodavca = "dummy 58069356381";
-
             model.addAttribute("title", title);
-            model.addAttribute("companyName", NazivPoslodavca);
-            model.addAttribute("companyOib", OibPoslodavca);
+            model.addAttribute("companyName", employee.getUser().getCompany());
+            model.addAttribute("companyOib", employee.getUser().getOib());
 
             model.addAttribute("class", employee);
             List<Data> dataList = defineDataList(id);
             model.addAttribute("dataList", dataList);
-
+            model.addAttribute("script", "/js/app-html.js");
 
             return "app-html";
 
+//            // Resolve the view and render it
+//            String viewName = "app-html";
+//            ViewResolver viewResolver = RequestContextUtils.getLocaleResolver(request);
+//            View view = viewResolver.resolveViewName(viewName, Locale.getDefault());
+//            String renderedHtml = renderView(view, model, request);
+//
+//            String fileName = "";
+//
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//                fileName = "sign-up-" + employee.getId() + ".html";
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//                fileName = "sign-out-" + employee.getId() + ".html";
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//                fileName = "update-" + employee.getId() + ".html";
+//            }
+//
+//            // Save the rendered HTML content to a file
+//            String htmlFilePath = "prijavaRadnika/html/" + fileName;
+//
+//            try (BufferedWriter writer = new BufferedWriter(new FileWriter(htmlFilePath))) {
+//                writer.write(renderedHtml);
+//            } catch (IOException e) {
+//                throw new RuntimeException(e);
+//            }
+//
+//            // Set the HTML file path as an attribute for later use
+//            model.addAttribute("htmlFilePath", htmlFilePath);
+//
+//            return renderedHtml;
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
             return "redirect:/employees/show";
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
     }
 
-
-
+//    private String renderView(View view, Model model, HttpServletRequest request) throws Exception {
+//        StringWriter stringWriter = new StringWriter();
+//        view.render(model.asMap(), request, new PrintWriter(stringWriter));
+//        return stringWriter.toString();
+//    }
 
     private boolean checkOibExists(Employee employee) {
 
@@ -850,7 +879,6 @@ public class EmployeeController {
                 }
             }
         }
-
         return employeeColumnFieldsNotInDataList;
     }
 }
