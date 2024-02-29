@@ -10,6 +10,8 @@ import java.util.List;
 @AllArgsConstructor
 public class Data {
 
+    private String ordinal;
+
     private String name;
 
     private String field;

@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="hr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+
+    <title>Prikaz podataka</title>
+
+    <style>
+        * {  font-size: 15px; }
+	    body {
+		padding: 0px;
+		}
+		h4 {
+		padding: 0px;
+		}
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+        th, td {
+            border: 1px solid black;
+            padding: 5px;
+            text-align: left;
+        }
+        th {
+            background-color: #f2f2f2;
+        }
+        .small-width {
+            width: 5%;
+            text-align: center;
+        }
+        .half-width {
+            width: 25%;
+        }
+        .double-width {
+            width: 45%;
+        }
+
+
+
+
+    </style>
+</head>
+<body style="font-family:calibri">
+
+<h4 th:text="${title}">Naslov</h4>
+
+
+<table>
+    <tr>
+        <th class="small-width"></th>
+        <th class="half-width">Podaci o poslodavcu</th>
+        <th class="double-width">Opis</th>
+    </tr>
+    <tr>
+        <th class="small-width">1.</th>
+        <td class="half-width">Tvrtka</td>
+        <td class="double-width" th:text="${companyName}">companyName</td>
+    </tr>
+    <tr>
+        <th class="small-width">2.</th>
+        <td class="half-width">OIB</td>
+        <td class="double-width" th:text="${companyOib}">companyOib</td>
+    </tr>
+</table>
+<br/>
+<table>
+    <tr>
+        <th class="small-width"></th>
+        <th class="half-width">Podaci o radniku</th>
+        <th class="double-width">Opis</th>
+    </tr>
+
+    <div th:each="data : ${dataList}">
+        <tr>
+            <th class="small-width" th:text="${data.ordinal}">rb</th>
+            <td class="half-width" th:text="${data.name}">name</td>
+            <td class="double-width" th:text="${class[data.field]}">data</td>
+        </tr>
+    </div>
+
+
+</table>
+
+</body>
+</html>
