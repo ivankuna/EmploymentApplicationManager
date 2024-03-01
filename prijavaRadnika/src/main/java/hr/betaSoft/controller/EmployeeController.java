@@ -679,7 +679,7 @@ public class EmployeeController {
             model.addAttribute("class", employee);
             List<Data> dataList = defineDataList(id);
             model.addAttribute("dataList", dataList);
-            model.addAttribute("script", "/js/app-html.js");
+
 
             return "app-html";
 
