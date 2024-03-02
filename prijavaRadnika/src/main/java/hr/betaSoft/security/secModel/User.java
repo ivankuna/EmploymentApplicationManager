@@ -1,5 +1,6 @@
 package hr.betaSoft.security.secModel;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import hr.betaSoft.model.Employee;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -7,6 +8,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -56,6 +58,10 @@ User {
 
     @Column(nullable=false)
     private boolean showAllApplications;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfUserAccountExpiry;
 
     @OneToMany(mappedBy = "user")
     private List<Employee> employees;

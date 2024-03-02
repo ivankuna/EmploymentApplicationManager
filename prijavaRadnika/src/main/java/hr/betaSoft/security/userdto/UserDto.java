@@ -1,12 +1,17 @@
 package hr.betaSoft.security.userdto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.persistence.Column;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import java.sql.Date;
 
 @Getter
 @Setter
@@ -50,6 +55,10 @@ public class UserDto
 
     @NotEmpty(message = "Lozinka mora biti upisana!")
     private String password;
+
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    @Temporal(TemporalType.DATE)
+    private Date dateOfUserAccountExpiry;
 
     private boolean showAllApplications;
 }

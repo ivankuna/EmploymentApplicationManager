@@ -53,6 +53,7 @@ public class UserServiceImpl implements UserService {
         user.setEmailToSend(userDto.getEmailToSend());
         user.setUsername(userDto.getUsername());
         user.setShowAllApplications(userDto.isShowAllApplications());
+        user.setDateOfUserAccountExpiry(userDto.getDateOfUserAccountExpiry());
 
         if (userDto.getId() != null) {
             user.setId(userDto.getId());
@@ -138,6 +139,7 @@ public class UserServiceImpl implements UserService {
         userDto.setEmail(user.getEmail());
         userDto.setEmailToSend(user.getEmailToSend());
         userDto.setShowAllApplications(user.isShowAllApplications());
+        userDto.setDateOfUserAccountExpiry(user.getDateOfUserAccountExpiry());
 
         return userDto;
     }

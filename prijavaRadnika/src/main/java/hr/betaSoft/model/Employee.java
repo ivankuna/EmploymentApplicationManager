@@ -216,6 +216,15 @@ public class Employee {
     @Column
     private String noteUpdate;
 
+    @Column
+    private Integer numSignUp;
+
+    @Column
+    private Integer numSignOut;
+
+    @Column
+    private Integer numUpdate;
+
     @Override
     public String toString() {
 

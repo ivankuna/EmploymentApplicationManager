@@ -49,6 +49,9 @@
                 <div class="alert alert-success">Odjavili ste se.</div>
             </div>
 
+            <!-- TEST -->
+            <div th:if="${accExpired}" class="alert alert-danger" th:text="${message}"></div>
+
             <div class="card">
                 <div class="card-header">
                     <h3 class="text-center">Obrazac za prijavu</h3>

@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.sql.Date;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -63,7 +64,13 @@ public class MainController {
     }
 
     @GetMapping("/authorization")
-    public String authorization() {
+    public String authorization(Model model) {
+
+        if (userService.getAuthenticatedUser().getDateOfUserAccountExpiry().before(new Date(System.currentTimeMillis()))) {
+            model.addAttribute("accExpired", true);
+            model.addAttribute("message", "Rok vašeg korisničkog računa je istekao!");
+            return "login";
+        }
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();

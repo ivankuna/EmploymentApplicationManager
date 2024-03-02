@@ -231,10 +231,12 @@ public class UserController {
         ;
         dataList.add(new Data("10.","Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items));
         ;
+        dataList.add(new Data("11.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date", "true", fieldStatus, items));
+        ;
         if (!update) {
-            dataList.add(new Data("11.","Korisničko ime *", "username", "", "", "", "text", "true", "", items));
+            dataList.add(new Data("12.","Korisničko ime *", "username", "", "", "", "text", "true", "", items));
             ;
-            dataList.add(new Data("12.","Lozinka *", "password", "", "", "", "text", "true", "", items));
+            dataList.add(new Data("13.","Lozinka *", "password", "", "", "", "text", "true", "", items));
             ;
         }
         return dataList;

@@ -284,7 +284,6 @@ public class EmployeeController {
 
         if (employee != null) {
             model.addAttribute("class", employee);
-
         } else {
             model.addAttribute("class", new Employee());
         }
@@ -308,7 +307,6 @@ public class EmployeeController {
 
     @GetMapping("/employees/update/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
-
 
         try {
             Employee employee = employeeService.findById(id);
@@ -556,18 +554,39 @@ public class EmployeeController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String time = currentTime.format(formatter);
 
+            List<Employee> employees = userService.findById(UserIdTracker.getUserId()).getEmployees();
+            int counter = 0;
+
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 employeeToSend.setSignUpSent(true);
                 employeeToSend.setDateOfSignUpSent(date);
                 employeeToSend.setTimeOfSignUpSent(time);
+                for (Employee employee : employees) {
+                    if (employee.isSignUpSent() && !employee.equals(employeeToSend)) {
+                        counter++;
+                    }
+                }
+                employeeToSend.setNumSignUp(counter + 1);
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 employeeToSend.setSignOutSent(true);
                 employeeToSend.setDateOfSignOutSent(date);
                 employeeToSend.setTimeOfSignOutSent(time);
+                for (Employee employee : employees) {
+                    if (employee.isSignOutSent() && !employee.equals(employeeToSend)) {
+                        counter++;
+                    }
+                }
+                employeeToSend.setNumSignOut(counter + 1);
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 employeeToSend.setUpdateSent(true);
                 employeeToSend.setDateOfUpdateSent(date);
                 employeeToSend.setTimeOfUpdateSent(time);
+                for (Employee employee : employees) {
+                    if (employee.isUpdateSent() && !employee.equals(employeeToSend)) {
+                        counter++;
+                    }
+                }
+                employeeToSend.setNumUpdate(counter + 1);
             }
 
             employeeService.saveEmployee(employeeToSend);
