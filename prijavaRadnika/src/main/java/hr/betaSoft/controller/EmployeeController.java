@@ -634,6 +634,7 @@ public class EmployeeController {
             userDto.setPassword(userService.findById(userDto.getId()).getPassword());
             userDto.setCompany(userService.findById(userDto.getId()).getCompany());
             userDto.setOib(userService.findById(userDto.getId()).getOib());
+            userDto.setDateOfUserAccountExpiry(userService.findById(userDto.getId()).getDateOfUserAccountExpiry());
         }
 
         userService.saveUser(userDto);
