@@ -1,4 +1,7 @@
 $(document).ready(function() {
+
+    var dateColumnIndex = 6;
+
     $('#myTable').DataTable( {
         "language": {
             "lengthMenu": "Prikaži _MENU_ zapisa po stranici",
@@ -17,19 +20,38 @@ $(document).ready(function() {
             "loadingRecords": "Učitavanje...",
             "processing": "Obrada..."
         },
-        "columnDefs": [ {
-            "targets": "_all",
-            "render": function ( data, type, row ) {
-                if (data != null) {
+        "columnDefs": [
+            {
+                "targets": "_all",
+                "render": function (data, type, row) {
                 if (data === "true") {
-                    return "DA";
+                    return '<i class="fas fa-circle  text-danger"></i>';
                 } else if (data === "false") {
-                    return "NE";
+                    return '<i class="far fa-circle"></i>';
                 } else {
-                    return data;
-                }
+               if (data) {
+                   if (moment(data, 'YYYY-MM-DD').isValid() && !/[a-zA-Z]/.test(data) && data.length === 10 && data.indexOf('-') !== 2) {
+                       var date = moment(data, 'YYYY-MM-DD');
+                       var minDate = moment('1054-12-31', 'YYYY-MM-DD');
+                       if (date.isAfter(minDate)) {
+                           return date.format('DD-MM-YY');
+                       } else {
+                           return data;
+                       }
+                   } else {
+                       return data;
+                   }
+               } else {
+                   return '';
+               }
+
             }
-            }
-        } ]
+        }
+    }
+    ],
+         "paging": false,
+         "searching": false,
+         "info": false
+//         ,"ordering": false
     } );
 } );

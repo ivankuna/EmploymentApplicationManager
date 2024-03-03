@@ -221,11 +221,11 @@ public class EmployeeController {
 
         String title = "";
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-            title = "PRIJAVA RADNIKA";
+            title = "NALOZI ZA PRIJAVU RADNIKA";
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            title = "PROMJENA PODATAKA RADNIKA";
+            title = "NALOZI ZA PROMJENU PODATAKA RADNIKA";
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            title = "ODJAVA RADNIKA";
+            title = "NALOZI ZA ODJAVU RADNIKA";
         }
         if (isAdmin) {
             title = "EVIDENCIJA RADNIKA " + authenticatedUser.getCompany();

@@ -44,7 +44,9 @@ public class UserController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("Naziv tvrtke", "company", "id"));
+            columnList.add(new Column("Tvrtke", "company", "id"));
+            columnList.add(new Column("Korisnik", "username", "id"));
+            columnList.add(new Column("Licenca", "dateOfUserAccountExpiry", "id"));
 
         } else {
             columnList.add(new Column("ID", "id", "id"));
@@ -52,12 +54,13 @@ public class UserController {
             columnList.add(new Column("OIB", "oib", "id"));
             columnList.add(new Column("Naziv tvrtke", "company", "id"));
             columnList.add(new Column("Adresa", "address", "id"));
-            columnList.add(new Column("Naziv grada", "city", "id"));
+            columnList.add(new Column("Grad", "city", "id"));
             columnList.add(new Column("Osoba", "name", "id"));
             columnList.add(new Column("Telefon", "telephone", "id"));
             columnList.add(new Column("e-mail korisnika", "email", "id"));
             columnList.add(new Column("e-mail primatelja naloga", "emailToSend", "id"));
             columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
+            columnList.add(new Column("Datum licence", "dateOfUserAccountExpiry", "id"));
         }
 
         List<User> userList = userService.findAll();
@@ -229,9 +232,9 @@ public class UserController {
         ;
         dataList.add(new Data("9.","e-mail primatelja naloga *", "emailToSend", "", "", "", "text", "true", "", items));
         ;
-        dataList.add(new Data("10.","Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("10.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date", "true", fieldStatus, items));
         ;
-        dataList.add(new Data("11.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date", "true", fieldStatus, items));
+        dataList.add(new Data("11.","Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items));
         ;
         if (!update) {
             dataList.add(new Data("12.","Korisničko ime *", "username", "", "", "", "text", "true", "", items));

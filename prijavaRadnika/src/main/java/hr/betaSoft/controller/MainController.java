@@ -43,7 +43,6 @@ public class MainController {
 
     @GetMapping("/login")
     public String loginForm(Model model) {
-
         if (userService.countUsers() != 0) {
             return "login";
         }
@@ -52,6 +51,9 @@ public class MainController {
 
     @GetMapping("/register")
     public String showRegistrationForm(Model model){
+        if (userService.countUsers() != 0) {
+            return "redirect:/login";
+        }
         UserDto user = new UserDto();
         model.addAttribute("user", user);
         return "register";
