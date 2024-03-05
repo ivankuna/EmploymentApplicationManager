@@ -91,9 +91,9 @@ public class EmployeeController {
             // dateOfSignUpSent/dateOfSignOutSent/dateOfUpdateSent I timeOfSignUpSent/timeOfSignOutSent/timeOfUpdateSent SU GENERIRANI PRI SLANJU NALOGA
             //// KOLONE ZA PRIJAVU ////
             if (isAdmin) {
-                columnList.add(new Column("prijava", "fromSignUp", "id"));
-                columnList.add(new Column("promjena", "fromUpdate", "id"));
-                columnList.add(new Column("odjava", "fromSignOut", "id"));
+                columnList.add(new Column("Pr", "fromSignUp", "id"));
+                columnList.add(new Column("Po", "fromUpdate", "id"));
+                columnList.add(new Column("Od", "fromSignOut", "id"));
 
             } else {
                 columnList.add(new Column("Status", statusField, "id"));
@@ -107,9 +107,9 @@ public class EmployeeController {
             columnList.add(new Column("Adresa", "address", "id"));
             columnList.add(new Column("Grad", "city", "id"));
             if (isAdmin) {
-                columnList.add(new Column("mail prijava", "signUpSent", "id"));
-                columnList.add(new Column("mail promjena", "updateSent", "id"));
-                columnList.add(new Column("mail odjava", "signOutSent", "id"));
+                columnList.add(new Column("m.Pr", "signUpSent", "id"));
+                columnList.add(new Column("m.Po", "updateSent", "id"));
+                columnList.add(new Column("m.Od", "signOutSent", "id"));
             }
 
 //            //// SVE KOLONE ////
@@ -221,14 +221,14 @@ public class EmployeeController {
 
         String title = "";
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-            title = "NALOZI ZA PRIJAVU RADNIKA";
+            title = "Nalozi za prijavu radnika";
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            title = "NALOZI ZA PROMJENU PODATAKA RADNIKA";
+            title = "Nalozi za promjenu podataka radnika";
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            title = "NALOZI ZA ODJAVU RADNIKA";
+            title = "Nalozi za odjavu radnika";
         }
         if (isAdmin) {
-            title = "EVIDENCIJA RADNIKA " + authenticatedUser.getCompany();
+            title = "Evidencija radnika " + authenticatedUser.getCompany();
         }
 
         model.addAttribute("title", title);
@@ -245,11 +245,14 @@ public class EmployeeController {
 
         model.addAttribute("sendLink", "/employees/send/{id}");
 
+        // Privremeno
         if (isMobile && !isAdmin) {
             model.addAttribute("pdfLink", "");
         } else {
             model.addAttribute("pdfLink", "/employees/pdf/{id}");
         }
+
+
 
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("deleteLink", "/employees/delete/{id}");
