@@ -543,9 +543,9 @@ public class EmployeeController {
 //                return "redirect:/employees/update/" + id;
 //            }
 
-            String recipient = employeeToSend.getUser().getEmailToSend();
-            SendMail.sendMail(recipient, "Nalog za " + messageTag + " radnika", employeeToSend.toString());
-            ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
+//            String recipient = employeeToSend.getUser().getEmailToSend();
+//            SendMail.sendMail(recipient, "Nalog za " + messageTag + " radnika", employeeToSend.toString());
+//            ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
 
             Date date = new Date(Calendar.getInstance().getTime().getTime());
 
@@ -590,6 +590,15 @@ public class EmployeeController {
             }
 
             employeeService.saveEmployee(employeeToSend);
+
+            String employeeName = employeeToSend.getFirstName() + " " + employeeToSend.getLastName();
+            String mailRecipient = employeeToSend.getUser().getEmailToSend();
+            String companyName = employeeToSend.getUser().getCompany();
+            String mailSubject = companyName + " [ nalog za " + messageTag + " radnika: " + employeeName  + " ]";
+            String mailText = employeeToSend.toString();
+
+            SendMail.sendMail(mailRecipient, mailSubject, mailText);
+            ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
 
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());

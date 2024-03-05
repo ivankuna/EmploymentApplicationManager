@@ -247,11 +247,14 @@ public class Employee {
         if (dateOfSignOut != null) {
             formattedDateOfSignOut = sdf.format(dateOfSignOut);
         }
+        if (dateOfUpdate != null) {
+            formattedDateOfSignOut = sdf.format(dateOfUpdate);
+        }
         if (expiryDateOfWorkPermit != null) {
             formattedExpiryDateOfWorkPermit = sdf.format(expiryDateOfWorkPermit);
         }
         if (dateOfUpdateSent != null) {
-            formattedDateOfUpdate = sdf.format(dateOfUpdate);
+            formattedDateOfUpdate = sdf.format(dateOfUpdateSent);
         }
         if (dateOfSignOutReal != null) {
             formattedDateOfSignOutReal = sdf.format(dateOfSignOutReal);
