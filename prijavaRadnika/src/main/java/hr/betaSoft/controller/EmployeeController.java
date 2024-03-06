@@ -731,6 +731,7 @@ public class EmployeeController {
             }
 
             appOrderDate = appOrder + " " + appDate;
+            model.addAttribute("name", name);
             model.addAttribute("title", title);
             model.addAttribute("appOrder", appOrder);
             model.addAttribute("appDate", appDate);
@@ -742,6 +743,9 @@ public class EmployeeController {
             List<Data> dataList = defineDataList(id);
             model.addAttribute("dataList", dataList);
 
+            // dalje je za PDF
+
+
             String htmlContent = renderHtml(model);
             String pdfFilePath = "prijavaRadnika/pdf/"+ name + ".pdf";
             HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
@@ -750,7 +754,7 @@ public class EmployeeController {
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "inline; filename=" + pdfFilePath);
 
-            // Učitaj generisani PDF dokument
+            // Učitaj generirani PDF dokument
             File pdfFile = new File(pdfFilePath);
             FileInputStream fileInputStream = new FileInputStream(pdfFile);
 

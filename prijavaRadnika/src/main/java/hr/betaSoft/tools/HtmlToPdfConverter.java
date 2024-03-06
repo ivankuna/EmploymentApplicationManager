@@ -6,11 +6,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-import com.itextpdf.text.Document;
+import com.itextpdf.text.*;
 
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.PageSize;
+import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.jsoup.Jsoup;
@@ -94,47 +92,6 @@ public class HtmlToPdfConverter {
 //    }
 
 
-    public static void convertHtmlContentToPdf(String htmlContent, String pdfFilePath) throws IOException, DocumentException {
-
-        // Make the necessary replacements
-        String modifiedHtmlContent = htmlContent.replace("true", "Da")
-                .replace("false", "Ne")
-                .replace("<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\">",
-                        "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>");
-
-
-        org.jsoup.nodes.Document doc = Jsoup.parse(modifiedHtmlContent);
-
-        // Formatting dates in the desired format
-        org.jsoup.select.Elements dateElements = doc.select("td:matches(\\d{4}-\\d{2}-\\d{2})");
-        for (org.jsoup.nodes.Element element : dateElements) {
-            String originalText = element.text();
-            String formattedDate = formatDate(originalText);
-            element.text(formattedDate);
-        }
-
-
-        // Creating PDF document
-        Document pdfDocument = new Document(PageSize.A4);
-
-        // Initializing PdfWriter for writing PDF
-        PdfWriter pdfWriter = PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
-
-        // Opening the document for writing
-        pdfDocument.open();
-
-        // Creating a new XMLWorkerHelper
-        XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
-
-        // Parsing and adding HTML content to the document
-        try (InputStream inputStream = new ByteArrayInputStream(doc.outerHtml().getBytes(StandardCharsets.UTF_8))) {
-            worker.parseXHtml(pdfWriter, pdfDocument, inputStream, StandardCharsets.UTF_8);
-        }
-
-        // Closing the document
-        pdfDocument.close();
-    }
-
 //    public static void convertHtmlToPdf(String htmlContent, String pdfFilePath) throws IOException, DocumentException {
 //        // Make the necessary replacements
 //        String modifiedHtmlContent = htmlContent.replace("UTF-8\">", "UTF-8\"/>")
@@ -171,6 +128,159 @@ public class HtmlToPdfConverter {
 //        // Closing the document
 //        pdfDocument.close();
 //    }
+
+
+//    public static void convertHtmlContentToPdf(String htmlContent, String pdfFilePath) throws IOException, DocumentException {
+//
+//        // Make the necessary replacements
+//        String modifiedHtmlContent = htmlContent.replace("true", "Da")
+//                .replace("false", "Ne");
+//
+//
+//        org.jsoup.nodes.Document doc = Jsoup.parse(modifiedHtmlContent);
+//
+//        // Formatting dates in the desired format
+//        org.jsoup.select.Elements dateElements = doc.select("td:matches(\\d{4}-\\d{2}-\\d{2})");
+//        for (org.jsoup.nodes.Element element : dateElements) {
+//            String originalText = element.text();
+//            String formattedDate = formatDate(originalText);
+//            element.text(formattedDate);
+//        }
+//        org.jsoup.select.Elements metaElements = doc.select("meta");
+//        for (org.jsoup.nodes.Element element : metaElements) {
+//
+//            String newMeta = "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>";
+//            element.text(newMeta);
+//        }
+//
+//
+//        // Creating PDF document
+//        Document pdfDocument = new Document(PageSize.A4);
+//
+//        // Initializing PdfWriter for writing PDF
+//        PdfWriter pdfWriter = PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
+//
+//        // Opening the document for writing
+//        pdfDocument.open();
+//
+//        // Creating a new XMLWorkerHelper
+//        XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
+//
+//        // Parsing and adding HTML content to the document
+//        try (InputStream inputStream = new ByteArrayInputStream(doc.outerHtml().getBytes(StandardCharsets.UTF_8))) {
+//            worker.parseXHtml(pdfWriter, pdfDocument, inputStream, StandardCharsets.UTF_8);
+//        }
+//
+//        // Closing the document
+//        pdfDocument.close();
+//    }
+
+
+//    public static void convertHtmlContentToPdf(String htmlContent, String pdfFilePath) throws IOException, DocumentException {
+//        // Make the necessary replacements
+//        String modifiedHtmlContent = htmlContent.replace("true", "Da")
+//                .replace("false", "Ne");
+//
+//        org.jsoup.nodes.Document doc = Jsoup.parse(modifiedHtmlContent);
+//
+//        // Formatting dates in the desired format
+//        org.jsoup.select.Elements dateElements = doc.select("td:matches(\\d{4}-\\d{2}-\\d{2})");
+//        for (org.jsoup.nodes.Element element : dateElements) {
+//            String originalText = element.text();
+//            String formattedDate = formatDate(originalText);
+//            element.text(formattedDate);
+//        }
+//        org.jsoup.select.Elements metaElements = doc.select("meta");
+//        for (org.jsoup.nodes.Element element : metaElements) {
+//            String newMeta = "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>";
+//            element.text(newMeta);
+//        }
+//
+//        // Creating PDF document
+//        Document pdfDocument = new Document(PageSize.A4);
+//
+//        // Initializing PdfWriter for writing PDF
+//        PdfWriter pdfWriter = PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
+//
+//        // Opening the document for writing
+//        pdfDocument.open();
+//
+//        // Creating a new XMLWorkerHelper
+//        XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
+//
+//        // Defining font
+//        BaseFont bf = BaseFont.createFont("prijavaRadnika/font/Roboto-Medium.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+//        Font font = new Font(bf, 8);
+//
+//        // Setting default font for HTMLWorker
+//        FontFactory.setFontImp(new FontFactoryImp() {
+//            @Override
+//            public Font getFont(String fontname, String encoding, boolean embedded, float size, int style, BaseColor color) {
+//                return font;
+//            }
+//        });
+//
+//        // Parsing and adding HTML content to the document
+//        try (InputStream inputStream = new ByteArrayInputStream(doc.outerHtml().getBytes(StandardCharsets.UTF_8))) {
+//            worker.parseXHtml(pdfWriter, pdfDocument, inputStream, StandardCharsets.UTF_8);
+//        }
+//
+//        // Closing the document
+//        pdfDocument.close();
+//    }
+
+
+    public static void convertHtmlContentToPdf(String htmlContent, String pdfFilePath) throws IOException, DocumentException {
+        // Make the necessary replacements
+        String modifiedHtmlContent = htmlContent.replace("true", "Da")
+                .replace("false", "Ne")
+                .replace("<br>", "<br/>");
+
+        org.jsoup.nodes.Document doc = Jsoup.parse(modifiedHtmlContent);
+
+        // Formatting dates in the desired format
+        org.jsoup.select.Elements dateElements = doc.select("td:matches(\\d{4}-\\d{2}-\\d{2})");
+        for (org.jsoup.nodes.Element element : dateElements) {
+            String originalText = element.text();
+            String formattedDate = formatDate(originalText);
+            element.text(formattedDate);
+        }
+        org.jsoup.select.Elements metaElements = doc.select("meta");
+        for (org.jsoup.nodes.Element element : metaElements) {
+            String newMeta = "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>";
+            element.text(newMeta);
+        }
+
+        // Creating PDF document
+        Document pdfDocument = new Document(PageSize.A4);
+
+        // Initializing PdfWriter for writing PDF
+        PdfWriter pdfWriter = PdfWriter.getInstance(pdfDocument, new FileOutputStream(pdfFilePath));
+
+        // Opening the document for writing
+        pdfDocument.open();
+
+        // Creating a new XMLWorkerHelper
+        XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
+
+        // Defining font
+        BaseFont bf = BaseFont.createFont("prijavaRadnika/font/Roboto-Medium.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
+        Font font = new Font(bf, 11);
+
+        // Parsing and adding HTML content to the document
+        try (InputStream inputStream = new ByteArrayInputStream(doc.outerHtml().getBytes(StandardCharsets.UTF_8))) {
+            worker.parseXHtml(pdfWriter, pdfDocument, inputStream, StandardCharsets.UTF_8, new FontFactoryImp() {
+                @Override
+                public Font getFont(String fontname, String encoding, boolean embedded, float size, int style, BaseColor color) {
+                    return font;
+                }
+            });
+        }
+
+        // Closing the document
+        pdfDocument.close();
+    }
+
 
     private static String formatDate(String originalDate) {
         String[] parts = originalDate.split("-");

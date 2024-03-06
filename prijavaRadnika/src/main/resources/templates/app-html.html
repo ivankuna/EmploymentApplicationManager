@@ -3,16 +3,22 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <!--    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>-->
-    <title>Prikaz podataka</title>
+    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8">
+    <title th:text="${name}">Naslov...</title>
+
     <style>
-        * {  font-size: 15px; }
+        * {
+            font-size: 15px;
+          }
+
 	    body {
-		padding: 0px;
+		    padding: 0px;
 		}
+
 		h4 {
-		padding: 0px;
-		}
+            text-align: center;
+            padding: 0px;
+        }
         table {
             width: 100%;
             border-collapse: collapse;
@@ -49,6 +55,7 @@
         }
 
 
+
     </style>
 </head>
 <body style="font-family:calibri">
@@ -60,14 +67,14 @@
     <tr>
         <th class="small-width"></th>
         <th class="half-width">POSLODAVAC</th>
-<!--        <th class="double-width-left" th:text="${appOrder}"></th>-->
-<!--        <th class="double-width-right" th:text="${appDate}"></th>-->
+        <!--        <th class="double-width-left" th:text="${appOrder}"></th>-->
+        <!--        <th class="double-width-right" th:text="${appDate}"></th>-->
 
         <th class="double-width-right" th:text="${appOrderDate}"></th>
-<!--        <th class="double-width-right" th:text="${appDate}"></th>-->
+        <!--        <th class="double-width-right" th:text="${appDate}"></th>-->
     </tr>
 </table>
-<table style="margin-bottom: 2px;">
+<table style="margin-bottom: 4px;">
     <tr>
         <td class="small-width">1.</td>
         <td class="half-width">Tvrtka</td>
@@ -80,7 +87,7 @@
     </tr>
 </table>
 
-<table id="myTable" style="margin-bottom: 2px;">
+<table id="myTable" style="margin-bottom: 4px;">
     <tr>
         <th class="small-width"></th>
         <th class="half-width">PODACI O RADNIKU</th>
@@ -127,21 +134,21 @@
 <!--        });-->
 <!--    });-->
 <!--</script>-->
-<script>
-    $(document).ready(function () {
-        $("td").each(function() {
-            var originalText = $(this).text();
-            if (/^\d{4}-\d{2}-\d{2}$/.test(originalText)) {
-                var formattedDatum = moment(originalText).format("DD.MM.YYYY.");
-                $(this).text(formattedDatum);
-            } else if (originalText.toLowerCase() === 'true') {
-                $(this).text('DA');
-            } else if (originalText.toLowerCase() === 'false') {
-                $(this).text('NE');
-            }
-        });
-    });
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $("td").each(function() {-->
+<!--            var originalText = $(this).text();-->
+<!--            if (/^\d{4}-\d{2}-\d{2}$/.test(originalText)) {-->
+<!--                var formattedDatum = moment(originalText).format("DD.MM.YYYY.");-->
+<!--                $(this).text(formattedDatum);-->
+<!--            } else if (originalText.toLowerCase() === 'true') {-->
+<!--                $(this).text('DA');-->
+<!--            } else if (originalText.toLowerCase() === 'false') {-->
+<!--                $(this).text('NE');-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
 
-</script>
+<!--</script>-->
 </body>
 </html>
