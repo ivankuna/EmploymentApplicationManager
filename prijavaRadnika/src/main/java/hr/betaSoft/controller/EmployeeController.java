@@ -9,6 +9,8 @@ import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.apache.pdfbox.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
@@ -21,9 +23,11 @@ import org.springframework.web.servlet.ViewResolver;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.springframework.web.servlet.support.RequestContextUtils;
 
+
 import java.io.*;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
+import java.net.http.HttpHeaders;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
 import java.time.ZoneId;
@@ -32,7 +36,9 @@ import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Locale;
+
+import org.thymeleaf.TemplateEngine;
+import org.thymeleaf.context.Context;
 
 @Controller
 public class EmployeeController {
@@ -78,12 +84,12 @@ public class EmployeeController {
 
         if (isMobile) {
             if (!isAdmin) {
-                columnList.add(new Column("", statusField, "id"));
+                columnList.add(new Column("", statusField, "id",statusField));
             }
-            columnList.add(new Column("Prezime", "lastName", "id"));
-            columnList.add(new Column("Ime", "firstName", "id"));
+            columnList.add(new Column("Prezime", "lastName", "id",statusField));
+            columnList.add(new Column("Ime", "firstName", "id",statusField));
             if (!isAdmin) {
-                columnList.add(new Column("Poslano", "dateOfSignUpSent", "id"));
+                columnList.add(new Column("Poslano", "dateOfSignUpSent", "id",statusField));
             }
         } else {
             // OBRATI PAŽNJU!
@@ -91,28 +97,29 @@ public class EmployeeController {
             // dateOfSignUpSent/dateOfSignOutSent/dateOfUpdateSent I timeOfSignUpSent/timeOfSignOutSent/timeOfUpdateSent SU GENERIRANI PRI SLANJU NALOGA
             //// KOLONE ZA PRIJAVU ////
             if (isAdmin) {
-                columnList.add(new Column("Pr", "fromSignUp", "id"));
-                columnList.add(new Column("Po", "fromUpdate", "id"));
-                columnList.add(new Column("Od", "fromSignOut", "id"));
+                columnList.add(new Column("Pr", "fromSignUp", "id",statusField));
+                columnList.add(new Column("Po", "fromUpdate", "id",statusField));
+                columnList.add(new Column("Od", "fromSignOut", "id",statusField));
 
             } else {
-                columnList.add(new Column("Status", statusField, "id"));
+                columnList.add(new Column("Status", statusField, "id",statusField));
             }
 
-            columnList.add(new Column("OIB", "oib", "id"));
-            columnList.add(new Column("Ime", "firstName", "id"));
-            columnList.add(new Column("Prezime", "lastName", "id"));
-            columnList.add(new Column("Spol", "gender", "id"));
-            columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
-            columnList.add(new Column("Adresa", "address", "id"));
-            columnList.add(new Column("Grad", "city", "id"));
+            columnList.add(new Column("OIB", "oib", "id",statusField));
+            columnList.add(new Column("Ime", "firstName", "id",statusField));
+            columnList.add(new Column("Prezime", "lastName", "id",statusField));
+
             if (isAdmin) {
-                columnList.add(new Column("m.Pr", "signUpSent", "id"));
-                columnList.add(new Column("m.Po", "updateSent", "id"));
-                columnList.add(new Column("m.Od", "signOutSent", "id"));
+                columnList.add(new Column("m.Pr", "signUpSent", "id",statusField));
+                columnList.add(new Column("m.Po", "updateSent", "id",statusField));
+                columnList.add(new Column("m.Od", "signOutSent", "id",statusField));
             }
 
 //            //// SVE KOLONE ////
+//            columnList.add(new Column("Spol", "gender", "id"));
+//            columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
+//            columnList.add(new Column("Adresa", "address", "id"));
+//            columnList.add(new Column("Grad", "city", "id"));
 //            columnList.add(new Column("Stvarna stručna sprema", "professionalQualification", "id"));
 //            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));
 //            columnList.add(new Column("IBAN - tekući račun - redovni", "ibanRegular", "id"));
@@ -245,18 +252,17 @@ public class EmployeeController {
 
         model.addAttribute("sendLink", "/employees/send/{id}");
 
-        // Privremeno
-        if (isMobile && !isAdmin) {
+
+        if (isAdmin) {
             model.addAttribute("pdfLink", "");
+            model.addAttribute("deleteLink", "");
         } else {
             model.addAttribute("pdfLink", "/employees/pdf/{id}");
+            model.addAttribute("deleteLink", "/employees/delete/{id}");
         }
-
-
-
         model.addAttribute("updateLink", "/employees/update/{id}");
-        model.addAttribute("deleteLink", "/employees/delete/{id}");
         model.addAttribute("showLink", "");
+        model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/script-table-employees.js");
 
         return "table";
@@ -653,58 +659,82 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+
+
 //    @GetMapping("/employees/pdf/{id}")
-//    public void showEmployessPdf(@PathVariable Long id, RedirectAttributes ra, HttpServletResponse response) {
-//
-////        try {
-////            PdfAppGenerator pdfAppGenerator = new PdfAppGenerator(employeeService);
-////            pdfAppGenerator.generateApplication(id);
-////
-////            // Postavi odgovarajuće zaglavlje
-////            response.setContentType("application/pdf");
-////            response.setHeader("Content-Disposition", "inline; filename=employee.pdf");
-////
-////            // Učitaj generisani PDF dokument
-////            File pdfFile = new File("pdf/employee.pdf");
-////            FileInputStream fileInputStream = new FileInputStream(pdfFile);
-////
-////            // Kopiraj PDF sadržaj u odgovor
-////            IOUtils.copy(fileInputStream, response.getOutputStream());
-////
-////            // Zatvori tokove
-////            fileInputStream.close();
-////            response.getOutputStream().flush();
-////        } catch (IOException | EmployeeNotFoundException e) {
-////            // Handlaj izuzetak
-////        }
+//    public String showemployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletRequest request) {
 //
 //        try {
-//            String filePath = "pdf/employee.pdf";
+//            Employee employee = employeeService.findById(id);
 //
-//            // Generate the PDF
-//            PdfSignOutLose.generatePDF(employeeService.findById(id), filePath);
+//            String title = "";
+//            boolean appSend = false;
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//                title = "NALOG - PRIJAVA RADNIKA - HZMO -HZZO";
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//                title = "NALOG - ODJAVA RADNIKA - HZMO -HZZO";
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO -HZZO";
+//            }
+//
+//            model.addAttribute("title", title);
+//            model.addAttribute("companyName", employee.getUser().getCompany());
+//            model.addAttribute("companyOib", employee.getUser().getOib());
+//
+//            model.addAttribute("class", employee);
+//            List<Data> dataList = defineDataList(id);
+//            model.addAttribute("dataList", dataList);
+//            return "app-html";
+//
 //        } catch (EmployeeNotFoundException e) {
-//            // Handlaj izuzetak
+//            ra.addFlashAttribute("message", e.getMessage());
+//            return "redirect:/employees/show";
+//        } catch (Exception e) {
+//            throw new RuntimeException(e);
 //        }
 //    }
 
+    @Autowired
+    private TemplateEngine templateEngine;
+
     @GetMapping("/employees/pdf/{id}")
-    public String showemployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletRequest request) {
+    public void showEmployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra,  HttpServletResponse response) {
 
         try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+
             Employee employee = employeeService.findById(id);
 
             String title = "";
+            String appOrder = "";
+            String appDate = "";
+            String appOrderDate = "";
+            String name = "";
             boolean appSend = false;
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-                title = "NALOG - PRIJAVA RADNIKA - HZMO -HZZO";
+                title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
+                appOrder = "Nalog: " + employee.getNumSignUp();
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " +employee.getTimeOfSignUpSent();
+                name = "Prijava-" + id.toString()+"-"+employee.getNumSignUp();
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-                title = "NALOG - ODJAVA RADNIKA - HZMO -HZZO";
+                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
+                appOrder = "Nalog: " + employee.getNumSignOut();
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " +employee.getTimeOfSignOutSent();
+                name = "Odjava-" + id.toString()+"-"+employee.getNumSignOut();
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO -HZZO";
+                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
+                appOrder = "Nalog: " + employee.getNumUpdate() + "        Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " +employee.getTimeOfUpdateSent();
+                appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " +employee.getTimeOfUpdateSent();
+                name = "Promjena-" + id.toString()+"-"+employee.getNumUpdate();
+
             }
 
+            appOrderDate = appOrder + " " + appDate;
             model.addAttribute("title", title);
+            model.addAttribute("appOrder", appOrder);
+            model.addAttribute("appDate", appDate);
+            model.addAttribute("appOrderDate", appOrderDate);
             model.addAttribute("companyName", employee.getUser().getCompany());
             model.addAttribute("companyOib", employee.getUser().getOib());
 
@@ -712,51 +742,40 @@ public class EmployeeController {
             List<Data> dataList = defineDataList(id);
             model.addAttribute("dataList", dataList);
 
+            String htmlContent = renderHtml(model);
+            String pdfFilePath = "prijavaRadnika/pdf/"+ name + ".pdf";
+            HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
 
-            return "app-html";
+            // Postavi odgovarajuće zaglavlje
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=" + pdfFilePath);
 
-//            // Resolve the view and render it
-//            String viewName = "app-html";
-//            ViewResolver viewResolver = RequestContextUtils.getLocaleResolver(request);
-//            View view = viewResolver.resolveViewName(viewName, Locale.getDefault());
-//            String renderedHtml = renderView(view, model, request);
-//
-//            String fileName = "";
-//
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-//                fileName = "sign-up-" + employee.getId() + ".html";
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-//                fileName = "sign-out-" + employee.getId() + ".html";
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-//                fileName = "update-" + employee.getId() + ".html";
-//            }
-//
-//            // Save the rendered HTML content to a file
-//            String htmlFilePath = "prijavaRadnika/html/" + fileName;
-//
-//            try (BufferedWriter writer = new BufferedWriter(new FileWriter(htmlFilePath))) {
-//                writer.write(renderedHtml);
-//            } catch (IOException e) {
-//                throw new RuntimeException(e);
-//            }
-//
-//            // Set the HTML file path as an attribute for later use
-//            model.addAttribute("htmlFilePath", htmlFilePath);
-//
-//            return renderedHtml;
+            // Učitaj generisani PDF dokument
+            File pdfFile = new File(pdfFilePath);
+            FileInputStream fileInputStream = new FileInputStream(pdfFile);
+
+            // Kopiraj PDF sadržaj u odgovor
+            IOUtils.copy(fileInputStream, response.getOutputStream());
+
+            // Zatvori tokove
+            fileInputStream.close();
+            response.getOutputStream().flush();
+
+//            return "app-html";
+
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
-            return "redirect:/employees/show";
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
-//    private String renderView(View view, Model model, HttpServletRequest request) throws Exception {
-//        StringWriter stringWriter = new StringWriter();
-//        view.render(model.asMap(), request, new PrintWriter(stringWriter));
-//        return stringWriter.toString();
-//    }
+    private String renderHtml(Model model) {
+        Context context = new Context();
+        context.setVariables(model.asMap());
+        return templateEngine.process("app-html", context);
+    }
+
 
     private boolean checkOibExists(Employee employee) {
 

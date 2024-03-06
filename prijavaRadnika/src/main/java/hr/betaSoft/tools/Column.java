@@ -14,4 +14,6 @@ public class Column {
     private String field;
 
     private String id;
+
+    private String status;
 }

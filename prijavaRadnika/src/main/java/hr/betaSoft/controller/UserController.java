@@ -44,23 +44,23 @@ public class UserController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("Tvrtke", "company", "id"));
-            columnList.add(new Column("Korisnik", "username", "id"));
-            columnList.add(new Column("Licenca", "dateOfUserAccountExpiry", "id"));
+            columnList.add(new Column("Tvrtke", "company", "id",""));
+            columnList.add(new Column("Korisnik", "username", "id",""));
+            columnList.add(new Column("Licenca", "dateOfUserAccountExpiry", "id",""));
 
         } else {
-            columnList.add(new Column("ID", "id", "id"));
-            columnList.add(new Column("Korisničko ime", "username", "id"));
-            columnList.add(new Column("OIB", "oib", "id"));
-            columnList.add(new Column("Naziv tvrtke", "company", "id"));
-            columnList.add(new Column("Adresa", "address", "id"));
-            columnList.add(new Column("Grad", "city", "id"));
-            columnList.add(new Column("Osoba", "name", "id"));
-            columnList.add(new Column("Telefon", "telephone", "id"));
-            columnList.add(new Column("e-mail korisnika", "email", "id"));
-            columnList.add(new Column("e-mail primatelja naloga", "emailToSend", "id"));
-            columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id"));
-            columnList.add(new Column("Datum licence", "dateOfUserAccountExpiry", "id"));
+            columnList.add(new Column("ID", "id", "id",""));
+            columnList.add(new Column("Korisničko ime", "username", "id",""));
+            columnList.add(new Column("OIB", "oib", "id",""));
+            columnList.add(new Column("Naziv tvrtke", "company", "id",""));
+            columnList.add(new Column("Adresa", "address", "id",""));
+            columnList.add(new Column("Grad", "city", "id",""));
+            columnList.add(new Column("Osoba", "name", "id",""));
+            columnList.add(new Column("Telefon", "telephone", "id",""));
+            columnList.add(new Column("e-mail korisnika", "email", "id",""));
+            columnList.add(new Column("e-mail primatelja naloga", "emailToSend", "id",""));
+            columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id",""));
+            columnList.add(new Column("Datum licence", "dateOfUserAccountExpiry", "id",""));
         }
 
         List<User> userList = userService.findAll();
@@ -71,10 +71,11 @@ public class UserController {
         model.addAttribute("path", "/users");
         model.addAttribute("addLink", "/users/new");
         model.addAttribute("sendLink", "");
-        model.addAttribute("pdfLink", "/users/pdf/{id}");
+        model.addAttribute("pdfLink", "");
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("showLink", "/users/employees/show/{id}");
+        model.addAttribute("tableName", "users");
         model.addAttribute("script", "/js/script-table-users.js");
 
         return "table";

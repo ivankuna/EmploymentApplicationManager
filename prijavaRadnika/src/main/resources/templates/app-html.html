@@ -3,7 +3,7 @@
       xmlns:th="http://www.thymeleaf.org"
       xmlns="http://www.w3.org/1999/xhtml">
 <head>
-    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>
+    <!--    <meta http-equiv="content-type" content="application/xhtml+xml; charset=UTF-8"/>-->
     <title>Prikaz podataka</title>
     <style>
         * {  font-size: 15px; }
@@ -30,15 +30,24 @@
             text-align: center;
         }
         .half-width {
-            width: 25%;
+            width: 30%;
         }
         .double-width {
-            width: 45%;
+            width: 65%;
+        }
+        .double-width-left {
+            width: 65%;
+            text-align: left;
+        }
+        .double-width-right {
+            width: 65%;
+            text-align: right;
         }
          .full-width {
             width: 100%;
             text-align: center;
         }
+
 
     </style>
 </head>
@@ -47,12 +56,18 @@
 <h4 th:text="${title}">Naslov</h4>
 
 
-<table style="margin-bottom: 2px;">
+<table style="margin-bottom: 0px;">
     <tr>
         <th class="small-width"></th>
         <th class="half-width">POSLODAVAC</th>
-        <th class="double-width"></th>
+<!--        <th class="double-width-left" th:text="${appOrder}"></th>-->
+<!--        <th class="double-width-right" th:text="${appDate}"></th>-->
+
+        <th class="double-width-right" th:text="${appOrderDate}"></th>
+<!--        <th class="double-width-right" th:text="${appDate}"></th>-->
     </tr>
+</table>
+<table style="margin-bottom: 2px;">
     <tr>
         <td class="small-width">1.</td>
         <td class="half-width">Tvrtka</td>
@@ -97,6 +112,21 @@
         integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+<!--<script>-->
+<!--    $(document).ready(function () {-->
+<!--        $("td").each(function() {-->
+<!--            var originalText = $(this).text();-->
+<!--            if (/^\d{4}-\d{2}-\d{2}$/.test(originalText)) {-->
+<!--                var formattedDatum = moment(originalText).format("DD.MM.YYYY.");-->
+<!--                $(this).text(formattedDatum);-->
+<!--            } else if (originalText.toLowerCase() === 'true') {-->
+<!--                $(this).text('DA');-->
+<!--            } else if (originalText.toLowerCase() === 'false') {-->
+<!--                $(this).text('NE');-->
+<!--            }-->
+<!--        });-->
+<!--    });-->
+<!--</script>-->
 <script>
     $(document).ready(function () {
         $("td").each(function() {
@@ -111,7 +141,7 @@
             }
         });
     });
-</script>
 
+</script>
 </body>
 </html>
