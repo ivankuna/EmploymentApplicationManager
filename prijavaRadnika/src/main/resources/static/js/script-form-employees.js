@@ -45,13 +45,25 @@ document.addEventListener("DOMContentLoaded", function() {
             }
         }
 
+
+   function enableHiddenInputs() {
+        var hiddenInputs = document.querySelectorAll('input[type="hidden"]');
+        hiddenInputs.forEach(function(input) {
+            input.disabled = false;
+        });
+    }
+
+    enableHiddenInputs();
     toggleReasonForDefinite();
     toggleExpiryDateOfWorkPermitInput();
     toggleReasonForHoursForPartTime();
     toggleAdditionalWorkInput();
 
+
     employmentContractControl.addEventListener("change", toggleReasonForDefinite);
     foreignNationalCheckbox.addEventListener('change', toggleExpiryDateOfWorkPermitInput);
     workingHoursControl.addEventListener("change", toggleReasonForHoursForPartTime);
     additionalWorkCheckbox.addEventListener('change', toggleAdditionalWorkInput);
+
+
 });

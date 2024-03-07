@@ -8,6 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="shortcut icon" type="image/png" sizes="16x16"
           href="https://betastudio.hr/betasoft/png/employee-16x16.png">
     <link rel="shortcut icon" type="image/png" sizes="32x32"
@@ -71,21 +72,28 @@
           text-align: center;
           z-index: 1000;
         }
-
-
-
+        .navbar,
+        .fixed-top-title {
+            padding: 0px 0; /* Promijenite visinu trake ovdje */
+        }
     </style>
 </head>
 <body>
 <div class="content">
-    <!-- NAVBAR -->
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark" style="padding-left: 5px;">
-<!--        <a class="navbar-brand" href="#">Sustav radnici</a>-->
-        <a class="navbar-brand" th:text="${title}" href="#">Sustav radnici</a>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container-fluid">
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+<!--                <a class="nav-link" th:href="${pathShow}">&larr;</a>-->
+                <a class="nav-link" th:href="${pathShow}" style="padding-left: 5px;"><i class="fas fa-arrow-left"></i></a>
+            </li>
+        </ul>
+        <a class="navbar-brand" th:text="${title}" href="#" style="margin-right: auto;">Sustav radnici</a>
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
+        </div>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
@@ -97,15 +105,21 @@
                         <a class="dropdown-item" href="/logout">Odjava</a>
                     </div>
                 </li>
+
             </ul>
         </div>
     </nav>
 </div>
+
+
+
+
+
+
+
 <div class="container mt-4">
     <div class="col-md-6 offset-md-3">
         <br>
-<!--        <h4 th:text="${title}" class="fixed-top-title">Podatak</h4>-->
-<!--        <hr>-->
         <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
         <form id="myForm" th:object="${class}" th:action="@{${pathSave}}" method="POST">
             <input type="hidden" th:field="*{__${dataId}__}">
@@ -134,13 +148,16 @@
                         </select>
                     </div>
                     <div th:if="${data.items != null and data.items.size() > 0}">
-                        <select class="form-control" th:id="${data.field}"
+                        <select class="form-control" t
+                                th:id="${data.field}"
                                 th:field="*{__${data.field}__}"
                                 th:required="${data.required == 'true'} ? 'required' : null"
                                 th:disabled="${data.enabled == 'false'} ? 'disabled' : null"
+                                th:multiple="${data.multi == 'true'} ? 'multiple' : null"
                                 title="Molimo Vas da odaberete vrijednost iz padajućeg izbornika.">
-                            <option th:each="item : ${data.items}" th:value="${item}"
-                                    th:text="${item}"></option>
+                            <th:block th:each="item : ${data.items}">
+                                <option th:value="${item}" th:text="${item}"></option>
+                            </th:block>
                         </select>
                     </div>
                     <br>
@@ -154,17 +171,10 @@
                     Pošalji
                 </button>
                 <form th:if="${pathSave != ''}">
-
-                    <!--                    <button th:if="${pathSave != ''}" type="submit" class="btn btn-danger"-->
-                    <!--                            onclick="cancelForm()"-->
-                    <!--                            th:formaction="@{${cancelLink}}">-->
-                    <!--                        Odustani-->
-                    <!--                    </button>-->
-                    <button type="button" class="btn btn-danger" th:onclick="showConfirmation()">Odustani</button>
-
+                    <button type="button" class="btn btn-secondary" th:onclick="showConfirmation()">Odustani</button>
                 </form>
                 <form th:if="${pathSave == ''}">
-                    <button type="button" class="btn btn-primary" th:onclick="window.location=[[${pathShow}]]">
+                    <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${pathShow}]]">
                         Povratak
                     </button>
                 </form>
@@ -191,7 +201,6 @@
             return false; // Dodajte ovo da spriječite preusmjeravanje
         }
     }
-
 </script>
 
 <script>
@@ -203,7 +212,6 @@
         // POST zahtjev
         sendPostRequest(oibValue);
     });
-
 function sendPostRequest(oib) {
     fetch('/employees/check-oib', {
         method: 'POST',
@@ -235,10 +243,6 @@ function sendPostRequest(oib) {
         console.error('Greška prilikom slanja POST zahtjeva:', error);
     });
 }
-
-
 </script>
-
-
 </body>
 </html>

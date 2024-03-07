@@ -215,32 +215,32 @@ public class UserController {
 
         List<String> items = new ArrayList<>();
 
-        dataList.add(new Data("1.","Naziv tvrtke *", "company", "", "", "", "text", "true", fieldStatus, items));
+        dataList.add(new Data("1.","Naziv tvrtke *", "company", "", "", "", "text", "true", fieldStatus, items,"false"));
         ;
-        dataList.add(new Data("2.","OIB *", "oib", "", "", "", "text", "true", fieldStatus, items));
+        dataList.add(new Data("2.","OIB *", "oib", "", "", "", "text", "true", fieldStatus, items,"false"));
         ;
-        dataList.add(new Data("3.","Adresa *", "address", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("3.","Adresa *", "address", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("4.","Poštanski broj i grad *", "city", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("4.","Poštanski broj i grad *", "city", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("5.","Ime *", "firstName", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("5.","Ime *", "firstName", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("6.","Prezime *", "lastName", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("6.","Prezime *", "lastName", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("7.","Telefon *", "telephone", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("7.","Telefon *", "telephone", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("8.","e-mail korisnika *", "email", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("8.","e-mail korisnika *", "email", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("9.","e-mail primatelja naloga *", "emailToSend", "", "", "", "text", "true", "", items));
+        dataList.add(new Data("9.","e-mail primatelja naloga *", "emailToSend", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("10.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date", "true", fieldStatus, items));
+        dataList.add(new Data("10.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date", "true", fieldStatus, items,"false"));
         ;
-        dataList.add(new Data("11.","Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items));
+        dataList.add(new Data("11.","Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items,"false"));
         ;
         if (!update) {
-            dataList.add(new Data("12.","Korisničko ime *", "username", "", "", "", "text", "true", "", items));
+            dataList.add(new Data("12.","Korisničko ime *", "username", "", "", "", "text", "true", "", items,"false"));
             ;
-            dataList.add(new Data("13.","Lozinka *", "password", "", "", "", "text", "true", "", items));
+            dataList.add(new Data("13.","Lozinka *", "password", "", "", "", "text", "true", "", items,"false"));
             ;
         }
         return dataList;

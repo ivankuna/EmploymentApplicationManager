@@ -35,7 +35,7 @@ public class Employee {
 
     public static final List<String> WORKING_HOURS = Arrays.asList("Puno", "Nepuno");
 
-    public static final List<String> SALARY_TYPE = Arrays.asList("Bruto", "Neto");
+    public static final List<String> SALARY_TYPE = Arrays.asList("Neto", "Bruto");
 
     // Item, pored ponuđenih,  može biti slobodan unos teksta
     public static final List<String> REASON_FOR_SIGN_OUT = Arrays.asList("Istek Ugovora o radu ", "Sporazumni raskid", "Otkaz - poslovno uvjetovani", "Otkaz - osobno uvjetovani",
@@ -192,7 +192,7 @@ public class Employee {
     private Date dateOfSignOutReal;
 
     @Column
-    private String reasonForSignOut;
+    private List<String> reasonForSignOut;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

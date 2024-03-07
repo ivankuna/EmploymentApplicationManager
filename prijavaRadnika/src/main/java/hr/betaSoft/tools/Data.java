@@ -29,4 +29,6 @@ public class Data {
     private String enabled;
 
     private List<String> items;
+
+    private String multi;
 }
