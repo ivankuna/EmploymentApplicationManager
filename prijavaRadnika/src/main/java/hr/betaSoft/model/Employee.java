@@ -185,14 +185,14 @@ public class Employee {
     private Date dateOfUpdateReal;
 
     @Column
-    private String reasonForUpdate;
+    private List<String> reasonForUpdate;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)
     private Date dateOfSignOutReal;
 
     @Column
-    private List<String> reasonForSignOut;
+    private String reasonForSignOut;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

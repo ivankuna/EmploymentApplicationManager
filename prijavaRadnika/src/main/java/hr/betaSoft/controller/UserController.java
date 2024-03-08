@@ -105,7 +105,7 @@ public class UserController {
         model.addAttribute("title", "Korisnik");
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/users/save");
-        model.addAttribute("pathShow", "/users/show");
+        model.addAttribute("path", "/users/show");
         model.addAttribute("sendLink", "");
         model.addAttribute("pathSaveSend", "");
         model.addAttribute("script", "/js/script-form-users.js");
@@ -124,7 +124,7 @@ public class UserController {
             model.addAttribute("title", "Korisnik");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/users/save");
-            model.addAttribute("pathShow", "/users/show");
+            model.addAttribute("path", "/users/show");
             model.addAttribute("sendLink", "");
             model.addAttribute("pathSaveSend", "");
             model.addAttribute("script", "/js/script-form-users.js");

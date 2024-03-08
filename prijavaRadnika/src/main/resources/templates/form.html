@@ -17,106 +17,108 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://betastudio.hr/betasoft/png/employee-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="https://betastudio.hr/betasoft/png/employee-180x180.png">
     <style>
-        * {  font-size: 14px; }
-        .btn {
-             font-size: 14px;
-             }
-        .fixed-bottom-buttons {
-                position: fixed;
-                bottom: 0px;
-                left: 0;
-                right: 0;
-                z-index: 1030;
-                display: flex;
-                justify-content: center;
-                background-color: #343a40; /* grey color */
-                padding: 10px 0;
-            }
-        .fixed-bottom-buttons .btn {
-          margin: 0 5px;
-        }
-        .navbar {
-          position: fixed;
-          top: 0;
-          z-index: 1000;
-          width: 100%;
-          background-color: #343a40; /* siva boja */
-          padding: 10px 0;
-          padding-left: 2px;
-        }
+    * {
+        font-size: 14px;
+    }
 
-        .navbar .nav-item {
-          margin-right: 15px;
-        }
+    .btn {
+        font-size: 14px;
+    }
 
-        .navbar .nav-link {
-          color: #fff; /* bijela boja */
-          font-size: 14px;
-        }
+    .fixed-bottom-buttons {
+        position: fixed;
+        bottom: 0px;
+        left: 0;
+        right: 0;
+        z-index: 1030;
+        display: flex;
+        justify-content: center;
+        background-color: #343a40; /* siva boja */
+        padding: 10px 0;
+    }
 
-        .navbar .nav-link:hover {
-          color: #f8f9fa; /* svijetlo siva boja */
-        }
-        body {
-          padding-top: 40px; /* Dodatni padding na vrhu body elementa */
-        }
+    .fixed-bottom-buttons .btn {
+        margin: 0 5px;
+    }
 
-         .fixed-top-title {
-          position: fixed;
-          top: 1;
-          width: 100%;
-          background-color: #343a40; /* siva boja */
-          color: #fff; /* bijela boja */
-          font-size: 14px;
-          padding: 10px 0;
-          text-align: center;
-          z-index: 1000;
-        }
-        .navbar,
-        .fixed-top-title {
-            padding: 0px 0; /* Promijenite visinu trake ovdje */
-        }
+    .navbar {
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+        background-color: #343a40; /* siva boja */
+        padding: 10px 0;
+        padding-left: 2px;
+    }
+
+    .navbar .nav-item {
+        margin-right: 15px;
+    }
+
+    .navbar .nav-link {
+        color: #fff; /* bijela boja */
+        font-size: 14px;
+    }
+
+    .navbar .nav-link:hover {
+        color: #f8f9fa; /* svijetlo siva boja */
+    }
+
+    body {
+        padding-top: 40px; /* Dodatni padding na vrhu body elementa */
+    }
+
+    .fixed-top-title {
+        position: fixed;
+        top: 1;
+        width: 100%;
+        background-color: #343a40; /* siva boja */
+        color: #fff; /* bijela boja */
+        font-size: 14px;
+        padding: 10px 0;
+        text-align: center;
+        z-index: 1000;
+    }
+
+    /* Novi stil za navbar */
+    .navbar-brand {
+        margin: 0 auto; /* Centriranje teksta */
+    }
+
+    .navbar-nav .nav-link {
+        padding: 0; /* Uklanja prostor oko ikone */
+    }
+
+    .navbar-nav .nav-item {
+        margin-right: 0; /* Uklanja prostor između ikone i ruba */
+    }
+
+
     </style>
 </head>
 <body>
 <div class="content">
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container-fluid">
-        <ul class="navbar-nav mr-auto">
-            <li class="nav-item">
-<!--                <a class="nav-link" th:href="${pathShow}">&larr;</a>-->
-                <a class="nav-link" th:href="${pathShow}" style="padding-left: 5px;"><i class="fas fa-arrow-left"></i></a>
-            </li>
-        </ul>
-        <a class="navbar-brand" th:text="${title}" href="#" style="margin-right: auto;">Sustav radnici</a>
-        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-                aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-        </div>
-        <div class="collapse navbar-collapse" id="navbarNav">
-            <ul class="navbar-nav ml-auto">
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button"
-                       data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span sec:authentication="name">not found</span>
-                    </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/logout">Odjava</a>
-                    </div>
-                </li>
 
+            <ul class="navbar-nav mr-auto">
+                <li class="nav-item">
+                    <a class="nav-link" style="padding-left: 8px;" th:href="${path}"><i
+                            class="fas fa-arrow-left"></i></a>
+                </li>
+            </ul>
+
+            <a class="navbar-brand mx-auto" th:text="${title}" href="#">Naslov tablice</a>
+
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a class="nav-link" style="padding-right: 8px;" href="/logout"><i
+                            class="fas fa-sign-out-alt"></i></a>
+                </li>
             </ul>
         </div>
     </nav>
 </div>
-
-
-
-
-
-
-
 <div class="container mt-4">
     <div class="col-md-6 offset-md-3">
         <br>
@@ -174,7 +176,7 @@
                     <button type="button" class="btn btn-secondary" th:onclick="showConfirmation()">Odustani</button>
                 </form>
                 <form th:if="${pathSave == ''}">
-                    <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${pathShow}]]">
+                    <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${path}]]">
                         Povratak
                     </button>
                 </form>
@@ -192,15 +194,32 @@
 <script type="text/javascript" th:src="@{${script}}"></script>
 
 <script>
+    // Funkcija za postavljanje visine padajućeg izbornika na temelju broja opcija
+    function setDropdownHeight() {
+        var dropdown = document.getElementById('reasonForUpdate');
+        var numOptions = dropdown.options.length;
+        dropdown.size = numOptions;
+    }
+
+    // Poziv funkcije kada se stranica učita
+    window.onload = setDropdownHeight;
+</script>
+
+
+
+<script>
     function showConfirmation() {
         if (confirm("Želite li prekinuti unos?")) {
             // Ako korisnik pritisne "OK", preusmjeri ih na putanju
-            window.location = "[[${pathShow}]]";
+            window.location = "[[${path}]]";
         } else {
             // Ako korisnik pritisne "Cancel", ne preusmjeravaj ih
             return false; // Dodajte ovo da spriječite preusmjeravanje
         }
     }
+
+
+
 </script>
 
 <script>
@@ -243,6 +262,9 @@ function sendPostRequest(oib) {
         console.error('Greška prilikom slanja POST zahtjeva:', error);
     });
 }
+
+
+
 </script>
 </body>
 </html>

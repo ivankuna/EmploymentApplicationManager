@@ -224,7 +224,7 @@ public class EmployeeController {
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             title = "Nalozi za prijavu radnika";
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            title = "Nalozi za promjenu podataka radnika";
+            title = "Nalozi za promjenu podataka";
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             title = "Nalozi za odjavu radnika";
         }
@@ -299,7 +299,7 @@ public class EmployeeController {
         model.addAttribute("title", title);
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/employees/save");
-        model.addAttribute("pathShow", "/employees/show");
+        model.addAttribute("path", "/employees/show");
         model.addAttribute("sendLink", "/employees/send");
         model.addAttribute("script", script);
 
@@ -356,7 +356,7 @@ public class EmployeeController {
             model.addAttribute("title", title);
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", pathSave);
-            model.addAttribute("pathShow", "/employees/show");
+            model.addAttribute("path", "/employees/show");
             model.addAttribute("sendLink", sendLink);
             if (!appSend) {
                 model.addAttribute("script", script);
@@ -627,7 +627,7 @@ public class EmployeeController {
             model.addAttribute("title", "Postavke");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/employees/user/save");
-            model.addAttribute("pathShow", "/employees");
+            model.addAttribute("path", "/employees");
             model.addAttribute("sendLink", "");
             model.addAttribute("script", "/js/script-form-users.js");
             return "form";
@@ -886,7 +886,7 @@ public class EmployeeController {
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             dataList.add(new Data("6.","Datum promjene  *", "dateOfUpdateReal", "", "", "", "date", "false", fieldStatus, items,"false"));
             ;
-            dataList.add(new Data("7.","Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_UPDATE,"false"));
+            dataList.add(new Data("7.","Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_UPDATE,"true"));
             ;
             dataList.add(new Data("8.","Napomena", "noteUpdate", "", "", "", "text", "false", fieldStatus, items,"false"));
             ;
