@@ -541,16 +541,6 @@ public class EmployeeController {
                 return "redirect:/employees/update/" + id;
             }
 
-            // NE TREBA VIŠE JER NAKON ŠTO SE POŠALJE VIŠE NEMA GUMBA ZA SLANJE
-//            if (employeeToSend.isSignUpSent()) {
-//                ra.addFlashAttribute("message", "Nalog za " + messageTag + " radnika je već poslan.");
-//                return "redirect:/employees/update/" + id;
-//            }
-
-//            String recipient = employeeToSend.getUser().getEmailToSend();
-//            SendMail.sendMail(recipient, "Nalog za " + messageTag + " radnika", employeeToSend.toString());
-//            ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
-
             Date date = new Date(Calendar.getInstance().getTime().getTime());
 
             ZoneId zoneId = ZoneId.of("Europe/Zagreb");
@@ -593,9 +583,6 @@ public class EmployeeController {
                 }
                 employeeToSend.setNumUpdate(counter + 1);
             }
-
-
-
 
             employeeService.saveEmployee(employeeToSend);
 
@@ -657,41 +644,6 @@ public class EmployeeController {
         userService.saveUser(userDto);
         return "redirect:/employees";
     }
-
-
-
-//    @GetMapping("/employees/pdf/{id}")
-//    public String showemployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletRequest request) {
-//
-//        try {
-//            Employee employee = employeeService.findById(id);
-//
-//            String title = "";
-//            boolean appSend = false;
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-//                title = "NALOG - PRIJAVA RADNIKA - HZMO -HZZO";
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-//                title = "NALOG - ODJAVA RADNIKA - HZMO -HZZO";
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-//                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO -HZZO";
-//            }
-//
-//            model.addAttribute("title", title);
-//            model.addAttribute("companyName", employee.getUser().getCompany());
-//            model.addAttribute("companyOib", employee.getUser().getOib());
-//
-//            model.addAttribute("class", employee);
-//            List<Data> dataList = defineDataList(id);
-//            model.addAttribute("dataList", dataList);
-//            return "app-html";
-//
-//        } catch (EmployeeNotFoundException e) {
-//            ra.addFlashAttribute("message", e.getMessage());
-//            return "redirect:/employees/show";
-//        } catch (Exception e) {
-//            throw new RuntimeException(e);
-//        }
-//    }
 
     @Autowired
     private TemplateEngine templateEngine;

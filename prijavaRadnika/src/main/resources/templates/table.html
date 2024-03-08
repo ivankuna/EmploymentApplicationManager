@@ -58,131 +58,76 @@
             padding-right: 0px !important;
             padding-left: 0px !important;
         }
-
-
-<!--        .fixed-bottom-buttons {-->
-<!--                position: fixed;-->
-<!--                bottom: 0px;-->
-<!--                left: 0;-->
-<!--                right: 0;-->
-<!--                z-index: 1030;-->
-<!--                display: flex;-->
-<!--                justify-content: center;-->
-<!--                background-color: #343a40; /* grey color */-->
-<!--                padding: 10px 0;-->
-<!--            }-->
-<!--        .fixed-bottom-buttons .btn {-->
-<!--          margin: 0 5px;-->
-<!--        }-->
-
-<!--         .fixed-top-title {-->
-<!--        position: fixed;-->
-<!--        top: 1;-->
-<!--        width: 100%;-->
-<!--        background-color: #343a40; /* siva boja */-->
-<!--        color: #fff; /* bijela boja */-->
-<!--        font-size: 14px;-->
-<!--        padding: 10px 0;-->
-<!--        text-align: center;-->
-<!--        z-index: 1000;-->
-<!--    }-->
-
-<!--        .navbar {-->
-<!--          position: fixed;-->
-<!--          top: 0;-->
-<!--          z-index: 1000;-->
-<!--          width: 100%;-->
-<!--          background-color: #343a40; /* siva boja */-->
-<!--          padding: 10px 0;-->
-<!--          padding-left: 2px;-->
-<!--        }-->
-
-<!--        .navbar .nav-item {-->
-<!--          margin-right: 15px;-->
-<!--        }-->
-
-<!--        .navbar .nav-link {-->
-<!--          color: #fff; /* bijela boja */-->
-<!--          font-size: 14px;-->
-<!--        }-->
-
-<!--        .navbar .nav-link:hover {-->
-<!--          color: #f8f9fa; /* svijetlo siva boja */-->
-<!--        }-->
-<!--        body {-->
-<!--          padding-top: 50px; /* Dodatni padding na vrhu body elementa */-->
-<!--        }-->
-
           th {
             text-indent: 10px;
         }
-.fixed-bottom-buttons {
-        position: fixed;
-        bottom: 0px;
-        left: 0;
-        right: 0;
-        z-index: 1030;
-        display: flex;
-        justify-content: center;
-        background-color: #343a40; /* siva boja */
-        padding: 10px 0;
-    }
+        .fixed-bottom-buttons {
+            position: fixed;
+            bottom: 0px;
+            left: 0;
+            right: 0;
+            z-index: 1030;
+            display: flex;
+            justify-content: center;
+            background-color: #343a40; /* siva boja */
+            padding: 10px 0;
+        }
 
-    .fixed-bottom-buttons .btn {
-        margin: 0 5px;
-    }
+        .fixed-bottom-buttons .btn {
+            margin: 0 5px;
+        }
 
-    .navbar {
-        position: fixed;
-        top: 0;
-        z-index: 1000;
-        width: 100%;
-        background-color: #343a40; /* siva boja */
-        padding: 10px 0;
-        padding-left: 2px;
-    }
+        .navbar {
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+            width: 100%;
+            background-color: #343a40; /* siva boja */
+            padding: 10px 0;
+            padding-left: 2px;
+        }
 
-    .navbar .nav-item {
-        margin-right: 15px;
-    }
+        .navbar .nav-item {
+            margin-right: 15px;
+        }
 
-    .navbar .nav-link {
-        color: #fff; /* bijela boja */
-        font-size: 14px;
-    }
+        .navbar .nav-link {
+            color: #fff;
+            font-size: 14px;
+        }
 
-    .navbar .nav-link:hover {
-        color: #f8f9fa; /* svijetlo siva boja */
-    }
+        .navbar .nav-link:hover {
+            color: #f8f9fa;
+        }
 
-    body {
-        padding-top: 40px; /* Dodatni padding na vrhu body elementa */
-    }
+        body {
+            padding-top: 40px;
+        }
 
-    .fixed-top-title {
-        position: fixed;
-        top: 1;
-        width: 100%;
-        background-color: #343a40; /* siva boja */
-        color: #fff; /* bijela boja */
-        font-size: 14px;
-        padding: 10px 0;
-        text-align: center;
-        z-index: 1000;
-    }
+        .fixed-top-title {
+            position: fixed;
+            top: 1;
+            width: 100%;
+            background-color: #343a40; /* siva boja */
+            color: #fff; /* bijela boja */
+            font-size: 14px;
+            padding: 10px 0;
+            text-align: center;
+            z-index: 1000;
+        }
 
-    /* Novi stil za navbar */
-    .navbar-brand {
-        margin: 0 auto; /* Centriranje teksta */
-    }
+        /* Novi stil za navbar */
+        .navbar-brand {
+            margin: 0 auto; /* Centriranje teksta */
+        }
 
-    .navbar-nav .nav-link {
-        padding: 0; /* Uklanja prostor oko ikone */
-    }
+        .navbar-nav .nav-link {
+            padding: 0; /* Uklanja prostor oko ikone */
+        }
 
-    .navbar-nav .nav-item {
-        margin-right: 0; /* Uklanja prostor između ikone i ruba */
-    }
+        .navbar-nav .nav-item {
+            margin-right: 0; /* Uklanja prostor između ikone i ruba */
+        }
 
 
     </style>
@@ -199,7 +144,6 @@
                             class="fas fa-arrow-left"></i></a>
                 </li>
             </ul>
-
             <a class="navbar-brand mx-auto" th:text="${title}" href="#">Naslov tablice</a>
 
             <ul class="navbar-nav ml-auto">
