@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="hr"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>test</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.1.3/dist/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+</head>
+<body>
+
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-6">
+            <label for="pinInput" class="form-label">Unesite OIB:</label>
+            <input type="text" class="form-control" id="pinInput" placeholder="OIB" inputmode="decimal">
+            <br>
+            <label for="firstNameInput" class="form-label">Ime:</label>
+            <input type="text" class="form-control" id="firstNameInput" placeholder="Ime">
+            <br>
+            <label for="lastNameInput" class="form-label">Prezime:</label>
+            <input type="text" class="form-control" id="lastNameInput" placeholder="Prezime">
+            <br>
+
+            <label for="dateOfBirthInput" class="form-label">Datum rođenja (dd.mm.yyyy):</label>
+            <input type="text" class="form-control date-input" id="dateOfBirthInput" name="dateOfBirth"
+                   inputmode="decimal" pattern="\d{1,2}\.\d{1,2}\.\d{4}" placeholder="dd.mm.yyyy">
+            <br>
+            <label for="dateSignUpInput" class="form-label mt-3">Datum prijave (dd.mm.yyyy):</label>
+            <input type="text" class="form-control date-input auto-fill" id="dateSignUpInput" name="dateSignUp"
+                   inputmode="decimal" pattern="\d{1,2}\.\d{1,2}\.\d{4}" placeholder="dd.mm.yyyy">
+            <br>
+            <label for="dateSignOutInput" class="form-label mt-3">Datum odjave (dd.mm.yyyy):</label>
+            <input type="text" class="form-control date-input" id="dateSignOutInput" name="dateSignOut"
+                   inputmode="decimal" pattern="\d{1,2}\.\d{1,2}\.\d{4}" placeholder="dd.mm.yyyy">
+            <br>
+            <label for="memoInput" class="form-label">Napomena:</label>
+            <input type="text" class="form-control" id="memoInput" placeholder="Napomena">
+            <br>
+            <button onclick="redirectToEmployees()" class="btn btn-primary mt-3">Povratak</button>
+
+
+        </div>
+    </div>
+</div>
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+<!--<script>-->
+<!--document.querySelectorAll(".date-input").forEach(function(input) {-->
+<!--  input.addEventListener("input", function(event) {-->
+<!--    let value = event.target.value;-->
+<!--    if (value.length === 2 || value.length === 5) {-->
+<!--      event.target.value += ".";-->
+<!--    }-->
+<!--  });-->
+
+<!--  input.addEventListener("blur", function(event) {-->
+<!--    let value = event.target.value;-->
+
+<!--    if (!value.match(/^\d{2}\.\d{2}\.\d{4}$/)) {-->
+<!--      event.target.value = "";-->
+<!--    } else {-->
+<!--      let parts = value.split('.');-->
+<!--      let day = parseInt(parts[0], 10);-->
+<!--      let month = parseInt(parts[1], 10) - 1;-->
+<!--      let year = parseInt(parts[2], 10);-->
+
+<!--      let dateObj = new Date(year, month, day);-->
+
+<!--      if (dateObj.getDate() !== day || dateObj.getMonth() !== month || dateObj.getFullYear() !== year) {-->
+<!--        event.target.value = "";-->
+<!--      }-->
+<!--    }-->
+<!--  });-->
+<!--});-->
+
+<!--document.getElementById("pinInput").addEventListener("input", function(event) {-->
+<!--  let value = event.target.value;-->
+<!--  event.target.value = value.replace(/\D/g, '');-->
+<!--});-->
+
+<!--function redirectToEmployees() {-->
+<!--  window.location = '/employees';-->
+<!--}-->
+
+<!--</script>-->
+
+<!--// ok ali se puni već ulaskom u formu-->
+<!--<script>-->
+<!--document.querySelectorAll(".date-input").forEach(function(input) {-->
+<!--  input.addEventListener("input", function(event) {-->
+<!--    let value = event.target.value;-->
+<!--    if (value.length === 2 || value.length === 5) {-->
+<!--      event.target.value += ".";-->
+<!--    }-->
+<!--  });-->
+
+<!--  input.addEventListener("blur", function(event) {-->
+<!--    let value = event.target.value;-->
+
+<!--    if (!value.match(/^\d{2}\.\d{2}\.\d{4}$/)) {-->
+<!--      event.target.value = "";-->
+<!--    } else {-->
+<!--      let parts = value.split('.');-->
+<!--      let day = parseInt(parts[0], 10);-->
+<!--      let month = parseInt(parts[1], 10) - 1;-->
+<!--      let year = parseInt(parts[2], 10);-->
+
+<!--      let dateObj = new Date(year, month, day);-->
+
+<!--      if (dateObj.getDate() !== day || dateObj.getMonth() !== month || dateObj.getFullYear() !== year) {-->
+<!--        event.target.value = "";-->
+<!--      }-->
+<!--    }-->
+<!--  });-->
+<!--});-->
+
+<!--document.getElementById("pinInput").addEventListener("input", function(event) {-->
+<!--  let value = event.target.value;-->
+<!--  event.target.value = value.replace(/\D/g, '');-->
+<!--});-->
+
+<!--// Funkcija za automatsko postavljanje današnjeg datuma ako je polje Datum prijave prazno-->
+<!--function setTodayDateIfEmpty() {-->
+<!--  let dateSignUpInput = document.querySelector(".date-input.auto-fill");-->
+<!--  if (dateSignUpInput.value === "") {-->
+<!--    let today = new Date();-->
+<!--    let day = today.getDate().toString().padStart(2, '0');-->
+<!--    let month = (today.getMonth() + 1).toString().padStart(2, '0');-->
+<!--    let year = today.getFullYear();-->
+<!--    dateSignUpInput.value = day + "." + month + "." + year;-->
+<!--  }-->
+<!--}-->
+
+<!--// Poziv funkcije kada se dokument učita-->
+<!--window.addEventListener('DOMContentLoaded', setTodayDateIfEmpty);-->
+
+<!--function redirectToEmployees() {-->
+<!--  window.location = '/employees';-->
+<!--}-->
+
+<!--</script>-->
+
+
+<!--<script>-->
+<!--document.querySelectorAll(".date-input").forEach(function(input) {-->
+<!--  input.addEventListener("input", function(event) {-->
+<!--    let value = event.target.value;-->
+<!--    if (value.length === 2 || value.length === 5) {-->
+<!--      event.target.value += ".";-->
+<!--    }-->
+<!--  });-->
+
+<!--  input.addEventListener("blur", function(event) {-->
+<!--    let value = event.target.value;-->
+
+<!--    if (!value.match(/^\d{2}\.\d{2}\.\d{4}$/)) {-->
+<!--      event.target.value = "";-->
+<!--    } else {-->
+<!--      let parts = value.split('.');-->
+<!--      let day = parseInt(parts[0], 10);-->
+<!--      let month = parseInt(parts[1], 10) - 1;-->
+<!--      let year = parseInt(parts[2], 10);-->
+
+<!--      let dateObj = new Date(year, month, day);-->
+
+<!--      if (dateObj.getDate() !== day || dateObj.getMonth() !== month || dateObj.getFullYear() !== year) {-->
+<!--        event.target.value = "";-->
+<!--      }-->
+<!--    }-->
+<!--  });-->
+<!--});-->
+
+<!--document.getElementById("pinInput").addEventListener("input", function(event) {-->
+<!--  let value = event.target.value;-->
+<!--  event.target.value = value.replace(/\D/g, '');-->
+<!--});-->
+
+<!--// Funkcija za automatsko postavljanje današnjeg datuma ako je polje Datum prijave prazno-->
+<!--function setTodayDateIfEmpty(event) {-->
+<!--  let dateSignUpInput = event.target;-->
+<!--  if (dateSignUpInput.value === "") {-->
+<!--    let today = new Date();-->
+<!--    let day = today.getDate().toString().padStart(2, '0');-->
+<!--    let month = (today.getMonth() + 1).toString().padStart(2, '0');-->
+<!--    let year = today.getFullYear();-->
+<!--    dateSignUpInput.value = day + "." + month + "." + year;-->
+<!--  }-->
+<!--}-->
+
+<!--// Dodavanje događaja za pozivanje funkcije setTodayDateIfEmpty() kada se klikne na polje Datum prijave-->
+<!--document.getElementById("dateSignUpInput").addEventListener("click", setTodayDateIfEmpty);-->
+
+<!--function redirectToEmployees() {-->
+<!--  window.location = '/employees';-->
+<!--}-->
+
+<!--</script>-->
+
+<script>
+document.querySelectorAll(".date-input").forEach(function(input) {
+  input.addEventListener("input", function(event) {
+    let value = event.target.value;
+    if (value.length === 2 || value.length === 5) {
+      event.target.value += ".";
+    }
+  });
+
+  input.addEventListener("blur", function(event) {
+    let value = event.target.value;
+
+    if (!value.match(/^\d{2}\.\d{2}\.\d{4}$/)) {
+      event.target.value = "";
+    } else {
+      let parts = value.split('.');
+      let day = parseInt(parts[0], 10);
+      let month = parseInt(parts[1], 10) - 1;
+      let year = parseInt(parts[2], 10);
+
+      let dateObj = new Date(year, month, day);
+
+      if (dateObj.getDate() !== day || dateObj.getMonth() !== month || dateObj.getFullYear() !== year) {
+        event.target.value = "";
+      }
+    }
+  });
+});
+
+document.getElementById("pinInput").addEventListener("input", function(event) {
+  let value = event.target.value;
+  event.target.value = value.replace(/\D/g, '');
+});
+
+// Funkcija za automatsko postavljanje današnjeg datuma ako je polje Datum prijave prazno
+function setTodayDateIfEmpty(event) {
+  let dateSignUpInput = document.querySelector(".date-input.auto-fill");
+  if (dateSignUpInput.value === "") {
+    let today = new Date();
+    let day = today.getDate().toString().padStart(2, '0');
+    let month = (today.getMonth() + 1).toString().padStart(2, '0');
+    let year = today.getFullYear();
+    dateSignUpInput.value = day + "." + month + "." + year;
+  }
+}
+
+// Dodavanje događaja za pozivanje funkcije setTodayDateIfEmpty() kada se klikne na polje Datum prijave
+document.querySelector(".date-input.auto-fill").addEventListener("click", setTodayDateIfEmpty);
+
+function redirectToEmployees() {
+  window.location = '/employees';
+}
+
+</script>
+
+
+</body>
+</html>

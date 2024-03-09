@@ -50,7 +50,7 @@ public class MainController {
     }
 
     @GetMapping("/register")
-    public String showRegistrationForm(Model model){
+    public String showRegistrationForm(Model model) {
         if (userService.countUsers() != 0) {
             return "redirect:/login";
         }
@@ -120,10 +120,15 @@ public class MainController {
     public String postavkeFirme() {
 
         long id = getCurrentUserId();
-        if ( id != 0L) {
-            return "redirect:/employees/user/update/"+id;
+        if (id != 0L) {
+            return "redirect:/employees/user/update/" + id;
         } else {
             return "page-not-found";
         }
+    }
+
+    @GetMapping("/employees/test")
+    public String testDatuma() {
+        return "test";
     }
 }
