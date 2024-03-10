@@ -79,12 +79,12 @@ public class EmployeeController {
 
         if (isMobile) {
             if (!isAdmin) {
-                columnList.add(new Column("", statusField, "id",statusField));
+                columnList.add(new Column("", statusField, "id", statusField));
             }
-            columnList.add(new Column("Prezime", "lastName", "id",statusField));
-            columnList.add(new Column("Ime", "firstName", "id",statusField));
+            columnList.add(new Column("Prezime", "lastName", "id", statusField));
+            columnList.add(new Column("Ime", "firstName", "id", statusField));
             if (!isAdmin) {
-                columnList.add(new Column("Poslano", "dateOfSignUpSent", "id",statusField));
+                columnList.add(new Column("Poslano", "dateOfSignUpSent", "id", statusField));
             }
         } else {
             // OBRATI PAŽNJU!
@@ -92,22 +92,22 @@ public class EmployeeController {
             // dateOfSignUpSent/dateOfSignOutSent/dateOfUpdateSent I timeOfSignUpSent/timeOfSignOutSent/timeOfUpdateSent SU GENERIRANI PRI SLANJU NALOGA
             //// KOLONE ZA PRIJAVU ////
             if (isAdmin) {
-                columnList.add(new Column("Pr", "fromSignUp", "id",statusField));
-                columnList.add(new Column("Po", "fromUpdate", "id",statusField));
-                columnList.add(new Column("Od", "fromSignOut", "id",statusField));
+                columnList.add(new Column("Pr", "fromSignUp", "id", statusField));
+                columnList.add(new Column("Po", "fromUpdate", "id", statusField));
+                columnList.add(new Column("Od", "fromSignOut", "id", statusField));
 
             } else {
-                columnList.add(new Column("Status", statusField, "id",statusField));
+                columnList.add(new Column("Status", statusField, "id", statusField));
             }
 
-            columnList.add(new Column("OIB", "oib", "id",statusField));
-            columnList.add(new Column("Ime", "firstName", "id",statusField));
-            columnList.add(new Column("Prezime", "lastName", "id",statusField));
+            columnList.add(new Column("OIB", "oib", "id", statusField));
+            columnList.add(new Column("Ime", "firstName", "id", statusField));
+            columnList.add(new Column("Prezime", "lastName", "id", statusField));
 
             if (isAdmin) {
-                columnList.add(new Column("m.Pr", "signUpSent", "id",statusField));
-                columnList.add(new Column("m.Po", "updateSent", "id",statusField));
-                columnList.add(new Column("m.Od", "signOutSent", "id",statusField));
+                columnList.add(new Column("m.Pr", "signUpSent", "id", statusField));
+                columnList.add(new Column("m.Po", "updateSent", "id", statusField));
+                columnList.add(new Column("m.Od", "signOutSent", "id", statusField));
             }
 
 //            //// SVE KOLONE ////
@@ -517,11 +517,11 @@ public class EmployeeController {
 
 
     @GetMapping("/employees/send/{id}")
-    public String sendEmployeeMail(@PathVariable Long id, RedirectAttributes ra) {
+    public String sendEmployeeMail(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         String messageTag = switch (FormTracker.getFormId()) {
             case 1 -> "prijavu";
-            case 2 -> "promjenu";
+            case 2 -> "promjenu podataka";
             case 3 -> "odjavu";
             default -> "";
         };
@@ -589,10 +589,23 @@ public class EmployeeController {
             String employeeName = employeeToSend.getFirstName() + " " + employeeToSend.getLastName();
             String mailRecipient = employeeToSend.getUser().getEmailToSend();
             String companyName = employeeToSend.getUser().getCompany();
-            String mailSubject = companyName + " [ nalog za " + messageTag + " radnika: " + employeeName  + " ]";
-            String mailText = employeeToSend.toString();
+            String mailSubject = companyName + "  Nalog za " + messageTag + " radnika: " + employeeName;
+//            String mailText = employeeToSend.toString();
+            String mailText = "Poštovani," + " \n" +
+                    "" + " \n" +
+                    "U privitku vam šaljemo Nalog za " + messageTag + " radnika: " + employeeName + " \n" +
+                    "" + " \n" +
+                    "Ova poruka je automatski generirana te Vas molimo da na nju ne odgovarate." + " \n" +
+                    "" + " \n" +
+                    "" + " \n" +
+                    employeeToSend.getUser().getCompany() + " \n" +
+                    employeeToSend.getUser().getAddress() + " \n" +
+                    employeeToSend.getUser().getCity()+ " \n"  ;
 
-            SendMail.sendMail(mailRecipient, mailSubject, mailText);
+                    // ovdje samo kreirati pdf i putanju proslijediti u mail za attachment
+                    String pdfFilePath = createAppPdf(id, model, ra, response);
+
+            SendMail.sendMail(mailRecipient, mailSubject, mailText, pdfFilePath);
             ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
 
         } catch (EmployeeNotFoundException e) {
@@ -649,56 +662,65 @@ public class EmployeeController {
     private TemplateEngine templateEngine;
 
     @GetMapping("/employees/pdf/{id}")
-    public void showEmployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra,  HttpServletResponse response) {
+    public void showEmployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         try {
 
-            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+//            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+//
+//            Employee employee = employeeService.findById(id);
+//
+//            String title = "";
+//            String appOrder = "";
+//            String appDate = "";
+//            String appOrderDate = "";
+//            String name = "";
+//            String year = "";
+//            boolean appSend = false;
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//                title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
+//                Date dateOfSignUpSent = employee.getDateOfSignUpSent();
+//                year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
+//                appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
+//                appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
+//                name = "Prijava-" + id.toString() + "-" + employee.getNumSignUp();
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
+//                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+//                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
+//                appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
+//                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
+//                name = "Odjava-" + id.toString() + "-" + employee.getNumSignOut();
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
+//                Date dateOfUpdateSent = employee.getDateOfUpdateSent();
+//                year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
+//                appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
+//                appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
+//                name = "Promjena-" + id.toString() + "-" + employee.getNumUpdate();
+//
+//            }
+//
+//            appOrderDate = appOrder + " " + appDate;
+//            model.addAttribute("name", name);
+//            model.addAttribute("title", title);
+//            model.addAttribute("appOrder", appOrder);
+//            model.addAttribute("appDate", appDate);
+//            model.addAttribute("appOrderDate", appOrderDate);
+//            model.addAttribute("companyName", employee.getUser().getCompany());
+//            model.addAttribute("companyOib", employee.getUser().getOib());
+//
+//            model.addAttribute("class", employee);
+//            List<Data> dataList = defineDataList(id);
+//            model.addAttribute("dataList", dataList);
+//
+//            // dalje je za PDF
+//
+//            String htmlContent = renderHtml(model);
+//            String pdfFilePath = "prijavaRadnika/pdf/" + name + ".pdf";
+//            HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
 
-            Employee employee = employeeService.findById(id);
-
-            String title = "";
-            String appOrder = "";
-            String appDate = "";
-            String appOrderDate = "";
-            String name = "";
-            boolean appSend = false;
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-                title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
-                appOrder = "Nalog: " + employee.getNumSignUp();
-                appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
-                name = "Prijava-" + id.toString()+"-"+employee.getNumSignUp();
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
-                appOrder = "Nalog: " + employee.getNumSignOut();
-                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
-                name = "Odjava-" + id.toString()+"-"+employee.getNumSignOut();
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
-                appOrder = "Nalog: " + employee.getNumUpdate();
-                appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
-                name = "Promjena-" + id.toString()+"-"+employee.getNumUpdate();
-
-            }
-
-            appOrderDate = appOrder + " " + appDate;
-            model.addAttribute("name", name);
-            model.addAttribute("title", title);
-            model.addAttribute("appOrder", appOrder);
-            model.addAttribute("appDate", appDate);
-            model.addAttribute("appOrderDate", appOrderDate);
-            model.addAttribute("companyName", employee.getUser().getCompany());
-            model.addAttribute("companyOib", employee.getUser().getOib());
-
-            model.addAttribute("class", employee);
-            List<Data> dataList = defineDataList(id);
-            model.addAttribute("dataList", dataList);
-
-            // dalje je za PDF
-
-            String htmlContent = renderHtml(model);
-            String pdfFilePath = "prijavaRadnika/pdf/"+ name + ".pdf";
-            HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
+            String pdfFilePath = createAppPdf(id, model, ra, response);
 
             // Postavi odgovarajuće zaglavlje
             response.setContentType("application/pdf");
@@ -721,6 +743,76 @@ public class EmployeeController {
             throw new RuntimeException(e);
         }
     }
+
+    public String createAppPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+
+            Employee employee = employeeService.findById(id);
+
+            String title = "";
+            String appOrder = "";
+            String appDate = "";
+            String appOrderDate = "";
+            String name = "";
+            String year = "";
+            boolean appSend = false;
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
+                Date dateOfSignUpSent = employee.getDateOfSignUpSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
+                appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
+                name = "Prijava-" + id.toString() + "-" + employee.getNumSignUp();
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
+                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
+                appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
+                name = "Odjava-" + id.toString() + "-" + employee.getNumSignOut();
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
+                Date dateOfUpdateSent = employee.getDateOfUpdateSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
+                appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
+                name = "Promjena-" + id.toString() + "-" + employee.getNumUpdate();
+
+            }
+
+            appOrderDate = appOrder + " " + appDate;
+            model.addAttribute("name", name);
+            model.addAttribute("title", title);
+            model.addAttribute("appOrder", appOrder);
+            model.addAttribute("appDate", appDate);
+            model.addAttribute("appOrderDate", appOrderDate);
+            model.addAttribute("companyName", employee.getUser().getCompany());
+            model.addAttribute("companyOib", employee.getUser().getOib());
+
+            model.addAttribute("class", employee);
+            List<Data> dataList = defineDataList(id);
+            model.addAttribute("dataList", dataList);
+
+            // dalje je za PDF
+
+            String htmlContent = renderHtml(model);
+            String pdfFilePath = "prijavaRadnika/pdf/" + name + ".pdf";
+            HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
+
+            return pdfFilePath;
+
+
+        } catch (EmployeeNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "ERROR";
+    }
+
 
     private String renderHtml(Model model) {
         Context context = new Context();
@@ -753,94 +845,94 @@ public class EmployeeController {
                 fieldStatus = "false";
             }
         }
-        dataList.add(new Data("1.","OIB *", "oib", "", "", "", "text", "true", fieldStatus, items,"false"));
+        dataList.add(new Data("1.", "OIB *", "oib", "", "", "", "text", "true", fieldStatus, items, "false"));
         ;
-        dataList.add(new Data("2.","Ime *", "firstName", "", "", "", "text", "true", fieldStatus, items,"false"));
+        dataList.add(new Data("2.", "Ime *", "firstName", "", "", "", "text", "true", fieldStatus, items, "false"));
         ;
-        dataList.add(new Data("3.","Prezime *", "lastName", "", "", "", "text", "true", fieldStatus, items,"false"));
+        dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", fieldStatus, items, "false"));
         ;
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
 
-            dataList.add(new Data("4.","Spol *", "gender", "", "", "", "text", "false", fieldStatus, Employee.GENDER,"false"));
+            dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", fieldStatus, Employee.GENDER, "false"));
             ;
-            dataList.add(new Data("5.","Datum rođenja *", "dateOfBirth", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("5.", "Datum rođenja *", "dateOfBirth", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("6.","Adresa *", "address", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("6.", "Adresa *", "address", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("7.","Poštanski broj i grad *", "city", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("7.", "Poštanski broj i grad *", "city", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("8.","Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION,"false"));
+            dataList.add(new Data("8.", "Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION, "false"));
             ;
-            dataList.add(new Data("9.","Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("9.", "Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("10.","IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("10.", "IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("11.","IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("11.", "IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("12.","Radno mjesto *", "employmentPosition", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("12.", "Radno mjesto *", "employmentPosition", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("13.","Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("13.", "Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("14.","Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION,"false"));
+            dataList.add(new Data("14.", "Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION, "false"));
             ;
-            dataList.add(new Data("15.","Ugovor o radu *", "employmentContract", "", "", "", "text", "false", fieldStatus, Employee.EMPLOYMENT_CONTRACT,"false"));
+            dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", fieldStatus, Employee.EMPLOYMENT_CONTRACT, "false"));
             ;
-            dataList.add(new Data("16.","Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("17.","Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("17a.","Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("17a.", "Dodatni rad - sati *", "additionalWorkHours", "", "", "", "myDecimal", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("18.","Radno vrijeme *", "workingHours", "", "", "", "text", "false", fieldStatus, Employee.WORKING_HOURS,"false"));
+            dataList.add(new Data("18.", "Radno vrijeme *", "workingHours", "", "", "", "text", "false", fieldStatus, Employee.WORKING_HOURS, "false"));
             ;
-            dataList.add(new Data("18a.","Sati nepuno *", "hoursForPartTime", "", "", "", "number", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "myDecimal", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("19.","Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("20.","Datum prijave *", "dateOfSignUp", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("21.","Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("21.", "Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("22.","Bruto / Neto *", "salaryType", "", "", "", "text", "false", fieldStatus, Employee.SALARY_TYPE,"false"));
+            dataList.add(new Data("22.", "Bruto / Neto *", "salaryType", "", "", "", "text", "false", fieldStatus, Employee.SALARY_TYPE, "false"));
             ;
-            dataList.add(new Data("22a.","Iznos osnovne plaće *", "basicSalary", "", "", "", "myDecimal", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("22a.", "Iznos osnovne plaće *", "basicSalary", "", "", "", "myDecimal", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("23.","Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("23.", "Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("23a.","Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("23a.", "Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("24.","Umirovljenik *", "retiree", "", "", "", "checkbox", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("24.", "Umirovljenik *", "retiree", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("25.","Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("25.", "Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("26.","Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("26.", "Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("27.","Invalid *", "disability", "", "", "", "checkbox", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("27.", "Invalid *", "disability", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("28.","Napomena", "noteSignUp", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("28.", "Napomena", "noteSignUp", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
 
         } else {
-            dataList.add(new Data("4.","Datum prijave *", "dateOfSignUp", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("4.", "Datum prijave *", "dateOfSignUp", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("5.","Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
         }
         if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            dataList.add(new Data("6.","Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("7.","Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("7.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("8.","Razlog odjave *", "reasonForSignOut", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_SIGN_OUT,"false"));
+            dataList.add(new Data("8.", "Razlog odjave *", "reasonForSignOut", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_SIGN_OUT, "false"));
             ;
-            dataList.add(new Data("9.","Napomena", "noteSignOut", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("9.", "Napomena", "noteSignOut", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            dataList.add(new Data("6.","Datum promjene  *", "dateOfUpdateReal", "", "", "", "date", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("6.", "Datum promjene  *", "dateOfUpdateReal", "", "", "", "date", "false", fieldStatus, items, "false"));
             ;
-            dataList.add(new Data("7.","Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_UPDATE,"true"));
+            dataList.add(new Data("7.", "Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_UPDATE, "true"));
             ;
-            dataList.add(new Data("8.","Napomena", "noteUpdate", "", "", "", "text", "false", fieldStatus, items,"false"));
+            dataList.add(new Data("8.", "Napomena", "noteUpdate", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
         }
         return dataList;

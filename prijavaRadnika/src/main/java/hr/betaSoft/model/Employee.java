@@ -102,13 +102,13 @@ public class Employee {
     private boolean additionalWork;
 
     @Column
-    private Integer additionalWorkHours;
+    private BigDecimal additionalWorkHours;
 
     @Column
     private String workingHours;
 
     @Column
-    private Integer hoursForPartTime;
+    private BigDecimal hoursForPartTime;
 
     @Column
     private String nonWorkingDays;
@@ -368,12 +368,13 @@ public class Employee {
             if (employmentContract.equals("Određeno") && (reasonForDefinite == null || reasonForDefinite.trim().isEmpty())) {
                 emptyAttributes.add("Razlog - na određeno");
             }
-            if (additionalWork && (additionalWorkHours == null || additionalWorkHours == 0)) {
+            if (additionalWork && (additionalWorkHours == null || additionalWorkHours.compareTo(BigDecimal.ZERO) == 0)) {
                 emptyAttributes.add("Dodatni rad - sati");
             } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
                 emptyAttributes.add("Radna dozvola vrijedi do");
             }
         }
+
 
         return emptyAttributes;
     }
