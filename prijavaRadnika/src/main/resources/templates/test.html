@@ -10,15 +10,16 @@
           integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <!-- Include Flatpickr CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
-
+<!--    <style>-->
+<!--      * { font-size: 14px; }-->
+<!--    </style>-->
 
 
 </head>
 <body>
-
 <div class="container mt-5">
     <div class="row">
-        <div class="col-md-6">
+        <div class="col-md-12">
             <label for="oib" class="form-label">Unesite OIB:</label>
             <input type="number" class="form-control" id="oib" placeholder="OIB" inputmode="decimal">
             <br>
@@ -41,7 +42,8 @@
             <br>
             <!--  "date-input auto-fill date-picker" -->
             <label for="dateSignOutInput" class="form-label mt-3">Datum odjave (danas + kalendar):</label>
-            <input type="text" class="form-control date-input auto-fill date-picker date-picker" id="dateSignOutInput" name="dateSignOut"
+            <input type="text" class="form-control date-input auto-fill date-picker date-picker" id="dateSignOutInput"
+                   name="dateSignOut"
                    inputmode="decimal" pattern="\d{1,2}\.\d{1,2}\.\d{4}" placeholder="dd.mm.yyyy">
             <br>
 
@@ -52,7 +54,8 @@
             <br>
 
             <label for="netto" class="form-label">Netto plaća:</label>
-            <input type="number" step="0.01" class="form-control" id="netto" placeholder="Netto plaća" inputmode="decimal">
+            <input type="number" step="0.01" class="form-control" id="netto" placeholder="Netto plaća"
+                   inputmode="decimal">
             <br>
 
             <label for="memoInput" class="form-label">Napomena:</label>
@@ -62,6 +65,10 @@
             <button onclick="redirectToEmployees()" class="btn btn-primary mt-3">Povratak</button>
 
 
+            <div class="row">
+                <br/><br/>
+                <br/><br/>
+            </div>
         </div>
     </div>
 </div>
@@ -166,6 +173,7 @@ document.addEventListener('DOMContentLoaded', function() {
 function redirectToEmployees() {
   window.location = '/employees';
 }
+
 </script>
 
 

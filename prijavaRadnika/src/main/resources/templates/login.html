@@ -18,9 +18,9 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://betastudio.hr/betasoft/png/employee-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="https://betastudio.hr/betasoft/png/employee-180x180.png">
     <style>
-        * {
-             font-size: 14px;
-         }
+<!--        * {-->
+<!--             font-size: 14px;-->
+<!--         }-->
          .navbar {
           position: fixed;
           top: 0;
@@ -37,7 +37,7 @@
 
         .navbar .nav-link {
           color: #fff; /* bijela boja */
-          font-size: 14px;
+<!--          font-size: 14px;-->
         }
 
         .navbar .nav-link:hover {
@@ -76,16 +76,16 @@
             <div th:if="${param.error}">
                 <div class="alert alert-danger">Neispravno korisničko ime ili lozinka.</div>
             </div>
-            <div th:if="${param.logout}">
-                <div class="alert alert-success">Odjavili ste se.</div>
-            </div>
+<!--            <div th:if="${param.logout}">-->
+<!--                <div class="alert alert-success">Odjavili ste se.</div>-->
+<!--            </div>-->
 
             <!-- TEST -->
             <div th:if="${accExpired}" class="alert alert-danger" th:text="${message}"></div>
 
             <div class="card">
                 <div class="card-header">
-                    <h3 class="text-center">Prijava</h3>
+                    <h4 class="text-center">Prijava</h4>
                 </div>
                 <div class="card-body">
                     <form

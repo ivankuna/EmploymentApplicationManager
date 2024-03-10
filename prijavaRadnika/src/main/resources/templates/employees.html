@@ -17,81 +17,130 @@
     <link rel="icon" type="image/png" sizes="32x32" href="https://betastudio.hr/betasoft/png/employee-32x32.png">
     <link rel="apple-touch-icon" sizes="180x180" href="https://betastudio.hr/betasoft/png/employee-180x180.png">
     <style>
-        * {  font-size: 14px; }
-        .btn { height: 80px; }
-        .navbar {
+
+        .menu-buttons {
+            height: 80px;
+        }
+
+        .menu-buttons button {
+            height: 100%; /* Ovo će osigurati da visina gumba bude ista kao i roditeljski div */
+        }
+
+        .fixed-bottom-buttons {
             position: fixed;
-            top: 0;
+            bottom: 0px;
+            left: 0;
+            right: 0;
             z-index: 1000;
-            width: 100%;
+            display: flex;
+            justify-content: center;
             background-color: #343a40;
             padding: 10px 0;
-            padding-left: 2px;
         }
 
-        .navbar .nav-item {
-            margin-right: 15px;
-        }
+<!--        .fixed-bottom-buttons button {-->
+<!--            width: 100%; /* Proširuje gumb na cijelu širinu roditeljskog diva */-->
+<!--            height: 100%; /* Postavlja visinu gumba na visinu roditeljskog diva */-->
+<!--        }-->
 
-        .navbar .nav-link {
-            color: #fff;
-            font-size: 14px;
-        }
 
-        .navbar .nav-link:hover {
-            color: #f8f9fa;
-        }
+   .navbar {
+        position: fixed;
+        top: 0;
+        z-index: 1000;
+        width: 100%;
+        background-color: #343a40;
+        padding: 10px 0;
+        padding-left: 2px;
+    }
 
-        body {
-            padding-top: 60px;
-        }
 
-        .navbar .navbar-nav {
-            margin-left: auto;
-        }
+
+    .navbar .nav-link {
+        color: #fff;
+    }
+
+    .navbar .nav-link:hover {
+        color: #f8f9fa;
+    }
+
+    body {
+        padding-top: 50px;
+    }
+
+
 
     </style>
 
 </head>
 <body>
-<div class="content">
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container d-flex justify-content-between align-items-center">
-            <a class="navbar-brand mx-auto" href="#">Sustav radnici</a>
-        </div>
-    </nav>
+<!--<div class="content">-->
+<!--    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">-->
+<!--        <div class="container d-flex justify-content-between align-items-center">-->
+<!--            <a class="navbar-brand mx-auto" href="#">Sustav radnici</a>-->
+<!--        </div>-->
 
+<!--        <ul class="navbar-nav ml-auto">-->
+<!--            <li class="nav-item">-->
+<!--                <a class="nav-link" style="padding-right: 10px;" href="/logout"><i-->
+<!--                        class="fas fa-sign-out-alt"></i></a>-->
+<!--            </li>-->
+<!--        </ul>-->
+<!--    </nav>-->
+
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container-fluid">
+
+        <ul class="navbar-nav mr-auto">
+            <li class="nav-item">
+                <a class="nav-link" style="padding-left: 10px;" th:href="${path}"><i
+                        class="fas fa-arrow-left"></i></a>
+            </li>
+        </ul>
+
+        <a class="navbar-brand mx-auto" href="#">Sustav radnici</a>
+
+        <ul class="navbar-nav ml-auto">
+            <li class="nav-item">
+                <a class="nav-link" style="padding-right: 10px;" href="/logout"><i
+                        class="fas fa-sign-out-alt"></i></a>
+            </li>
+        </ul>
+    </div>
+</nav>
 
     <!--MENU-->
     <div class="container mt-4">
         <div class="col-md-6 offset-md-3">
             <div class="row">
                 <div class="col-md-12">
+                    <div class="menu-buttons">
+                        <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/prijava'">
+                            <span>Prijava radnika</span>
+                        </button>
 
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/prijava'">
-                        <span>Prijava radnika</span>
-                    </button>
+                        <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/promjena'">
+                            <span>Promjena podataka radnika</span>
+                        </button>
 
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/promjena'">
-                        <span>Promjena podataka radnika</span>
-                    </button>
+                        <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/odjava'">
+                            <span>Odjava radnika</span>
+                        </button>
 
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/odjava'">
-                        <span>Odjava radnika</span>
-                    </button>
+                        <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/postavke'">
+                            <span>Postavke</span>
+                        </button>
 
-                    <button class="btn btn-primary btn-block mb-3" onclick="window.location.href='/postavke'">
-                        <span>Postavke</span>
-                    </button>
+                        <button class="btn btn-danger btn-block mb-3" onclick="window.location.href='/employees/test'">
+                            <span>Test unosa datuma</span>
+                        </button>
+                    </div>
 
-                    <button class="btn btn-danger btn-block mb-3" onclick="window.location.href='/employees/test'">
-                        <span>Test unosa datuma</span>
-                    </button>
-
-                    <button class="btn btn-secondary btn-block mb-3" onclick="window.location.href='/logout'">
-                        <span>Odjava</span>
-                    </button>
-
+                    <div class="fixed-bottom-buttons">
+                        <button type="button" class="btn btn-dark" onclick="window.location.href='/logout'">
+                            <span>Odjava</span>
+                        </button>
+                    </div>
                 </div>
             </div>
             <div class="row">
@@ -99,9 +148,9 @@
             </div>
         </div>
     </div>
-</div>
+<!--</div>-->
 
-</div>
+<!--</div>-->
 
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>

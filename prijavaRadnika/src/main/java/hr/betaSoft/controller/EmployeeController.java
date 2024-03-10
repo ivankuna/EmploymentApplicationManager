@@ -62,16 +62,20 @@ public class EmployeeController {
         boolean isMobile = deviceDetector.isMobileDevice(request);
         boolean isAdmin = false;
         String statusField = "signUpSent";
+        String datumField = "signUpSent";
 
         if (userService.getAuthenticatedUser().getId() == UserIdTracker.getADMIN_ID()) {
             isAdmin = true;
         } else {
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 statusField = "signUpSent";
+                datumField = "dateOfSignUpSent";
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 statusField = "signOutSent";
+                datumField = "dateOfSignOutSent";
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 statusField = "updateSent";
+                datumField = "dateOfUpdateSent";
             }
         }
 
@@ -84,7 +88,7 @@ public class EmployeeController {
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
             columnList.add(new Column("Ime", "firstName", "id", statusField));
             if (!isAdmin) {
-                columnList.add(new Column("Poslano", "dateOfSignUpSent", "id", statusField));
+                columnList.add(new Column("Poslano", datumField, "id", statusField));
             }
         } else {
             // OBRATI PAŽNJU!
@@ -92,9 +96,9 @@ public class EmployeeController {
             // dateOfSignUpSent/dateOfSignOutSent/dateOfUpdateSent I timeOfSignUpSent/timeOfSignOutSent/timeOfUpdateSent SU GENERIRANI PRI SLANJU NALOGA
             //// KOLONE ZA PRIJAVU ////
             if (isAdmin) {
-                columnList.add(new Column("Pr", "fromSignUp", "id", statusField));
-                columnList.add(new Column("Po", "fromUpdate", "id", statusField));
-                columnList.add(new Column("Od", "fromSignOut", "id", statusField));
+                columnList.add(new Column("PR", "fromSignUp", "id", statusField));
+                columnList.add(new Column("PP", "fromUpdate", "id", statusField));
+                columnList.add(new Column("OD", "fromSignOut", "id", statusField));
 
             } else {
                 columnList.add(new Column("Status", statusField, "id", statusField));
@@ -105,9 +109,9 @@ public class EmployeeController {
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
 
             if (isAdmin) {
-                columnList.add(new Column("m.Pr", "signUpSent", "id", statusField));
-                columnList.add(new Column("m.Po", "updateSent", "id", statusField));
-                columnList.add(new Column("m.Od", "signOutSent", "id", statusField));
+                columnList.add(new Column("PPR", "signUpSent", "id", statusField));
+                columnList.add(new Column("PPP", "updateSent", "id", statusField));
+                columnList.add(new Column("POD", "signOutSent", "id", statusField));
             }
 
 //            //// SVE KOLONE ////
