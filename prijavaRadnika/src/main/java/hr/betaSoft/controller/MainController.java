@@ -127,8 +127,8 @@ public class MainController {
         }
     }
 
-    @GetMapping("/employees/test")
-    public String testDatuma() {
-        return "test";
-    }
+//    @GetMapping("/employees/test")
+//    public String testDatuma() {
+//        return "test";
+//    }
 }
