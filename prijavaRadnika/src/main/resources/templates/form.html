@@ -295,7 +295,7 @@
                             >
 
                             <div th:if="${data.type == 'date-pick'}">
-                                <button type="button" class="clear-date-button btn btn-link" th:attr="data-field=${data.field}" th:onclick="clearDateField(this.getAttribute('data-field'))"><i class="far fa-trash-alt fa-1x"></i></button>
+                                <button type="button" style="padding-left: 15px" class="clear-date-button btn btn-link" th:attr="data-field=${data.field}" th:onclick="clearDateField(this.getAttribute('data-field'))"><i class="far fa-trash-alt fa-lg"></i></button>
                             </div>
 
                         </div>
@@ -592,7 +592,7 @@ function formatNumberOnInput(input) {
             $(".date-pick").datepicker({
                 dateFormat: "dd.mm.yy",
                 showOn: "both",
-                buttonText: "<i class='far fa-calendar-alt'></i>",
+                buttonText: "<i class='far fa-calendar-alt fa-lg'></i>",
                 // Za zatvaranje datepickera i fokusiranje na sljedeći gumb
                 onClose: function() {
                     $(this).next('.date-trigger').focus(); // Fokusiraj na sljedeći gumb nakon zatvaranja datepickera
@@ -602,7 +602,12 @@ function formatNumberOnInput(input) {
             $(".date-trigger").click(function() {
                 $(this).prev('.date-pick').datepicker('show');
             });
-              $(".ui-datepicker-trigger").addClass("btn btn-link");
+<!--              $(".ui-datepicker-trigger").addClass("btn btn-link");-->
+ $(".ui-datepicker-trigger").addClass("btn btn-link").attr("style", function(i, style) {
+        return (style || "") + "padding-left: 15px !important;";
+    });
+
+
         });
 
 </script>
