@@ -14,6 +14,9 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 
+
+
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="shortcut icon" type="image/png" sizes="16x16"
           href="https://betastudio.hr/betasoft/png/employee-16x16.png">
@@ -73,7 +76,7 @@
 
         /* Stiliziranje input polja */
         .date-pick {
-            width: 200px; /* Prilagodite širinu prema potrebi */
+            width: 120px; /* Prilagodite širinu prema potrebi */
             margin-right: 10px; /* Dodajte razmak s gumbom */
         }
 
@@ -190,6 +193,13 @@
 
     </style>
 
+
+<!--    <script>-->
+<!--    $(function() {-->
+<!--      $("#datepicker").datepicker($.datepicker.regional['hr']);-->
+<!--    });-->
+<!--  </script>-->
+
     <script>
         window.addEventListener('DOMContentLoaded', (event) => {
             // Pronalaženje svih elemenata s klasom "date-input"
@@ -281,7 +291,13 @@
                                    th:classappend="${data.type == 'date-input' ? 'date-input' : ''}  + ${data.type == 'date-pick' ? 'date-pick' : ''} + ${data.type == 'number-input' ? 'number-input' : ''}"
                                    th:inputmode="${data.type == 'date-input' || data.type == 'date-pick' ? 'decimal' : (data.type == 'number-input' ? 'decimal' : null)}"
                                    th:oninput="${data.type == 'number-input'} ? 'formatNumberOnInput(this)' : null"
+                                   th:readonly="${data.type == 'date-pick'} ? 'readonly' : null"
                             >
+
+                            <div th:if="${data.type == 'date-pick'}">
+                                <button type="button" class="clear-date-button btn btn-link" th:attr="data-field=${data.field}" th:onclick="clearDateField(this.getAttribute('data-field'))"><i class="far fa-trash-alt fa-1x"></i></button>
+                            </div>
+
                         </div>
 
 
@@ -576,43 +592,94 @@ function formatNumberOnInput(input) {
             $(".date-pick").datepicker({
                 dateFormat: "dd.mm.yy",
                 showOn: "both",
-                buttonText: "<i class='fas fa-calendar-alt'></i>",
+                buttonText: "<i class='far fa-calendar-alt'></i>",
                 // Za zatvaranje datepickera i fokusiranje na sljedeći gumb
                 onClose: function() {
                     $(this).next('.date-trigger').focus(); // Fokusiraj na sljedeći gumb nakon zatvaranja datepickera
                 }
             });
-
             // Omogućuje prikazivanje datepickera kada se klikne na gumb
             $(".date-trigger").click(function() {
                 $(this).prev('.date-pick').datepicker('show');
             });
+              $(".ui-datepicker-trigger").addClass("btn btn-link");
         });
 
 </script>
 
-<!-- Dodajte ovaj kod neposredno ispod vašeg postojećeg JavaScript koda -->
-
 <!--<script>-->
-<!--    // Pronalaženje svih checkbox elemenata-->
-<!--    var checkboxes = document.querySelectorAll(".checkbox-custom input[type='checkbox']");-->
-
-<!--    // Iteriranje kroz sve checkboxove i dodavanje event listenera za promjenu stanja-->
-<!--    checkboxes.forEach(function(checkbox) {-->
-<!--        checkbox.addEventListener('change', function(event) {-->
-<!--            // Provjerite je li checkbox označen-->
-<!--            if (checkbox.checked) {-->
-<!--                // Ovdje možete izvršiti odgovarajuće akcije-->
-<!--                console.log("Checkbox označen");-->
-<!--            } else {-->
-<!--                // Ovdje možete izvršiti odgovarajuće akcije kada se checkbox poništi označenje-->
-<!--                console.log("Checkbox nije označen");-->
+<!--    $(document).ready(function() {-->
+<!--        $(".date-pick").datepicker({-->
+<!--            dateFormat: "dd.mm.yy",-->
+<!--            showOn: "both",-->
+<!--            buttonText: "<i class='fas fa-calendar-alt'></i>",-->
+<!--            // Za zatvaranje datepickera i fokusiranje na sljedeći gumb-->
+<!--            onClose: function() {-->
+<!--                $(this).next('.date-trigger').focus(); // Fokusiraj na sljedeći gumb nakon zatvaranja datepickera-->
 <!--            }-->
+<!--        });-->
+
+<!--        // Omogućuje prikazivanje datepickera kada se klikne na gumb-->
+<!--        $(".date-trigger").click(function() {-->
+<!--            $(this).prev('.date-pick').datepicker('show');-->
+<!--        });-->
+
+<!--        // Sprječavanje pokretanja datepickera kada se klikne na polje za unos datuma-->
+<!--        $(".date-pick").click(function(event) {-->
+<!--            event.stopPropagation(); // Zaustavljanje propagacije klika-->
+<!--        });-->
+
+<!--        // Dodavanje događaja za zatvaranje datepickera kada se klikne izvan njega-->
+<!--        $(document).click(function(event) {-->
+<!--            $(".date-pick").datepicker('hide');-->
 <!--        });-->
 <!--    });-->
 <!--</script>-->
 
 
 
+
+
+<script>
+jQuery(function($) {
+$.datepicker.regional['hr'] = {
+clearText: 'izbriši',
+clearStatus: 'Izbriši trenutni datum',
+closeText: 'Zatvori',
+closeStatus: 'Zatvori kalendar',
+prevText: '&#x3c;&#x3c;',
+prevStatus: 'Prikaži prethodni mjesec',
+nextText: '&#x3e;&#x3e;',
+nextStatus: 'Prikaži slijedeći mjesec',
+currentText: 'Danas',
+currentStatus: 'Današnji datum',
+monthNames: ['Siječanj', 'Veljača', 'Ožujak', 'Travanj', 'Svibanj', 'Lipanj', 'Srpanj', 'Kolovoz', 'Rujan', 'Listopad', 'Studeni', 'Prosinac'],
+monthNamesShort: ['Sij', 'Velj', 'Ožu', 'Tra', 'Svi', 'Lip', 'Srp', 'Kol', 'Ruj', 'Lis', 'Stu', 'Pro'],
+monthStatus: 'Prikaži mjesece',
+yearStatus: 'Prikaži godine',
+weekHeader: 'Tje',
+weekStatus: 'Tjedan',
+dayNames: ['Nedjelja', 'Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota'],
+dayNamesShort: ['Ned', 'Pon', 'Uto', 'Sri', 'Čet', 'Pet', 'Sub'],
+dayNamesMin: ['Ne', 'Po', 'Ut', 'Sr', 'Če', 'Pe', 'Su'],
+dayStatus: 'Odaber DD za prvi dan tjedna',
+dateStatus: 'Datum D, M d',
+dateFormat: 'dd.mm.yy.',
+firstDay: 1,
+initStatus: 'Odaberi datum',
+};
+$.datepicker.setDefaults($.datepicker.regional['hr']);
+});
+</script>
+
+<script>
+function clearDateField(fieldId) {
+var inputField = document.getElementById(fieldId);
+if (inputField) {
+inputField.value = ''; // Postavlja vrijednost polja na prazan string
+}
+}
+
+</script>
 </body>
 </html>
