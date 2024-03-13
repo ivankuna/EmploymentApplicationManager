@@ -14,9 +14,6 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
 
 
-
-
-
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <link rel="shortcut icon" type="image/png" sizes="16x16"
           href="https://betastudio.hr/betasoft/png/employee-16x16.png">
@@ -68,17 +65,22 @@
         padding-top: 40px;
     }
 
-    /* Stiliziranje kontejnera */
         .datepicker-container {
             display: flex;
             align-items: center;
+            width: calc(100% - 20px); /* Oduzimamo 30 piksela jer je to ukupan margin od form-group-row */
         }
 
-        /* Stiliziranje input polja */
-        .date-pick {
-            width: 120px; /* Prilagodite širinu prema potrebi */
-            margin-right: 10px; /* Dodajte razmak s gumbom */
+        .datepicker-container input {
+            flex-grow: 1;
+            width: 100%; /* Puni preostali prostor */
         }
+
+        .datepicker-container button {
+            margin-left: 20px; /* prilagodite po potrebi */
+        }
+
+
 
         /* Stiliziranje gumba s ikonom */
         .date-trigger {
@@ -111,16 +113,28 @@
         cursor: pointer;
     }
 
+    .form-control[readonly] {
+        background-color: white; /* Promijenite boju pozadine prema potrebi */
+    }
+    .form-control[disabled] {
+        background-color: #C5C5C5; /* Promijenite boju pozadine prema potrebi */
+    }
 
-<!--    input[readonly] {-->
-<!--        color: black; /* Crna boja teksta */-->
-<!--        background-color: white; /* Bijela boja pozadine */-->
-<!--    }-->
-.form-control[readonly] {
-    background-color: #f8f9fa; /* Promijenite boju pozadine prema potrebi */
-    border-color: #ced4da; /* Promijenite boju granice prema potrebi */
-    cursor: not-allowed; /* Promijenite kursor prema potrebi */
-}
+    .form-group-row label {
+        margin-bottom: 2px; /* Postavite margine ispod oznake */
+    }
+
+    .form-group-row input {
+        margin-bottom: 20px; /* Postavite margine ispod polja unosa */
+    }
+
+     .form-group-row select {
+        margin-bottom: 20px; /* Postavite margine ispod polja unosa */
+    }
+
+   .form-group-row button {
+        margin-bottom: 20px; /* Postavite margine ispod polja unosa */
+    }
 
 
     </style>
@@ -147,6 +161,7 @@
                 return formattedDate;
             }
         });
+
 
     </script>
 
@@ -214,15 +229,23 @@
                                    th:required="${data.required == 'true'} ? 'required' : null"
                                    th:disabled="${data.enabled == 'false'} ? 'disabled' : null"
                                    th:title="${data.required == 'true'} ? 'Molimo Vas da popunite ovo polje.' : null"
-                                   th:classappend="${data.type == 'date-input' ? 'date-input' : ''}  + ${data.type == 'date-pick' && data.enabled != 'false' ? 'date-pick' : ''} + ${data.type == 'number-input' ? 'number-input' : ''}"
+                                   th:classappend="${data.type == 'date-input' ? 'date-input' : ''}  + ${data.type == 'date-pick' ? 'date-pick' : ''} + ${data.type == 'number-input' ? 'number-input' : ''}"
                                    th:inputmode="${data.type == 'date-input' || data.type == 'date-pick' ? 'decimal' : (data.type == 'number-input' ? 'decimal' : null)}"
                                    th:oninput="${data.type == 'number-input'} ? 'formatNumberOnInput(this)' : null"
                                    th:readonly="${data.type == 'date-pick'} ? 'readonly' : null"
                             >
 
-                            <div th:if="${data.type == 'date-pick' && data.enabled != 'false'}">
-<!--                            <div th:if="${data.type == 'date-pick'}">-->
-                                <button type="button" style="padding-left: 15px" class="clear-date-button btn btn-link" th:attr="data-field=${data.field}" th:onclick="clearDateField(this.getAttribute('data-field'))"><i class="far fa-trash-alt fa-lg"></i></button>
+
+                            <div th:if="${data.type == 'date-pick'}">
+<!--                                <button type="button" style="padding-left: 15px" class="clear-date-button btn btn-link"-->
+<!--                                        th:attr="data-field=${data.field}"-->
+<!--                                        th:onclick="clearDateField(this.getAttribute('data-field'))"><i-->
+<!--                                        class="far fa-trash-alt fa-lg"></i></button>-->
+
+                                <button type="button" class="clear-date-button btn btn-link"
+                                        th:attr="data-field=${data.field}"
+                                        th:onclick="clearDateField(this.getAttribute('data-field'))"><i
+                                        class="far fa-trash-alt fa-lg"></i></button>
                             </div>
 
                         </div>
@@ -251,7 +274,7 @@
                             </th:block>
                         </select>
                     </div>
-                    <br>
+
 
                 </div>
 
@@ -303,6 +326,7 @@
     // Poziv funkcije kada se stranica učita
     window.onload = setDropdownHeight;
 
+
 </script>
 
 
@@ -316,6 +340,7 @@
             return false; // Dodajte ovo da spriječite preusmjeravanje
         }
     }
+
 
 </script>
 
@@ -357,6 +382,7 @@
         console.error('Greška prilikom slanja POST zahtjeva:', error);
     });
 }
+
 
 </script>
 
@@ -459,6 +485,7 @@ function redirectToEmployees() {
 
 
 
+
 </script>
 
 
@@ -466,7 +493,7 @@ function redirectToEmployees() {
 
 function formatDataBeforeSubmit() {
     // Select all elements with class "date-input" or "date-pick"
-    var dateInputs = document.querySelectorAll(".date-input, .date-pick");
+    var dateInputs = document.querySelectorAll(".date-input, .date-pick, .date-no-pick");
 
     // Iterate over each date input element
     for (var i = 0; i < dateInputs.length; i++) {
@@ -492,6 +519,7 @@ function formatDataBeforeSubmit() {
     }
 }
 
+
 </script>
 
 <script>
@@ -509,37 +537,36 @@ function formatNumberOnInput(input) {
     }
 }
 
+
 </script>
-
-
 
 
 <script>
-        $(document).ready(function() {
-            $(".date-pick").datepicker({
-                dateFormat: "dd.mm.yy",
-                showOn: "both",
-                buttonText: "<i class='far fa-calendar-alt fa-lg'></i>",
-                // Za zatvaranje datepickera i fokusiranje na sljedeći gumb
-                onClose: function() {
-                    $(this).next('.date-trigger').focus(); // Fokusiraj na sljedeći gumb nakon zatvaranja datepickera
-                }
-            });
-            // Omogućuje prikazivanje datepickera kada se klikne na gumb
-            $(".date-trigger").click(function() {
-                $(this).prev('.date-pick').datepicker('show');
-            });
 
-        $(".ui-datepicker-trigger").addClass("btn btn-link").attr("style", function(i, style) {
-                return (style || "") + "padding-left: 5px !important;";
-            });
-
-
+    $(document).ready(function() {
+        $(".date-pick").datepicker({
+            dateFormat: "dd.mm.yy",
+            showOn: "both",
+            buttonText: "<i class='far fa-calendar-alt fa-lg'></i>",
+            // Za zatvaranje datepickera i fokusiranje na sljedeći gumb
+            onClose: function() {
+                $(this).next('.date-trigger').focus(); // Fokusiraj na sljedeći gumb nakon zatvaranja datepickera
+            }
+        });
+        // Omogućuje prikazivanje datepickera kada se klikne na gumb
+        $(".date-trigger").click(function() {
+            $(this).prev('.date-pick').datepicker('show');
         });
 
+    $(".ui-datepicker-trigger").addClass("btn btn-link").attr("style", function(i, style) {
+            return (style || "") + "padding-left: 5px !important;";
+        });
+
+
+    });
+
+
 </script>
-
-
 
 
 <script>
@@ -572,6 +599,7 @@ function formatNumberOnInput(input) {
         };
             $.datepicker.setDefaults($.datepicker.regional['hr']);
         });
+
 </script>
 
 <script>
@@ -582,6 +610,9 @@ function clearDateField(fieldId) {
     }
 }
 
+
 </script>
+
+
 </body>
 </html>

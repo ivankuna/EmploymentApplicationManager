@@ -333,6 +333,7 @@ public class EmployeeController {
                 title = "Nalog za prijavu";
                 if (employee.isSignUpSent()) {
                     appSend = true;
+                    script = "/js/script-sent-form-employees.js";
                 }
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
@@ -365,9 +366,9 @@ public class EmployeeController {
             model.addAttribute("pathSave", pathSave);
             model.addAttribute("path", "/employees/show");
             model.addAttribute("sendLink", sendLink);
-            if (!appSend) {
-                model.addAttribute("script", script);
-            }
+
+            model.addAttribute("script", script);
+
             return "form";
         } catch (EmployeeNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
