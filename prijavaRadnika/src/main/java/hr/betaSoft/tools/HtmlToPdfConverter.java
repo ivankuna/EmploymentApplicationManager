@@ -36,10 +36,11 @@ public class HtmlToPdfConverter {
         }
 
         // Applying dotted style to table cells
-        org.jsoup.select.Elements tableCells = doc.select("th, td");
-        for (org.jsoup.nodes.Element element : tableCells) {
-            element.attr("style", "border-style: dotted;");
-        }
+//        org.jsoup.select.Elements tableCells = doc.select("th, td");
+//        for (org.jsoup.nodes.Element element : tableCells) {
+//            element.attr("style", "border-style: dotted;");
+//            element.attr("style", "border: 0.1px dotted black;");
+//        }
 
         // Creating PDF document
         Document pdfDocument = new Document(PageSize.A4);
