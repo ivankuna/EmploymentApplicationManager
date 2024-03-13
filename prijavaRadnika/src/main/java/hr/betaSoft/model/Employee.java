@@ -37,7 +37,7 @@ public class Employee {
 
     public static final List<String> SALARY_TYPE = Arrays.asList("Neto", "Bruto");
 
-    public static final List<String> REASON_FOR_DEFINITE = Arrays.asList("povećani opseg poslova - sezona", "do nastupanja ili kraja događaja", "do izvršenja posla", "zamjena radnika");
+    public static final List<String> REASON_FOR_DEFINITE = Arrays.asList("","povećani opseg poslova - sezona", "do nastupanja ili kraja događaja", "do izvršenja posla", "zamjena radnika");
 
     // Item, pored ponuđenih,  može biti slobodan unos teksta
     public static final List<String> REASON_FOR_SIGN_OUT = Arrays.asList("Istek Ugovora o radu ", "Sporazumni raskid", "Otkaz - poslovno uvjetovani", "Otkaz - osobno uvjetovani",
@@ -346,12 +346,12 @@ public class Employee {
 
         if (formId == FormTracker.getSIGN_UP()) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Spol", "Datum rođenja", "Adresa", "Poštanski broj i grad", "Stvarna stručna sprema",
-                    "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu", "Radno vrijeme",
+                    "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu",
                     "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto"};
         } else if (formId == FormTracker.getSIGN_OUT()) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum odjave - stvarni", "Razlog odjave"};
         } else if (formId == FormTracker.getUPDATE()) {
-            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum prijave", "Datum promjene", "Razlog promjene"};
+            attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum promjene", "Razlog promjene"};
         }
 
         List<String> emptyAttributes = new ArrayList<>();
