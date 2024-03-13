@@ -1,10 +1,7 @@
 package hr.betaSoft.tools;
 
 import java.io.*;
-import java.net.URL;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 
 import com.itextpdf.text.*;
 
@@ -12,7 +9,7 @@ import com.itextpdf.text.pdf.BaseFont;
 import com.itextpdf.text.pdf.PdfWriter;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 import org.jsoup.Jsoup;
-import org.jsoup.select.Elements;
+
 
 
 public class HtmlToPdfConverter {
@@ -36,6 +33,12 @@ public class HtmlToPdfConverter {
         for (org.jsoup.nodes.Element element : metaElements) {
             String newMeta = "<meta http-equiv=\"content-type\" content=\"application/xhtml+xml; charset=UTF-8\"/>";
             element.text(newMeta);
+        }
+
+        // Applying dotted style to table cells
+        org.jsoup.select.Elements tableCells = doc.select("th, td");
+        for (org.jsoup.nodes.Element element : tableCells) {
+            element.attr("style", "border-style: dotted;");
         }
 
         // Creating PDF document

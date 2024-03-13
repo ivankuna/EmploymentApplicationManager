@@ -257,6 +257,7 @@ public class EmployeeController {
             model.addAttribute("deleteLink", "");
         } else {
             model.addAttribute("pdfLink", "/employees/pdf/{id}");
+//            model.addAttribute("pdfLink", "/employees/html/{id}");
             model.addAttribute("deleteLink", "/employees/delete/{id}");
         }
         model.addAttribute("updateLink", "/employees/update/{id}");
@@ -664,11 +665,80 @@ public class EmployeeController {
         return "redirect:/employees";
     }
 
+    @GetMapping("/employees/html/{id}")
+    public String showEmployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+
+        try {
+
+            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
+
+            Employee employee = employeeService.findById(id);
+
+            String title = "";
+            String appOrder = "";
+            String appDate = "";
+            String appOrderDate = "";
+            String name = "";
+            String year = "";
+            boolean appSend = false;
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
+                Date dateOfSignUpSent = employee.getDateOfSignUpSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
+                appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
+                name = "Prijava-" + id.toString() + "-" + employee.getNumSignUp();
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
+                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
+                appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
+                name = "Odjava-" + id.toString() + "-" + employee.getNumSignOut();
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
+                Date dateOfUpdateSent = employee.getDateOfUpdateSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
+                appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
+                name = "Promjena-" + id.toString() + "-" + employee.getNumUpdate();
+
+            }
+
+            appOrderDate = appOrder + " " + appDate;
+            model.addAttribute("name", name);
+            model.addAttribute("title", title);
+            model.addAttribute("appOrder", appOrder);
+            model.addAttribute("appDate", appDate);
+            model.addAttribute("appOrderDate", appOrderDate);
+            model.addAttribute("companyName", employee.getUser().getCompany());
+            model.addAttribute("companyOib", employee.getUser().getOib());
+
+            model.addAttribute("class", employee);
+            List<Data> dataList = defineDataList(id);
+            model.addAttribute("dataList", dataList);
+
+            return "app-html";
+
+
+
+        } catch (EmployeeNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+        return "page-not-found";
+    }
+
+
+
+
+
     @Autowired
     private TemplateEngine templateEngine;
 
     @GetMapping("/employees/pdf/{id}")
-    public void showEmployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+    public void showEmployeePdf(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         try {
 

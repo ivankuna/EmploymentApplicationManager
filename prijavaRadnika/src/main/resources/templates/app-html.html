@@ -13,6 +13,7 @@
 
 	    body {
 		    padding: 0px;
+		    font-family: calibri;
 		}
 
 		h4 {
@@ -24,9 +25,10 @@
             border-collapse: collapse;
         }
         th, td {
-            border: 0.1px doted black;
+            border: 0.1px dotted black;
             padding: 5px;
             text-align: left;
+             border-style: dotted; /* Dodani stil linija */
         }
         th {
             background-color: #f2f2f2;
@@ -54,7 +56,11 @@
             text-align: center;
         }
 
-
+        @media print {
+            th, td {
+                border-style: dotted;
+            }
+        }
 
     </style>
 </head>
