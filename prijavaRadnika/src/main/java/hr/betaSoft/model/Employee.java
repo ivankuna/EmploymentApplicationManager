@@ -37,13 +37,15 @@ public class Employee {
 
     public static final List<String> SALARY_TYPE = Arrays.asList("Neto", "Bruto");
 
+    public static final List<String> REASON_FOR_DEFINITE = Arrays.asList("povećani opseg poslova - sezona", "do nastupanja ili kraja događaja", "do izvršenja posla", "zamjena radnika");
+
     // Item, pored ponuđenih,  može biti slobodan unos teksta
     public static final List<String> REASON_FOR_SIGN_OUT = Arrays.asList("Istek Ugovora o radu ", "Sporazumni raskid", "Otkaz - poslovno uvjetovani", "Otkaz - osobno uvjetovani",
             "Ostvareno pravo na mirovinu", "Otkaz radnika", "Otkaz uvjetovan skrivljenim ponašanjem radnika", "Izvanredni otkaz", "Gubitak državljanstva ili istek radne dozvole");
 
     // Item, pored ponuđenih,  može biti slobodan unos teksta
     public static final List<String> REASON_FOR_UPDATE = Arrays.asList("određeno-neodređeno", "neodređeno-određeno", "nepuno-puno", "puno-nepuno", "broj sati nepuno",
-            "stjecanje državljanstva", "stjecanje mirovine", "invalidnost", "mlađi od 30 godina");
+            "stjecanje državljanstva", "stjecanje mirovine", "invalidnost", "mlađi od 30 godina","novo radno mjesto");
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

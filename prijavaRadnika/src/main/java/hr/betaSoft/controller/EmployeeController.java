@@ -953,7 +953,7 @@ public class EmployeeController {
             ;
             dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", fieldStatus, Employee.EMPLOYMENT_CONTRACT, "false"));
             ;
-            dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_DEFINITE, "false"));
             ;
             dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
             ;

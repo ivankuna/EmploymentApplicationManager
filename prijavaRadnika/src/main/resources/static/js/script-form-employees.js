@@ -33,15 +33,26 @@ document.addEventListener("DOMContentLoaded", function() {
             hoursForPartTimeControl.disabled = false;
         } else {
             hoursForPartTimeControl.disabled = true;
+            hoursForPartTimeControl.value = "";
         }
     }
 
     function toggleAdditionalWorkInput() {
             if (additionalWorkCheckbox.checked) {
                 additionalWorkHoursControl.disabled = false;
+                workingHoursControl.disabled = true;
+                workingHoursControl.value = "";
+                hoursForPartTimeControl.disabled = true;
+                hoursForPartTimeControl.value = "";
             } else {
                 additionalWorkHoursControl.disabled = true;
                 additionalWorkHoursControl.value = "";
+                workingHoursControl.disabled = false;
+                if (workingHoursControl.value === "") {
+                    workingHoursControl.value = "Puno";
+                }
+
+
             }
         }
 
