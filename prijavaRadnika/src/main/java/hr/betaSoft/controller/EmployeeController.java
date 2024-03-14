@@ -86,13 +86,13 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            if (!isAdmin) {
-                columnList.add(new Column("S", statusField, "id", statusField));
-            }
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
             columnList.add(new Column("Ime", "firstName", "id", statusField));
             if (!isAdmin) {
                 columnList.add(new Column("Poslano", datumField, "id", statusField));
+            }
+            if (!isAdmin) {
+                columnList.add(new Column("S", statusField, "id", statusField));
             }
         } else {
             if (isAdmin) {
@@ -324,7 +324,7 @@ public class EmployeeController {
             String pathSave = "";
             String sendLink = "";
             String title = "";
-            String script = "";
+            String  script = "/js/script-sent-form-employees.js";
             boolean appSend = false;
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
@@ -333,7 +333,6 @@ public class EmployeeController {
                 title = "Nalog za prijavu";
                 if (employee.isSignUpSent()) {
                     appSend = true;
-                    script = "/js/script-sent-form-employees.js";
                 }
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
@@ -912,6 +911,7 @@ public class EmployeeController {
 
         List<Data> dataList = new ArrayList<>();
         List<String> items = new ArrayList<>();
+        String fieldEnabled = "true";
         String fieldStatus = "true";
         if (id != 0L) {
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
@@ -922,81 +922,97 @@ public class EmployeeController {
                 fieldStatus = "false";
             }
         }
-        dataList.add(new Data("1.", "OIB *", "oib", "", "", "", "number-input", "true", fieldStatus, items, "false"));
+
+        // ovdje algoritam za provjeru postoji li nalog za prijavu u tablici a forma je promjena ili odjava
+        if (id != 0L) {
+            if (fieldStatus == "true") {
+                if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
+                    fieldEnabled = "false";
+                } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignUpSent()) {
+                    fieldEnabled = "false";
+                } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isSignUpSent()) {
+                    fieldEnabled = "false";
+                }
+            } else {
+                fieldEnabled = "false";
+            }
+        }
+
+        dataList.add(new Data("1.", "OIB *", "oib", "", "", "", "number-input", "true", fieldEnabled, items, "false"));
         ;
-        dataList.add(new Data("2.", "Ime *", "firstName", "", "", "", "text", "true", fieldStatus, items, "false"));
+        dataList.add(new Data("2.", "Ime *", "firstName", "", "", "", "text", "true", fieldEnabled, items, "false"));
         ;
-        dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", fieldStatus, items, "false"));
+        dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", fieldEnabled, items, "false"));
         ;
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
 
-            dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", fieldStatus, Employee.GENDER, "false"));
+            dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", fieldEnabled, Employee.GENDER, "false"));
             ;
-            dataList.add(new Data("5.", "Datum rođenja *", "dateOfBirth", "", "", "", "date-input", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("5.", "Datum rođenja *", "dateOfBirth", "", "", "", "date-input", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("6.", "Adresa *", "address", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("6.", "Adresa *", "address", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("7.", "Poštanski broj i grad *", "city", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("7.", "Poštanski broj i grad *", "city", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("8.", "Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION, "false"));
+            dataList.add(new Data("8.", "Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", fieldEnabled, Employee.PROFESSIONAL_QUALIFICATION, "false"));
             ;
-            dataList.add(new Data("9.", "Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("9.", "Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("10.", "IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("10.", "IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("11.", "IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("11.", "IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("12.", "Radno mjesto *", "employmentPosition", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("12.", "Radno mjesto *", "employmentPosition", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("13.", "Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("13.", "Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("14.", "Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", fieldStatus, Employee.PROFESSIONAL_QUALIFICATION, "false"));
+            dataList.add(new Data("14.", "Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", fieldEnabled, Employee.PROFESSIONAL_QUALIFICATION, "false"));
             ;
-            dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", fieldStatus, Employee.EMPLOYMENT_CONTRACT, "false"));
+            dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", fieldEnabled, Employee.EMPLOYMENT_CONTRACT, "false"));
             ;
-            dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_DEFINITE, "false"));
+            dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", fieldEnabled, Employee.REASON_FOR_DEFINITE, "false"));
             ;
-            dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("17a.", "Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number-input", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("17a.", "Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number-input", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("18.", "Radno vrijeme *", "workingHours", "", "", "", "text", "false", fieldStatus, Employee.WORKING_HOURS, "false"));
+            dataList.add(new Data("18.", "Radno vrijeme *", "workingHours", "", "", "", "text", "false", fieldEnabled, Employee.WORKING_HOURS, "false"));
             ;
-            dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "number-input", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "number-input", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("21.", "Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("21.", "Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("22.", "Bruto / Neto *", "salaryType", "", "", "", "text", "false", fieldStatus, Employee.SALARY_TYPE, "false"));
+            dataList.add(new Data("22.", "Bruto / Neto *", "salaryType", "", "", "", "text", "false", fieldEnabled, Employee.SALARY_TYPE, "false"));
             ;
-            dataList.add(new Data("22a.", "Iznos osnovne plaće *", "basicSalary", "", "", "", "number-input", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("22a.", "Iznos osnovne plaće *", "basicSalary", "", "", "", "number-input", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("23.", "Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("23.", "Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("23a.", "Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("23a.", "Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("24.", "Umirovljenik *", "retiree", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("24.", "Umirovljenik *", "retiree", "", "", "", "checkbox", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("25.", "Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("25.", "Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("26.", "Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("26.", "Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("27.", "Invalid *", "disability", "", "", "", "checkbox", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("27.", "Invalid *", "disability", "", "", "", "checkbox", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("28.", "Napomena", "noteSignUp", "", "", "", "text", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("28.", "Napomena", "noteSignUp", "", "", "", "text", "false", fieldEnabled, items, "false"));
             ;
 
         } else {
-            dataList.add(new Data("4.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("4.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
         }
         if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
+            dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
             dataList.add(new Data("7.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
             ;

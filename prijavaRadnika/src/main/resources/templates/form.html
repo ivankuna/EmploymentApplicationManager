@@ -237,11 +237,6 @@
 
 
                             <div th:if="${data.type == 'date-pick'}">
-<!--                                <button type="button" style="padding-left: 15px" class="clear-date-button btn btn-link"-->
-<!--                                        th:attr="data-field=${data.field}"-->
-<!--                                        th:onclick="clearDateField(this.getAttribute('data-field'))"><i-->
-<!--                                        class="far fa-trash-alt fa-lg"></i></button>-->
-
                                 <button type="button" class="clear-date-button btn btn-light"
                                         th:attr="data-field=${data.field}"
                                         th:onclick="clearDateField(this.getAttribute('data-field'))"><i
@@ -278,23 +273,36 @@
 
                 </div>
 
-
+                <div class="btn-group btn-group-justified">
                 <div class="fixed-bottom-buttons">
+                    <a>
                     <button th:if="${pathSave != ''}" type="submit" class="btn btn-primary">Spremi</button>
+                    </a>
+                    <a>
+
                     <button th:if="${sendLink != ''}" type="submit" class="btn btn-primary"
                             onclick="return confirm('Jeste li sigurni da želite poslati nalog?');"
                             th:formaction="@{${sendLink}}">
                         Pošalji
                     </button>
+                    </a>
+                    <a>
+
                     <form th:if="${pathSave != ''}">
                         <button type="button" class="btn btn-secondary" th:onclick="showConfirmation()">Odustani
                         </button>
+
                     </form>
+                    </a>
+                    <a>
                     <form th:if="${pathSave == ''}">
                         <button type="button" class="btn btn-secondary" th:onclick="window.location=[[${path}]]">
                             Povratak
                         </button>
                     </form>
+                    </a>
+
+                </div>
                 </div>
 
             </form>
@@ -345,6 +353,8 @@
 </script>
 
 <script>
+
+    // Provjerava postoji li OIB već u tablici employees
     document.getElementById('oib').addEventListener('blur', function(event) {
         // Dohvati vrijednost unesenog OIB-a
         var oibValue = document.getElementById('oib').value;
@@ -489,38 +499,91 @@ function redirectToEmployees() {
 </script>
 
 
+<!--<script>-->
+
+<!--function formatDataBeforeSubmit() {-->
+<!--    // Select all elements with class "date-input" or "date-pick"-->
+<!--    var dateInputs = document.querySelectorAll(".date-input, .date-pick, .date-no-pick");-->
+
+<!--    // Iterate over each date input element-->
+<!--    for (var i = 0; i < dateInputs.length; i++) {-->
+<!--        var input = dateInputs[i];-->
+<!--        if (input.value.trim() !== "") {-->
+<!--            // Split the value of the input by dot separator-->
+<!--            var parts = input.value.split(".");-->
+
+<!--            // Extract day, month, and year parts from the split value-->
+<!--            var day = parseInt(parts[0], 10);-->
+<!--            var month = parseInt(parts[1], 10);-->
+<!--            var year = parseInt(parts[2], 10);-->
+
+<!--            // Create a new Date object with extracted parts-->
+<!--            var date = new Date(year, month - 1, day);-->
+
+<!--            // Format the date as yyyy-mm-dd-->
+<!--            var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);-->
+
+<!--            // Set the formatted date as the value of the input-->
+<!--            input.value = formattedDate;-->
+<!--        }-->
+<!--    }-->
+
+<!--    function enableAllFields() {-->
+<!--    inputFields.forEach(field => {-->
+<!--        // Ako je polje onemogućeno, ukloni atribut "disabled"-->
+<!--        if (field.disabled) {-->
+<!--            field.removeAttribute('disabled');-->
+<!--        }-->
+<!--    });-->
+<!--}-->
+
+<!--}-->
+
+
+<!--</script>-->
+
 <script>
+    function formatDataBeforeSubmit() {
+        // Select all elements with class "date-input" or "date-pick"
+        var dateInputs = document.querySelectorAll(".date-input, .date-pick, .date-no-pick");
 
-function formatDataBeforeSubmit() {
-    // Select all elements with class "date-input" or "date-pick"
-    var dateInputs = document.querySelectorAll(".date-input, .date-pick, .date-no-pick");
+        // Iterate over each date input element
+        for (var i = 0; i < dateInputs.length; i++) {
+            var input = dateInputs[i];
+            if (input.value.trim() !== "") {
+                // Split the value of the input by dot separator
+                var parts = input.value.split(".");
 
-    // Iterate over each date input element
-    for (var i = 0; i < dateInputs.length; i++) {
-        var input = dateInputs[i];
-        if (input.value.trim() !== "") {
-            // Split the value of the input by dot separator
-            var parts = input.value.split(".");
+                // Extract day, month, and year parts from the split value
+                var day = parseInt(parts[0], 10);
+                var month = parseInt(parts[1], 10);
+                var year = parseInt(parts[2], 10);
 
-            // Extract day, month, and year parts from the split value
-            var day = parseInt(parts[0], 10);
-            var month = parseInt(parts[1], 10);
-            var year = parseInt(parts[2], 10);
+                // Create a new Date object with extracted parts
+                var date = new Date(year, month - 1, day);
 
-            // Create a new Date object with extracted parts
-            var date = new Date(year, month - 1, day);
+                // Format the date as yyyy-mm-dd
+                var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
 
-            // Format the date as yyyy-mm-dd
-            var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);
-
-            // Set the formatted date as the value of the input
-            input.value = formattedDate;
+                // Set the formatted date as the value of the input
+                input.value = formattedDate;
+            }
         }
+        enableAllFields();
     }
-}
 
-
+    function enableAllFields() {
+        // Assuming inputFields is defined somewhere in your code
+        var inputFields = document.querySelectorAll('input');
+        inputFields.forEach(field => {
+            // If the field is disabled, remove the "disabled" attribute
+            if (field.disabled) {
+                field.removeAttribute('disabled');
+            }
+        });
+    }
 </script>
+
 
 <script>
 function formatNumberOnInput(input) {

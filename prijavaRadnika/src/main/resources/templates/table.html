@@ -106,6 +106,8 @@
     }
 
 
+
+
     </style>
 </head>
 <body>
@@ -159,10 +161,10 @@
                                    onclick="return confirm('Jeste li sigurni da želite obrisati nalog?') ? true : false">
                                     <i class="far fa-trash-alt fa-lg"></i>
                                 </a>
-<!--                                <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}"-->
-<!--                                   onclick="return confirm('Jeste li sigurni da želite prikaz naloga?') ? true : false">-->
-<!--                                    <i class="far fa-file-pdf fa-lg"></i>-->
-<!--                                </a>-->
+                                <!--                                <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}"-->
+                                <!--                                   onclick="return confirm('Jeste li sigurni da želite prikaz naloga?') ? true : false">-->
+                                <!--                                    <i class="far fa-file-pdf fa-lg"></i>-->
+                                <!--                                </a>-->
 
                                 <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}">
                                     <i class="far fa-file-pdf fa-lg"></i>
@@ -181,7 +183,7 @@
                                 </a>
                                 <a th:if="${pdfLink != '' and data[columnList[0].status]}"
                                    th:href="@{${pdfLink}(id=${data[columnList[0].id]})}">
-<!--                                   onclick="return confirm('Jeste li sigurni da želite prikaz naloga?') ? true : false">-->
+                                    <!--                                   onclick="return confirm('Jeste li sigurni da želite prikaz naloga?') ? true : false">-->
                                     <i class="far fa-file-pdf fa-lg"></i>
                                 </a>
                                 <a th:if="${showLink != ''}" th:href="@{${showLink}(id=${data[columnList[0].id]})}">
@@ -195,14 +197,36 @@
                 </table>
             </div>
 
+
+            <!--            <div class="fixed-bottom-buttons">-->
+
+            <!--                <label>-->
+            <!--                    <a> <span sec:authentication="name">not found</span> </a>-->
+            <!--                </label>-->
+            <!--                <a th:if="${addLink}" th:href="@{${addLink}}" class="btn btn-primary"-->
+            <!--                   th:text="${addBtnText}">Dodaj</a>-->
+
+
+            <!--                <a th:href="@{${path}}" class="btn btn-secondary">Povratak</a>-->
+            <!--            </div>-->
             <div class="fixed-bottom-buttons">
-
-                <a th:if="${addLink}" th:href="@{${addLink}}" class="btn btn-primary"
-                   th:text="${addBtnText}">Dodaj</a>
-
-
-                <a th:href="@{${path}}" class="btn btn-secondary">Povratak</a>
+                <div class="btn-group btn-group-justified">
+<!--                <div class="row">-->
+<!--                    <div class="col-sm-4">-->
+<!--                        <label>-->
+<!--                            <a><span sec:authentication="name">not found</span></a>-->
+<!--                        </label>-->
+<!--                    </div>-->
+                    <div class="col-sm-8">
+                        <a th:if="${addLink}" th:href="@{${addLink}}" class="btn btn-primary" th:text="${addBtnText}">Dodaj</a>
+                    </div>
+                    <div class="col-sm-8">
+                        <a th:href="@{${path}}" class="btn btn-secondary">Povratak</a>
+                    </div>
+                </div>
             </div>
+<!--            </div>-->
+
         </div>
     </div>
     <div class="row">
