@@ -186,10 +186,30 @@ public class EmployeeController {
         List<Employee> employeeListTemp = employeeService.findByUser(authenticatedUser);
         List<Employee> employeeList = new ArrayList<>();
 
+//        if (!authenticatedUser.isShowAllApplications()) {
+//            for (Employee employee : employeeListTemp) {
+//                if (!employee.isSignUpSent()) {
+//                    employeeList.add(employee);
+//                }
+//            }
+//        } else {
+//            employeeList = employeeListTemp;
+//        }
+
         if (!authenticatedUser.isShowAllApplications()) {
             for (Employee employee : employeeListTemp) {
-                if (!employee.isSignUpSent()) {
-                    employeeList.add(employee);
+                if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                    if (!employee.isSignUpSent()) {
+                        employeeList.add(employee);
+                    }
+                } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                    if (!employee.isSignOutSent()) {
+                        employeeList.add(employee);
+                    }
+                } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                    if (!employee.isUpdateSent()) {
+                        employeeList.add(employee);
+                    }
                 }
             }
         } else {

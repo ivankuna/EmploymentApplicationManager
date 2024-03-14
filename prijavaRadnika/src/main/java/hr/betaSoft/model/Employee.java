@@ -346,8 +346,8 @@ public class Employee {
 
         if (formId == FormTracker.getSIGN_UP()) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Spol", "Datum rođenja", "Adresa", "Poštanski broj i grad", "Stvarna stručna sprema",
-                    "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu",
-                    "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto"};
+                                           "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu",
+                                           "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto"};
         } else if (formId == FormTracker.getSIGN_OUT()) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum odjave - stvarni", "Razlog odjave"};
         } else if (formId == FormTracker.getUPDATE()) {
@@ -372,11 +372,14 @@ public class Employee {
             }
             if (additionalWork && (additionalWorkHours == null || additionalWorkHours.compareTo(BigDecimal.ZERO) == 0)) {
                 emptyAttributes.add("Dodatni rad - sati");
-            } else if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
+            }
+            if (!additionalWork && workingHours.equals("Nepuno") && (hoursForPartTime == null || hoursForPartTime.compareTo(BigDecimal.ZERO) == 0)) {
+                emptyAttributes.add("Sati nepuno");
+            }
+            if (foreignNational && (expiryDateOfWorkPermit == null || expiryDateOfWorkPermit.toString().trim().isEmpty())) {
                 emptyAttributes.add("Radna dozvola vrijedi do");
             }
         }
-
 
         return emptyAttributes;
     }
@@ -411,6 +414,8 @@ public class Employee {
                 return additionalWork;
             case "Radno vrijeme":
                 return workingHours;
+            case "Sati nepuno":
+                return hoursForPartTime;
             case "Neradni dani u tjednu":
                 return nonWorkingDays;
             case "Datum prijave":
