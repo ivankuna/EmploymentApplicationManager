@@ -95,6 +95,13 @@ public class EmployeeController {
                 columnList.add(new Column("S", statusField, "id", statusField));
             }
         } else {
+
+
+            columnList.add(new Column("OIB", "oib", "id", statusField));
+            columnList.add(new Column("Ime", "firstName", "id", statusField));
+            columnList.add(new Column("Prezime", "lastName", "id", statusField));
+            columnList.add(new Column("Datum", datumApp, "id", statusField));
+            columnList.add(new Column("Poslano", datumField, "id", statusField));
             if (isAdmin) {
                 columnList.add(new Column("PR", "fromSignUp", "id", statusField));
                 columnList.add(new Column("PP", "fromUpdate", "id", statusField));
@@ -103,13 +110,6 @@ public class EmployeeController {
             } else {
                 columnList.add(new Column("Status", statusField, "id", statusField));
             }
-
-            columnList.add(new Column("OIB", "oib", "id", statusField));
-            columnList.add(new Column("Ime", "firstName", "id", statusField));
-            columnList.add(new Column("Prezime", "lastName", "id", statusField));
-            columnList.add(new Column("Datum", datumApp, "id", statusField));
-            columnList.add(new Column("Poslano", datumField, "id", statusField));
-
             if (isAdmin) {
                 columnList.add(new Column("PPR", "signUpSent", "id", statusField));
                 columnList.add(new Column("PPP", "updateSent", "id", statusField));
@@ -349,7 +349,7 @@ public class EmployeeController {
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
                 sendLink = employee.isSignUpSent() ? "" : "/employees/send";
-                script = "/js/script-form-employees.js";
+                script = employee.isSignUpSent() ? "/js/script-sent-form-employees.js" : "/js/script-form-employees.js";
                 title = "Nalog za prijavu";
                 if (employee.isSignUpSent()) {
                     appSend = true;

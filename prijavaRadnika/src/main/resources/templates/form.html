@@ -237,10 +237,10 @@
 
 
                             <div th:if="${data.type == 'date-pick'}">
-                                <button type="button" class="clear-date-button btn btn-light"
+                                <button type="button" class="clear-date-button btn btn-outline-light text-danger"
                                         th:attr="data-field=${data.field}"
                                         th:onclick="clearDateField(this.getAttribute('data-field'))"><i
-                                        class="far fa-trash-alt fa-lg"></i></button>
+                                        class="far fa-trash-alt fa-1x"></i></button>
                             </div>
 
                         </div>
@@ -610,7 +610,7 @@ function formatNumberOnInput(input) {
         $(".date-pick").datepicker({
             dateFormat: "dd.mm.yy",
             showOn: "both",
-            buttonText: "<i class='far fa-calendar-alt fa-lg'></i>",
+            buttonText: "<i class='far fa-calendar-alt fa-1x'></i>",
             // Za zatvaranje datepickera i fokusiranje na sljedeći gumb
             onClose: function() {
                 $(this).next('.date-trigger').focus(); // Fokusiraj na sljedeći gumb nakon zatvaranja datepickera
@@ -621,7 +621,7 @@ function formatNumberOnInput(input) {
             $(this).prev('.date-pick').datepicker('show');
         });
 
-    $(".ui-datepicker-trigger").addClass("btn btn-light").attr("style", function(i, style) {
+    $(".ui-datepicker-trigger").addClass("btn btn-outline-light text-primary").attr("style", function(i, style) {
             return (style || "") + "padding-left: 5px !important;";
         });
 
