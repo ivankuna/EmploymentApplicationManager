@@ -61,9 +61,9 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
         boolean isAdmin = false;
-        String statusField = "";
-        String datumField = "";
-        String datumApp = "";
+        String statusField = "signUpSent";
+        String datumField = "dateOfSignUp";
+        String datumApp = "dateOfSignUpSent";
 
         if (userService.getAuthenticatedUser().getId() == UserIdTracker.getADMIN_ID()) {
             isAdmin = true;
