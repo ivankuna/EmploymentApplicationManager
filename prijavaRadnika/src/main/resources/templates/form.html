@@ -179,19 +179,24 @@
         </ul>
 
         <a class="navbar-brand mx-auto" th:text="${title}" href="#">Naslov tablice</a>
-
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" style="padding-right: 10px;" href="/logout"><i
-                        class="fas fa-sign-out-alt fa-1x"></i></a>
+                <a class="nav-link d-inline-block" style="padding-right: 10px;" id="logoutLink" href="#">
+                    <i class="fas fa-user"></i>
+                    <span id="usernameMessage" style="display: none;">Prijavljeni korisnik: <span th:text="${#authentication.principal}">not found</span></span>
+                </a>
+                <a class="nav-link d-inline-block" style="padding-right: 10px;" href="/logout">
+                    <i class="fas fa-sign-out-alt fa-1x"></i>
+                </a>
             </li>
+
         </ul>
     </div>
 </nav>
 
 <div class="container mt-5">
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row justify-content-center"> <!-- Dodana klasa justify-content-center za centriranje -->
+        <div class="col-md-6">
 
             <div th:if="${message}" class="alert alert-danger" th:text="${message}"></div>
 
@@ -318,7 +323,19 @@
 
 
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
 <script type="text/javascript" th:src="@{${script}}"></script>
+
+<script>
+    $(document).ready(function(){
+        $('#logoutLink').click(function(e){
+        e.preventDefault(); // Spriječava preusmjeravanje na /logout
+        var username = $('#usernameMessage span').text();
+        alert(username); // Prikaže korisničko ime u alert box-u (možete promijeniti kako želite)
+        });
+    });
+</script>
+
 
 <script>
     // Funkcija za postavljanje visine padajućeg izbornika na temelju broja opcija
@@ -494,53 +511,8 @@ function redirectToEmployees() {
 }
 
 
-
-
 </script>
 
-
-<!--<script>-->
-
-<!--function formatDataBeforeSubmit() {-->
-<!--    // Select all elements with class "date-input" or "date-pick"-->
-<!--    var dateInputs = document.querySelectorAll(".date-input, .date-pick, .date-no-pick");-->
-
-<!--    // Iterate over each date input element-->
-<!--    for (var i = 0; i < dateInputs.length; i++) {-->
-<!--        var input = dateInputs[i];-->
-<!--        if (input.value.trim() !== "") {-->
-<!--            // Split the value of the input by dot separator-->
-<!--            var parts = input.value.split(".");-->
-
-<!--            // Extract day, month, and year parts from the split value-->
-<!--            var day = parseInt(parts[0], 10);-->
-<!--            var month = parseInt(parts[1], 10);-->
-<!--            var year = parseInt(parts[2], 10);-->
-
-<!--            // Create a new Date object with extracted parts-->
-<!--            var date = new Date(year, month - 1, day);-->
-
-<!--            // Format the date as yyyy-mm-dd-->
-<!--            var formattedDate = date.getFullYear() + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + ('0' + date.getDate()).slice(-2);-->
-
-<!--            // Set the formatted date as the value of the input-->
-<!--            input.value = formattedDate;-->
-<!--        }-->
-<!--    }-->
-
-<!--    function enableAllFields() {-->
-<!--    inputFields.forEach(field => {-->
-<!--        // Ako je polje onemogućeno, ukloni atribut "disabled"-->
-<!--        if (field.disabled) {-->
-<!--            field.removeAttribute('disabled');-->
-<!--        }-->
-<!--    });-->
-<!--}-->
-
-<!--}-->
-
-
-<!--</script>-->
 
 <script>
     function formatDataBeforeSubmit() {

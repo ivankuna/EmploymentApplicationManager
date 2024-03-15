@@ -95,6 +95,8 @@
 
     .navbar .nav-link {
         color: #fff;
+        display: flex; /* Koristimo flexbox */
+        align-items: center; /* Poravnavamo ikonice po sredini */
     }
 
     .navbar .nav-link:hover {
@@ -115,25 +117,28 @@
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-
         <ul class="navbar-nav mr-auto">
             <li class="nav-item">
-                <a class="nav-link" style="padding-left: 10px;" th:href="${path}"><i
-                        class="fas fa-arrow-left fa-1x"></i></a>
+                <a class="nav-link" style="padding-left: 10px;" th:href="${path}"><i class="fas fa-arrow-left fa-1x"></i></a>
             </li>
         </ul>
         <a class="navbar-brand mx-auto" th:text="${title}" href="#">Naslov tablice</a>
-
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
-                <a class="nav-link" style="padding-right: 10px;" href="/logout"><i
-                        class="fas fa-sign-out-alt fa-1x"></i></a>
+                <a class="nav-link d-inline-block" style="padding-right: 10px;" id="logoutLink" href="#">
+                    <i class="fas fa-user"></i>
+                    <span id="usernameMessage" style="display: none;">Prijavljeni korisnik: <span th:text="${#authentication.principal}">not found</span></span>
+                </a>
+                <a class="nav-link d-inline-block" style="padding-right: 10px;" href="/logout">
+                    <i class="fas fa-sign-out-alt fa-1x"></i>
+                </a>
             </li>
         </ul>
     </div>
 </nav>
 
 <div class="col-md-12">
+
     <div class="container-fluid">
         <div class="row">
             <div class="col-md-12">
@@ -161,10 +166,6 @@
                                    onclick="return confirm('Jeste li sigurni da želite obrisati nalog?') ? true : false">
                                     <i class="far fa-trash-alt fa-lg"></i>
                                 </a>
-                                <!--                                <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}"-->
-                                <!--                                   onclick="return confirm('Jeste li sigurni da želite prikaz naloga?') ? true : false">-->
-                                <!--                                    <i class="far fa-file-pdf fa-lg"></i>-->
-                                <!--                                </a>-->
 
                                 <a th:if="${pdfLink != ''}" th:href="@{${pdfLink}(id=${data[columnList[0].id]})}">
                                     <i class="far fa-file-pdf fa-lg"></i>
@@ -183,7 +184,6 @@
                                 </a>
                                 <a th:if="${pdfLink != '' and data[columnList[0].status]}"
                                    th:href="@{${pdfLink}(id=${data[columnList[0].id]})}">
-                                    <!--                                   onclick="return confirm('Jeste li sigurni da želite prikaz naloga?') ? true : false">-->
                                     <i class="far fa-file-pdf fa-lg"></i>
                                 </a>
                                 <a th:if="${showLink != ''}" th:href="@{${showLink}(id=${data[columnList[0].id]})}">
@@ -196,45 +196,32 @@
                     </tbody>
                 </table>
             </div>
-
-
-            <!--            <div class="fixed-bottom-buttons">-->
-
-            <!--                <label>-->
-            <!--                    <a> <span sec:authentication="name">not found</span> </a>-->
-            <!--                </label>-->
-            <!--                <a th:if="${addLink}" th:href="@{${addLink}}" class="btn btn-primary"-->
-            <!--                   th:text="${addBtnText}">Dodaj</a>-->
-
-
-            <!--                <a th:href="@{${path}}" class="btn btn-secondary">Povratak</a>-->
-            <!--            </div>-->
             <div class="fixed-bottom-buttons">
                 <div class="btn-group btn-group-justified">
-<!--                <div class="row">-->
-<!--                    <div class="col-sm-4">-->
-<!--                        <label>-->
-<!--                            <a><span sec:authentication="name">not found</span></a>-->
-<!--                        </label>-->
-<!--                    </div>-->
-                    <div class="col-sm-8">
+                    <div class="col-6">
                         <a th:if="${addLink}" th:href="@{${addLink}}" class="btn btn-primary" th:text="${addBtnText}">Dodaj</a>
                     </div>
-                    <div class="col-sm-8">
+                    <div class="col-6">
                         <a th:href="@{${path}}" class="btn btn-secondary">Povratak</a>
                     </div>
                 </div>
             </div>
-<!--            </div>-->
+
 
         </div>
     </div>
+
+
+
+
+
     <div class="row">
         <br/><br/>
         <br/><br/>
     </div>
 </div>
-<!--</div>-->
+
+
 
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
@@ -251,6 +238,18 @@
         crossorigin="anonymous"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/jquery.dataTables.min.js"></script>
 <script src="https://cdn.datatables.net/1.10.22/js/dataTables.bootstrap4.min.js"></script>
+
+<!--<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>-->
+
+<script>
+    $(document).ready(function(){
+        $('#logoutLink').click(function(e){
+        e.preventDefault(); // Spriječava preusmjeravanje na /logout
+        var username = $('#usernameMessage span').text();
+        alert(username); // Prikaže korisničko ime u alert box-u (možete promijeniti kako želite)
+        });
+    });
+</script>
 
 <script type="text/javascript" th:src="@{${script}}"></script>
 

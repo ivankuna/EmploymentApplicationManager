@@ -74,6 +74,9 @@ public class MainController {
             return "login";
         }
 
+
+
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 

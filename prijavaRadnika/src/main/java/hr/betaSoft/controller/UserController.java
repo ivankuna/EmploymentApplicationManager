@@ -44,7 +44,7 @@ public class UserController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("Tvrtke", "company", "id",""));
+            columnList.add(new Column("Tvrtka", "company", "id",""));
             columnList.add(new Column("Korisnik", "username", "id",""));
             columnList.add(new Column("Licenca", "dateOfUserAccountExpiry", "id",""));
 
@@ -74,20 +74,21 @@ public class UserController {
         model.addAttribute("pdfLink", "");
         model.addAttribute("updateLink", "/users/update/{id}");
         model.addAttribute("deleteLink", "/users/delete/{id}");
-        model.addAttribute("showLink", "/users/employees/show/{id}");
+//        model.addAttribute("showLink", "/users/employees/show/{id}");
+        model.addAttribute("showLink", "");
         model.addAttribute("tableName", "users");
         model.addAttribute("script", "/js/script-table-users.js");
 
         return "table";
     }
 
-    @GetMapping("/users/employees/show/{id}")
-    public String showEmployeesFromUsers(@PathVariable Long id) {
-
-        UserIdTracker.setUserId(id);
-
-        return "redirect:/employees/show";
-    }
+//    @GetMapping("/users/employees/show/{id}")
+//    public String showEmployeesFromUsers(@PathVariable Long id) {
+//
+//        UserIdTracker.setUserId(id);
+//
+//        return "redirect:/employees/show";
+//    }
 
     @GetMapping("/users/new")
     public String showAddForm(Model model) {

@@ -356,12 +356,26 @@ public class Employee {
 
         List<String> emptyAttributes = new ArrayList<>();
 
+//        Stream.of(attributeValues)
+//                .filter(attributeName -> {
+//                    Object value = getValueByName(attributeName);
+//                    return value == null || (value instanceof String && ((String) value).isEmpty());
+//                })
+//                .forEach(emptyAttributes::add);
+
         Stream.of(attributeValues)
                 .filter(attributeName -> {
                     Object value = getValueByName(attributeName);
-                    return value == null || (value instanceof String && ((String) value).isEmpty());
+                    if (value instanceof String) {
+                        return ((String) value).isEmpty();
+                    } else if (value instanceof List<?>) {
+                        return ((List<?>) value).isEmpty();
+                    }
+                    return value == null;
                 })
                 .forEach(emptyAttributes::add);
+
+
 
         if (formId == FormTracker.getSIGN_UP()) {
             if (employmentContract.equals("Određeno") && (dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())) {

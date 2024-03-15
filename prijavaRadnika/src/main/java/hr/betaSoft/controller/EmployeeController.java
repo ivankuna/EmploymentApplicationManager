@@ -186,15 +186,6 @@ public class EmployeeController {
         List<Employee> employeeListTemp = employeeService.findByUser(authenticatedUser);
         List<Employee> employeeList = new ArrayList<>();
 
-//        if (!authenticatedUser.isShowAllApplications()) {
-//            for (Employee employee : employeeListTemp) {
-//                if (!employee.isSignUpSent()) {
-//                    employeeList.add(employee);
-//                }
-//            }
-//        } else {
-//            employeeList = employeeListTemp;
-//        }
 
         if (!authenticatedUser.isShowAllApplications()) {
             for (Employee employee : employeeListTemp) {
