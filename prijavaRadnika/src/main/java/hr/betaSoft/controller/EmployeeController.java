@@ -261,7 +261,7 @@ public class EmployeeController {
         String path = userService.getAuthenticatedUser().getId().equals(UserIdTracker.getADMIN_ID()) ? "/redirect" : "/employees";
         model.addAttribute("path", path);
 
-        model.addAttribute("sendLink", "/employees/send/{id}");
+        model.addAttribute("sendLink", "/employees/appsend/{id}");
 
         if (isAdmin) {
             model.addAttribute("pdfLink", "");
@@ -318,7 +318,7 @@ public class EmployeeController {
         model.addAttribute("dataId", "id");
         model.addAttribute("pathSave", "/employees/save");
         model.addAttribute("path", "/employees/show");
-        model.addAttribute("sendLink", "/employees/send");
+        model.addAttribute("sendLink", "/employees/appsend");
         model.addAttribute("script", script);
 
         return "form";
@@ -339,7 +339,7 @@ public class EmployeeController {
             boolean appSend = false;
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
-                sendLink = employee.isSignUpSent() ? "" : "/employees/send";
+                sendLink = employee.isSignUpSent() ? "" : "/employees/appsend";
                 script = employee.isSignUpSent() ? "/js/script-sent-form-employees.js" : "/js/script-form-employees.js";
                 title = "Nalog za prijavu";
                 if (employee.isSignUpSent()) {
@@ -347,14 +347,14 @@ public class EmployeeController {
                 }
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
-                sendLink = employee.isSignOutSent() ? "" : "/employees/send";
+                sendLink = employee.isSignOutSent() ? "" : "/employees/appsend";
                 title = "Nalog za odjavu";
                 if (employee.isSignOutSent()) {
                     appSend = true;
                 }
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 pathSave = employee.isUpdateSent() ? "" : "/employees/save";
-                sendLink = employee.isUpdateSent() ? "" : "/employees/send";
+                sendLink = employee.isUpdateSent() ? "" : "/employees/appsend";
                 title = "Nalog za promjenu";
                 if (employee.isUpdateSent()) {
                     appSend = true;
@@ -490,7 +490,7 @@ public class EmployeeController {
         return "redirect:/employees/show";
     }
 
-    @PostMapping("/employees/send")
+    @PostMapping("/employees/appsend")
     public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
@@ -530,11 +530,11 @@ public class EmployeeController {
 
         employeeService.saveEmployee(employee);
 
-        return "redirect:/employees/send/" + employee.getId();
+        return "redirect:/employees/appsend/" + employee.getId();
     }
 
 
-    @GetMapping("/employees/send/{id}")
+    @GetMapping("/employees/appsend/{id}")
     public String sendEmployeeMail(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         String messageTag = switch (FormTracker.getFormId()) {
@@ -611,7 +611,7 @@ public class EmployeeController {
 //            String mailText = employeeToSend.toString();
             String mailText = "Poštovani," + " \n" +
                     "" + " \n" +
-                    "U privitku vam šaljemo Nalog za " + messageTag + " radnika: " + employeeName + " \n" +
+                    "U privitku Vam šaljemo Nalog za " + messageTag + " radnika: " + employeeName + " \n" +
                     "" + " \n" +
                     "Ova poruka je automatski generirana te Vas molimo da na nju ne odgovarate." + " \n" +
                     "" + " \n" +
