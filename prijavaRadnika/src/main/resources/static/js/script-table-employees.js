@@ -29,25 +29,24 @@ $(document).ready(function() {
                 } else if (data === "false") {
                     return '<i class="far fa-circle"></i>';
                 } else {
-               if (data) {
-                   if (moment(data, 'YYYY-MM-DD').isValid() && !/[a-zA-Z]/.test(data) && data.length === 10 && data.indexOf('-') !== 2) {
-                       var date = moment(data, 'YYYY-MM-DD');
-                       var minDate = moment('1054-12-31', 'YYYY-MM-DD');
-                       if (date.isAfter(minDate)) {
-                           return date.format('DD-MM-YY');
-                       } else {
-                           return data;
-                       }
-                   } else {
-                       return data;
-                   }
-               } else {
-                   return '';
-               }
-
+                    if (data) {
+                        if (moment(data, 'YYYY-MM-DD').isValid() && !/[a-zA-Z]/.test(data) && data.length === 10 && data.indexOf('-') !== 2) {
+                           var date = moment(data, 'YYYY-MM-DD');
+                           var minDate = moment('1054-12-31', 'YYYY-MM-DD');
+                           if (date.isAfter(minDate)) {
+                               return date.format('DD-MM-YY');
+                           } else {
+                               return data;
+                           }
+                        } else {
+                            return data;
+                        }
+                    } else {
+                        return '';
+                    }
+                }
             }
         }
-    }
     ],
          "paging": false,
          "searching": false,

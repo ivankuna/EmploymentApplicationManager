@@ -106,7 +106,9 @@
                                 />
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="togglePasswordVisibility">
-                                        <i class="far fa-eye-slash fa-1x"></i>
+                                           <span id="togglePasswordIcon"><i class="far fa-eye-slash fa-1x"></i></span>
+<!--                                        <i class="far fa-eye-slash fa-1x"></i>-->
+<!--                                        <i class="far fa-eye fa-1x"></i>-->
                                     </span>
                                 </div>
                             </div>
@@ -122,16 +124,36 @@
     </div>
 </div>
 
+<!--<script>-->
+<!--    document.getElementById('togglePasswordVisibility').addEventListener('click', function() {-->
+<!--        var passwordInput = document.getElementById('password');-->
+<!--        if (passwordInput.type === 'password') {-->
+<!--            passwordInput.type = 'text';-->
+<!--        } else {-->
+<!--            passwordInput.type = 'password';-->
+<!--        }-->
+<!--    });-->
+
+<!--</script>-->
+
 <script>
+  document.addEventListener('DOMContentLoaded', function() {
+    // Ovdje ide vaša postojeća skripta
     document.getElementById('togglePasswordVisibility').addEventListener('click', function() {
         var passwordInput = document.getElementById('password');
+        var icon = document.getElementById('togglePasswordIcon');
+
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
+            icon.innerHTML = '<i class="far fa-eye fa-1x"></i>';
         } else {
             passwordInput.type = 'password';
+            icon.innerHTML = '<i class="far fa-eye-slash fa-1x"></i>';
         }
     });
+});
 
 </script>
+
 </body>
 </html>
