@@ -75,11 +75,11 @@ public class EmployeeController {
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 statusField = "signOutSent";
                 datumField = "dateOfSignOutSent";
-                datumApp = "dateOfSignOut";
+                datumApp = "dateOfSignOutReal";
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 statusField = "updateSent";
                 datumField = "dateOfUpdateSent";
-                datumApp = "dateOfUpdate";
+                datumApp = "dateOfUpdateReal";
             }
         }
 

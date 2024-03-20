@@ -234,7 +234,7 @@ public class UserController {
         ;
         dataList.add(new Data("9.","e-mail primatelja naloga *", "emailToSend", "", "", "", "text", "true", "", items,"false"));
         ;
-        dataList.add(new Data("10.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date", "true", fieldStatus, items,"false"));
+        dataList.add(new Data("10.","Datum isteka roka korisničkog računa", "dateOfUserAccountExpiry", "", "", "", "date-pick", "true", fieldStatus, items,"false"));
         ;
         dataList.add(new Data("11.","Prikaz svih naloga", "showAllApplications", "", "", "", "checkbox", "false", "", items,"false"));
         ;
