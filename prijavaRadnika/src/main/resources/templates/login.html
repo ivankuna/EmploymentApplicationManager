@@ -106,9 +106,7 @@
                                 />
                                 <div class="input-group-append">
                                     <span class="input-group-text" id="togglePasswordVisibility">
-                                           <span id="togglePasswordIcon"><i class="far fa-eye-slash fa-1x"></i></span>
-<!--                                        <i class="far fa-eye-slash fa-1x"></i>-->
-<!--                                        <i class="far fa-eye fa-1x"></i>-->
+                                           <span id="togglePasswordIcon"><i class="far fa-eye fa-1x"></i></span>
                                     </span>
                                 </div>
                             </div>
@@ -145,10 +143,10 @@
 
         if (passwordInput.type === 'password') {
             passwordInput.type = 'text';
-            icon.innerHTML = '<i class="far fa-eye fa-1x"></i>';
+            icon.innerHTML = '<i class="far fa-eye-slash fa-1x"></i>';
         } else {
             passwordInput.type = 'password';
-            icon.innerHTML = '<i class="far fa-eye-slash fa-1x"></i>';
+            icon.innerHTML = '<i class="far fa-eye fa-1x"></i>';
         }
     });
 });
