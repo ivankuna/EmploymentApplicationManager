@@ -68,7 +68,6 @@
         .datepicker-container {
             display: flex;
             align-items: center;
-<!--            width: calc(100% - 20px); /* Oduzimamo 30 piksela jer je to ukupan margin od form-group-row */-->
         }
 
         .datepicker-container input {
@@ -347,11 +346,8 @@
         dropdown.size = numOptions;
         }
     }
-
     // Poziv funkcije kada se stranica učita
     window.onload = setDropdownHeight;
-
-
 </script>
 
 
@@ -365,12 +361,9 @@
             return false; // Dodajte ovo da spriječite preusmjeravanje
         }
     }
-
-
 </script>
 
 <script>
-
     // Provjerava postoji li OIB već u tablici employees
     document.getElementById('oib').addEventListener('blur', function(event) {
         // Dohvati vrijednost unesenog OIB-a
@@ -409,13 +402,10 @@
         console.error('Greška prilikom slanja POST zahtjeva:', error);
     });
 }
-
-
 </script>
 
 
 <script>
-
 document.querySelectorAll(".date-input, .date-pick").forEach(function(input) {
 
 <!--OK DODAJE TOČKE-->
@@ -501,16 +491,6 @@ function setTodayDateIfEmpty(event) {
 document.querySelectorAll(".date-input.auto-fill").forEach(function(input) {
   input.addEventListener("click", setTodayDateIfEmpty);
 });
-
-
-
-
-<!--// Funkcija za preusmjeravanje na /employees-->
-<!--function redirectToEmployees() {-->
-<!--  window.location = '/employees';-->
-<!--}-->
-
-
 </script>
 
 
@@ -571,13 +551,10 @@ function formatNumberOnInput(input) {
         input.value = input.value.replace(/^(.*\..*)\./g, '$1');
     }
 }
-
-
 </script>
 
 
 <script>
-
     $(document).ready(function() {
         $(".date-pick").datepicker({
             dateFormat: "dd.mm.yy",
@@ -596,11 +573,7 @@ function formatNumberOnInput(input) {
     $(".ui-datepicker-trigger").addClass("btn btn-outline-light text-primary").attr("style", function(i, style) {
             return (style || "") + "padding-left: 5px !important;";
         });
-
-
     });
-
-
 </script>
 
 
@@ -644,8 +617,6 @@ function clearDateField(fieldId) {
         inputField.value = '';
     }
 }
-
-
 </script>
 
 

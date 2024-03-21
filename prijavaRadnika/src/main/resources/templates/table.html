@@ -4,7 +4,6 @@
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
     <meta charset="UTF-8">
-    <!--    <title th:text="${title}">Popis podataka</title>-->
     <title>Sustav radnici</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
@@ -34,6 +33,11 @@
         }
     }
 
+    @media (max-width: 699px) {
+          .table-responsive {
+            overflow-x: auto;
+          }
+        }
     table.dataTable>thead .sorting::before,
     table.dataTable>thead .sorting_asc::before,
     table.dataTable>thead .sorting_desc::before,
@@ -108,18 +112,10 @@
     body {
         padding-top: 80px;
     }
-
-
-
-
     </style>
-
-
-
 
 </head>
 <body>
-
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
@@ -212,15 +208,8 @@
                     </div>
                 </div>
             </div>
-
-
         </div>
     </div>
-
-
-
-
-
     <div class="row">
         <br/><br/>
         <br/><br/>
