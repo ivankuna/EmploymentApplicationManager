@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="hr" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>"Unos satnice"</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <style>
+    table { font-size: 14px; }
+
+    @media only screen and (max-width: 699px) {
+        table {
+            font-size: 12px;
+        }
+    }
+    .sunday td {
+        background-color: #f2f2f2; /* svijetlo sivo */
+    }
+</style>
+</head>
+<body>
+
+<div class="container mt-5">
+  <h5 class="mb-4">Radno vrijeme - <span th:text="${title}"></span></h5>
+  <table class="table table-bordered">
+    <thead class="thead-light">
+    <tr>
+      <th scope="col">Datum</th>
+      <th scope="col" class="workday">Redovan rad</th>
+      <th scope="col" class="holiday">Godišnji</th>
+      <th scope="col" class="sickday">Bolovanje</th>
+    </tr>
+    </thead>
+    <tbody id="table-body">
+    <!-- JavaScript će dodati datume ovdje -->
+    </tbody>
+  </table>
+</div>
+
+<script th:inline="javascript">
+/*<![CDATA[*/
+// Funkcija za dodavanje datuma u tablicu
+function addDates() {
+    var tbody = document.getElementById("table-body");
+     var startDate = new Date([[${start}]]);
+    var endDate = new Date([[${end}]]);
+
+    for (var date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+        var row = document.createElement("tr");
+        var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Dodajemo vodeće nule ako je potrebno
+        var day = date.getDate().toString().padStart(2, '0');
+        var year = date.getFullYear();
+        var dateString = `${month}.${day}.${year}`;
+        row.innerHTML = `
+            <td class="text-center">${dateString}</td>
+            <td class="text-center workday" onclick="enableInput(this)"></td>
+            <td class="text-center holiday" onclick="enableInput(this)"></td>
+            <td class="text-center sickday" onclick="enableInput(this)"></td>
+        `;
+        if (date.getDay() === 0) {
+            row.classList.add('sunday');
+        }
+        tbody.appendChild(row);
+    }
+}
+
+// Funkcija za omogućavanje unosa u ćeliju
+function enableInput(cell) {
+    if (cell.innerText.trim() === '8') {
+        cell.innerText = '';
+    } else {
+        cell.innerText = '8';
+    }
+    cell.contentEditable = true;
+    cell.select();
+    cell.focus();
+}
+
+// Pozivamo funkciju za dodavanje datuma kada se stranica učita
+window.onload = function() {
+    addDates();
+};
+/*]]>*/
+</script>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
