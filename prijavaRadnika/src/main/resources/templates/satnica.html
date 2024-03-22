@@ -1,11 +1,11 @@
 <!DOCTYPE html>
 <html lang="hr" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>"Unos satnice"</title>
-  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-  <style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Unos satnice</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
     table { font-size: 14px; }
 
     @media only screen and (max-width: 699px) {
@@ -16,33 +16,46 @@
     .sunday td {
         background-color: #f2f2f2; /* svijetlo sivo */
     }
-</style>
+
+     .table-header th {
+        text-align: center;
+        vertical-align: middle;
+    }
+
+    </style>
 </head>
 <body>
 
 <div class="container mt-5">
-  <h5 class="mb-4">Radno vrijeme - <span th:text="${title}"></span></h5>
-  <table class="table table-bordered">
-    <thead class="thead-light">
-    <tr>
-      <th scope="col">Datum</th>
-      <th scope="col" class="workday">Redovan rad</th>
-      <th scope="col" class="holiday">Godišnji</th>
-      <th scope="col" class="sickday">Bolovanje</th>
-    </tr>
-    </thead>
-    <tbody id="table-body">
-    <!-- JavaScript će dodati datume ovdje -->
-    </tbody>
-  </table>
+    <h5 class="mb-4">Radno vrijeme - <span th:text="${title}"></span></h5>
+    <div class="container-fluid">
+        <div class="row">
+            <div class="table-responsive">
+                <table class="table table-bordered">
+                    <thead class="thead-light table-header">
+                    <tr>
+                        <th scope="col">Datum</th>
+                        <th scope="col">Dan</th> <!-- Dodana nova kolona za ime dana -->
+                        <th scope="col" class="workday">Redovan rad</th>
+                        <th scope="col" class="holiday">Godišnji</th>
+                        <th scope="col" class="sickday">Bolovanje</th>
+                    </tr>
+                    </thead>
+                    <tbody id="table-body">
+                    <!-- JavaScript će dodati datume ovdje -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 </div>
 
 <script th:inline="javascript">
-/*<![CDATA[*/
+
 // Funkcija za dodavanje datuma u tablicu
 function addDates() {
     var tbody = document.getElementById("table-body");
-     var startDate = new Date([[${start}]]);
+    var startDate = new Date([[${start}]]);
     var endDate = new Date([[${end}]]);
 
     for (var date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
@@ -50,9 +63,11 @@ function addDates() {
         var month = (date.getMonth() + 1).toString().padStart(2, '0'); // Dodajemo vodeće nule ako je potrebno
         var day = date.getDate().toString().padStart(2, '0');
         var year = date.getFullYear();
-        var dateString = `${month}.${day}.${year}`;
+        var dateString = `${day}.${month}.${year}`;
+        var dayName = getDayName(date); // Dohvaćamo ime dana za trenutni datum
         row.innerHTML = `
             <td class="text-center">${dateString}</td>
+            <td class="text-center">${dayName}</td> <!-- Dodajemo kolonu za ime dana -->
             <td class="text-center workday" onclick="enableInput(this)"></td>
             <td class="text-center holiday" onclick="enableInput(this)"></td>
             <td class="text-center sickday" onclick="enableInput(this)"></td>
@@ -62,25 +77,41 @@ function addDates() {
         }
         tbody.appendChild(row);
     }
+    // Postavljamo širinu ćelija na temelju izvorne širine
+    var cells = document.querySelectorAll('td');
+    cells.forEach(cell => {
+        var originalWidth = cell.offsetWidth;
+        cell.style.width = originalWidth + 'px';
+    });
+}
+
+// Funkcija za dohvaćanje imena dana na hrvatskom jeziku
+function getDayName(date) {
+    //var days = ['Nedjelja', 'Ponedjeljak', 'Utorak', 'Srijeda', 'Četvrtak', 'Petak', 'Subota'];
+    var days = ['ned', 'pon', 'uto', 'sri', 'čet', 'pet', 'sub'];
+    return days[date.getDay()];
 }
 
 // Funkcija za omogućavanje unosa u ćeliju
 function enableInput(cell) {
-    if (cell.innerText.trim() === '8') {
+    if (cell.innerText.trim() !== '') {
         cell.innerText = '';
+        cell.contentEditable = true;
+        cell.focus();
+        // Dodajemo inputmode='decimal' ako je ćelija označena odgovarajućom klasom
+        if (cell.classList.contains('workday') || cell.classList.contains('holiday') || cell.classList.contains('sickday')) {
+            cell.setAttribute('inputmode', 'decimal');
+        }
     } else {
         cell.innerText = '8';
     }
-    cell.contentEditable = true;
-    cell.select();
-    cell.focus();
 }
 
 // Pozivamo funkciju za dodavanje datuma kada se stranica učita
 window.onload = function() {
     addDates();
 };
-/*]]>*/
+
 </script>
 
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>

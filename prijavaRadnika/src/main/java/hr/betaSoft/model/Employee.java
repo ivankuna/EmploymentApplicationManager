@@ -47,6 +47,8 @@ public class Employee {
     public static final List<String> REASON_FOR_UPDATE = Arrays.asList("određeno-neodređeno", "neodređeno-određeno", "nepuno-puno", "puno-nepuno", "broj sati nepuno",
             "stjecanje državljanstva", "stjecanje mirovine", "invalidnost", "mlađi od 30 godina","novo radno mjesto");
 
+    public static final List<String> NON_WORKING_DAYS = Arrays.asList("Ponedjeljak", "Utorak", "Srijeda", "Četvrtak", "Petak", "Subota", "Nedjelja");
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -113,7 +115,7 @@ public class Employee {
     private BigDecimal hoursForPartTime;
 
     @Column
-    private String nonWorkingDays;
+    private List<String> nonWorkingDays;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     @Temporal(TemporalType.DATE)

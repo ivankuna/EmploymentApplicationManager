@@ -991,7 +991,7 @@ public class EmployeeController {
             ;
             dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "number-input", "false", fieldEnabled, items, "false"));
             ;
-            dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", fieldEnabled, items, "false"));
+            dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", fieldEnabled, Employee.NON_WORKING_DAYS, "true"));
             ;
             dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
             ;
