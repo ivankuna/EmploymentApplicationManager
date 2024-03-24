@@ -18,4 +18,6 @@ public interface EmployeeService {
     List<Employee> findByUser(User user);
 
     Employee findByOib(String oib);
+
+    Employee findFirstByOib(String oib);
 }

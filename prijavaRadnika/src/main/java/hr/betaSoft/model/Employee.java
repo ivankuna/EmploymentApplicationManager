@@ -62,7 +62,7 @@ public class Employee {
     @Column
     private String gender;
 
-    @Column(unique = true)
+    @Column(unique = false)
     private String oib;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -357,13 +357,6 @@ public class Employee {
         }
 
         List<String> emptyAttributes = new ArrayList<>();
-
-//        Stream.of(attributeValues)
-//                .filter(attributeName -> {
-//                    Object value = getValueByName(attributeName);
-//                    return value == null || (value instanceof String && ((String) value).isEmpty());
-//                })
-//                .forEach(emptyAttributes::add);
 
         Stream.of(attributeValues)
                 .filter(attributeName -> {

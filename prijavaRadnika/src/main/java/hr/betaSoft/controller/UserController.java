@@ -246,15 +246,15 @@ public class UserController {
         }
         return dataList;
     }
-    @GetMapping("/users/satnica")
-    public String showSatnica(Model model, HttpServletRequest request) {
+    @GetMapping("/users/shift-schedule")
+    public String showShiftSchedule(Model model, HttpServletRequest request) {
 
         model.addAttribute("title", "Veljača 2024.");
         model.addAttribute("start", "2024-02-01");
         model.addAttribute("end", "2024-02-29");
 
 
-        return "satnica";
+        return "shift-schedule";
     }
 
 }

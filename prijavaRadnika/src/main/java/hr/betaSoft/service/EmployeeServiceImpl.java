@@ -56,4 +56,9 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findByOib(String oib) {
         return employeeRepository.findByOib(oib);
     }
+
+    @Override
+    public Employee findFirstByOib(String oib) {
+        return employeeRepository.findFirstByOib(oib);
+    }
 }

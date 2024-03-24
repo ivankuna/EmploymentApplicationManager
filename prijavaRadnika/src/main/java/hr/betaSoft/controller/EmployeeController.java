@@ -268,7 +268,6 @@ public class EmployeeController {
             model.addAttribute("deleteLink", "");
         } else {
             model.addAttribute("pdfLink", "/employees/pdf/{id}");
-//            model.addAttribute("pdfLink", "/employees/html/{id}");
             model.addAttribute("deleteLink", "/employees/delete/{id}");
         }
         model.addAttribute("updateLink", "/employees/update/{id}");
@@ -308,6 +307,58 @@ public class EmployeeController {
             model.addAttribute("class", new Employee());
         }
 
+        List<Data> dataList = defineDataList(0);
+        model.addAttribute("dataList", dataList);
+
+        List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
+
+        model.addAttribute("hiddenList", hiddenList);
+        model.addAttribute("title", title);
+        model.addAttribute("dataId", "id");
+        model.addAttribute("pathSave", "/employees/save");
+        model.addAttribute("path", "/employees/show");
+        model.addAttribute("sendLink", "/employees/appsend");
+        model.addAttribute("script", script);
+
+        return "form";
+    }
+
+    @GetMapping("/employees/new-update/{oib}")
+    public String showAddFilledForm(@PathVariable("oib") String oib, Model model) throws IllegalAccessException {
+
+//        Employee employee = (Employee) model.getAttribute("employee");
+
+        Employee employee = new Employee();
+        Employee tempEmployee = employeeService.findFirstByOib(oib);
+        if (tempEmployee != null)
+        {
+            employee.setOib(tempEmployee.getOib());
+            employee.setFirstName(tempEmployee.getFirstName());
+            employee.setLastName(tempEmployee.getLastName());
+            employee.setDateOfSignUp(tempEmployee.getDateOfSignUp());
+            employee.setDateOfUpdate(tempEmployee.getDateOfUpdate());
+            employee.setDateOfSignOut(tempEmployee.getDateOfSignOut());
+        }
+
+
+        String title = "";
+        String script = "";
+
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            title = "Nalog za prijavu";
+            script = "/js/script-form-employees.js";
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            title = "Nalog za odjavu";
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            title = "Nalog za promjenu";
+        }
+
+//        if (employee != null) {
+//            model.addAttribute("class", employee);
+//        } else {
+//            model.addAttribute("class", new Employee());
+//        }
+        model.addAttribute("class", employee);
         List<Data> dataList = defineDataList(0);
         model.addAttribute("dataList", dataList);
 
@@ -608,7 +659,6 @@ public class EmployeeController {
             String mailRecipient = employeeToSend.getUser().getEmailToSend();
             String companyName = employeeToSend.getUser().getCompany();
             String mailSubject = companyName + "  Nalog za " + messageTag + " radnika: " + employeeName;
-//            String mailText = employeeToSend.toString();
             String mailText = "Poštovani," + " \n" +
                     "" + " \n" +
                     "U privitku Vam šaljemo Nalog za " + messageTag + " radnika: " + employeeName + " \n" +
@@ -753,60 +803,6 @@ public class EmployeeController {
 
         try {
 
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
-//
-//            Employee employee = employeeService.findById(id);
-//
-//            String title = "";
-//            String appOrder = "";
-//            String appDate = "";
-//            String appOrderDate = "";
-//            String name = "";
-//            String year = "";
-//            boolean appSend = false;
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-//                title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
-//                Date dateOfSignUpSent = employee.getDateOfSignUpSent();
-//                year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
-//                appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
-//                appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
-//                name = "Prijava-" + id.toString() + "-" + employee.getNumSignUp();
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-//                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
-//                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
-//                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
-//                appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
-//                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
-//                name = "Odjava-" + id.toString() + "-" + employee.getNumSignOut();
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-//                title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
-//                Date dateOfUpdateSent = employee.getDateOfUpdateSent();
-//                year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
-//                appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
-//                appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
-//                name = "Promjena-" + id.toString() + "-" + employee.getNumUpdate();
-//
-//            }
-//
-//            appOrderDate = appOrder + " " + appDate;
-//            model.addAttribute("name", name);
-//            model.addAttribute("title", title);
-//            model.addAttribute("appOrder", appOrder);
-//            model.addAttribute("appDate", appDate);
-//            model.addAttribute("appOrderDate", appOrderDate);
-//            model.addAttribute("companyName", employee.getUser().getCompany());
-//            model.addAttribute("companyOib", employee.getUser().getOib());
-//
-//            model.addAttribute("class", employee);
-//            List<Data> dataList = defineDataList(id);
-//            model.addAttribute("dataList", dataList);
-//
-//            // dalje je za PDF
-//
-//            String htmlContent = renderHtml(model);
-//            String pdfFilePath = "prijavaRadnika/pdf/" + name + ".pdf";
-//            HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
-
             String pdfFilePath = createAppPdf(id, model, ra, response);
 
             // Postavi odgovarajuće zaglavlje
@@ -910,11 +906,11 @@ public class EmployeeController {
 
     private boolean checkOibExists(Employee employee) {
 
-        Employee tempEmployee = employeeService.findByOib(employee.getOib());
+//        Employee tempEmployee = employeeService.findByOib(employee.getOib());
         boolean oibExist = false;
-        if (tempEmployee != null && employee.getId() != tempEmployee.getId()) {
-            oibExist = true;
-        }
+//        if (tempEmployee != null && employee.getId() != tempEmployee.getId()) {
+//            oibExist = true;
+//        }
         return oibExist;
     }
 
@@ -1017,13 +1013,13 @@ public class EmployeeController {
             ;
 
         } else {
-            dataList.add(new Data("4.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
+            dataList.add(new Data("4.", "Datum prijave - iz Prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
-            dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
+            dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
         }
         if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", fieldEnabled, items, "false"));
+            dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
             dataList.add(new Data("7.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
             ;
