@@ -329,7 +329,8 @@ public class EmployeeController {
 //        Employee employee = (Employee) model.getAttribute("employee");
 
         Employee employee = new Employee();
-        Employee tempEmployee = employeeService.findFirstByOib(oib);
+//        Employee tempEmployee = employeeService.findFirstByOib(oib);
+        Employee tempEmployee = employeeService.findFirstByOibOrderByDateOfUpdateDesc(oib);
         if (tempEmployee != null)
         {
             employee.setOib(tempEmployee.getOib());
@@ -450,7 +451,6 @@ public class EmployeeController {
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             employee.setFromSignOut(true);
         }
-
         if (checkOibExists(employee)) {
             ra.addFlashAttribute("employee", employee);
             ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");

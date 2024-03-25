@@ -20,4 +20,6 @@ public interface EmployeeService {
     Employee findByOib(String oib);
 
     Employee findFirstByOib(String oib);
+
+    Employee findFirstByOibOrderByDateOfUpdateDesc(String oib);
 }

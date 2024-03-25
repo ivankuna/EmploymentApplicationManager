@@ -61,4 +61,8 @@ public class EmployeeServiceImpl implements EmployeeService {
     public Employee findFirstByOib(String oib) {
         return employeeRepository.findFirstByOib(oib);
     }
+
+    public Employee findFirstByOibOrderByDateOfUpdateDesc(String oib) {
+        return employeeRepository.findFirstByOibOrderByDateOfUpdateDesc(oib);
+    }
 }

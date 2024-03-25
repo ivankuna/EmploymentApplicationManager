@@ -15,4 +15,6 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     Employee findByOib(String oib);
 
     Employee findFirstByOib(String oib);
+    Employee findFirstByOibOrderByDateOfUpdateDesc(String oib);
+
 }
