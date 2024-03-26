@@ -1,10 +1,10 @@
-package hr.betaSoft.security.secService;
+package hr.betaSoft.security.service;
 
 import hr.betaSoft.model.Employee;
-import hr.betaSoft.security.secModel.Role;
-import hr.betaSoft.security.secModel.User;
-import hr.betaSoft.security.secRepo.RoleRepository;
-import hr.betaSoft.security.secRepo.UserRepository;
+import hr.betaSoft.security.model.Role;
+import hr.betaSoft.security.model.User;
+import hr.betaSoft.security.repo.RoleRepository;
+import hr.betaSoft.security.repo.UserRepository;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
 import org.springframework.security.core.Authentication;

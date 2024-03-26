@@ -1,4 +1,4 @@
-package hr.betaSoft.security.secModel;
+package hr.betaSoft.security.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import hr.betaSoft.model.Employee;

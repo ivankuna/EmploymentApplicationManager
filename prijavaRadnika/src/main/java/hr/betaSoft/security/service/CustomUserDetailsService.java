@@ -1,8 +1,8 @@
-package hr.betaSoft.security.secService;
+package hr.betaSoft.security.service;
 
-import hr.betaSoft.security.secModel.Role;
-import hr.betaSoft.security.secModel.User;
-import hr.betaSoft.security.secRepo.UserRepository;
+import hr.betaSoft.security.model.Role;
+import hr.betaSoft.security.model.User;
+import hr.betaSoft.security.repo.UserRepository;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;

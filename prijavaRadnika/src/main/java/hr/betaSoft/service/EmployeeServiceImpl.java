@@ -2,7 +2,7 @@ package hr.betaSoft.service;
 
 import hr.betaSoft.model.Employee;
 import hr.betaSoft.repository.EmployeeRepository;
-import hr.betaSoft.security.secModel.User;
+import hr.betaSoft.security.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 

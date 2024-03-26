@@ -1,6 +1,6 @@
-package hr.betaSoft.security.secService;
+package hr.betaSoft.security.service;
 
-import hr.betaSoft.security.secModel.User;
+import hr.betaSoft.security.model.User;
 import hr.betaSoft.security.userdto.UserDto;
 
 import java.util.List;

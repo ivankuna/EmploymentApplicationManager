@@ -1,4 +1,4 @@
-package hr.betaSoft.security.secConfig;
+package hr.betaSoft.security.config;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;

@@ -1,8 +1,8 @@
 package hr.betaSoft.controller;
 
 
-import hr.betaSoft.security.secModel.User;
-import hr.betaSoft.security.secService.UserService;
+import hr.betaSoft.security.model.User;
+import hr.betaSoft.security.service.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.FormTracker;
 import hr.betaSoft.tools.UserIdTracker;

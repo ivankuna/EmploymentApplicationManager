@@ -1,6 +1,6 @@
-package hr.betaSoft.security.secRepo;
+package hr.betaSoft.security.repo;
 
-import hr.betaSoft.security.secModel.Role;
+import hr.betaSoft.security.model.Role;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoleRepository extends JpaRepository<Role, Long> {

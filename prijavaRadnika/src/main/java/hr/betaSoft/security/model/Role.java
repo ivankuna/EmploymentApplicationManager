@@ -1,4 +1,4 @@
-package hr.betaSoft.security.secModel;
+package hr.betaSoft.security.model;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

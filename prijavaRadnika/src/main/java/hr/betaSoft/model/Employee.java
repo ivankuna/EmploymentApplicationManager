@@ -1,7 +1,7 @@
 package hr.betaSoft.model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import hr.betaSoft.security.secModel.User;
+import hr.betaSoft.security.model.User;
 import hr.betaSoft.tools.FormTracker;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

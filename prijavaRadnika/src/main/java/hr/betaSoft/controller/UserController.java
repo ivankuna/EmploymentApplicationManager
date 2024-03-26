@@ -1,16 +1,11 @@
 package hr.betaSoft.controller;
 
-import hr.betaSoft.model.Employee;
 import hr.betaSoft.security.exception.UserNotFoundException;
-import hr.betaSoft.security.secModel.User;
-import hr.betaSoft.security.secService.UserService;
+import hr.betaSoft.security.model.User;
+import hr.betaSoft.security.service.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.Valid;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -20,10 +15,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.lang.annotation.Annotation;
-import java.lang.reflect.Field;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
 
 @Controller

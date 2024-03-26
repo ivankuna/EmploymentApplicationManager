@@ -3,8 +3,8 @@ package hr.betaSoft.controller;
 import hr.betaSoft.exception.EmployeeNotFoundException;
 import hr.betaSoft.model.Employee;
 import hr.betaSoft.security.exception.UserNotFoundException;
-import hr.betaSoft.security.secModel.User;
-import hr.betaSoft.security.secService.UserService;
+import hr.betaSoft.security.model.User;
+import hr.betaSoft.security.service.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.*;
@@ -95,8 +95,6 @@ public class EmployeeController {
                 columnList.add(new Column("S", statusField, "id", statusField));
             }
         } else {
-
-
             columnList.add(new Column("OIB", "oib", "id", statusField));
             columnList.add(new Column("Ime", "firstName", "id", statusField));
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
@@ -115,70 +113,6 @@ public class EmployeeController {
                 columnList.add(new Column("PPP", "updateSent", "id", statusField));
                 columnList.add(new Column("POD", "signOutSent", "id", statusField));
             }
-
-//            //// SVE KOLONE ////
-//            columnList.add(new Column("Spol", "gender", "id"));
-//            columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
-//            columnList.add(new Column("Adresa", "address", "id"));
-//            columnList.add(new Column("Grad", "city", "id"));
-//            columnList.add(new Column("Stvarna stručna sprema", "professionalQualification", "id"));
-//            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));
-//            columnList.add(new Column("IBAN - tekući račun - redovni", "ibanRegular", "id"));
-//            columnList.add(new Column("IBAN - tekući račun - zaštićeni", "ibanProtected", "id"));
-//            columnList.add(new Column("Radno mjesto", "employmentPosition", "id"));
-//            columnList.add(new Column("Mjesto rada - Grad", "cityOfEmployment", "id"));
-//            columnList.add(new Column("Potrebna stručna sprema", "requiredProfessionalQualification", "id"));
-//            columnList.add(new Column("Ugovor o radu", "employmentContract", "id"));
-//            columnList.add(new Column("Razlog - na određeno", "reasonForDefinite", "id"));
-//            columnList.add(new Column("Dodatni radi", "additionalWork", "id"));
-//            columnList.add(new Column("Dodatni rad - sati", "additionalWorkHours", "id"));
-//            columnList.add(new Column("Radno vrijeme", "workingHours", "id"));
-//            columnList.add(new Column("Sati nepuno", "hoursForPartTime", "id"));
-//            columnList.add(new Column("Neradni dan(i) u tjednu", "nonWorkingDays", "id"));
-//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
-//            columnList.add(new Column("Datum odjave - za određeno", "dateOfSignOut", "id"));
-//            columnList.add(new Column("Iznos osnovne plaće", "basicSalary", "id"));
-//            columnList.add(new Column("Bruto / Neto", "salaryType", "id"));
-//            columnList.add(new Column("Strani državljanin", "foreignNational", "id"));
-//            columnList.add(new Column("Radna dozvola vrijedi do", "expiryDateOfWorkPermit", "id"));
-//            columnList.add(new Column("Umirovljenik", "retiree", "id"));
-//            columnList.add(new Column("Mlađi od 30 godina", "youngerThanThirty", "id"));
-//            columnList.add(new Column("Prvo zaposlenje", "firstEmployment", "id"));
-//            columnList.add(new Column("Invalid", "disability", "id"));
-//            columnList.add(new Column("Napomena", "noteSignUp", "id"));
-
-
-//
-//            //// KOLONE ZA ODJAVU ////
-//            columnList.add(new Column("Status", statusField, "id"));
-//            columnList.add(new Column("OIB", "oib", "id"));
-//            columnList.add(new Column("Ime", "firstName", "id"));
-//            columnList.add(new Column("Prezime", "lastName", "id"));
-//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
-//            columnList.add(new Column("Datum zadnje promjene", "dateOfUpdate", "id"));
-//            columnList.add(new Column("Datum odjave - iz Prijave", "dateOfSignOut", "id"));
-//            columnList.add(new Column("Datum odjave - stvarni", "dateOfSignOutSentReal", "id"));
-//            columnList.add(new Column("Razlog odjave", "reasonForSignOut", "id"));
-//            columnList.add(new Column("Napomena", "noteSignOut", "id"));
-//
-//            //// KOLONE ZA PROMJENU ////
-//            columnList.add(new Column("Status", statusField, "id"));
-//            columnList.add(new Column("OIB", "oib", "id"));
-//            columnList.add(new Column("Ime", "firstName", "id"));
-//            columnList.add(new Column("Prezime", "lastName", "id"));
-//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
-//            columnList.add(new Column("Datum zadnje promjene", "dateOfUpdate", "id"));
-//            columnList.add(new Column("Datum promjene", "dateOfUpdateSentReal", "id"));
-//            columnList.add(new Column("Razlog promjene", "reasonForUpdate", "id"));
-//            columnList.add(new Column("Napomena", "noteSignOut", "id"));
-
-//            //// RAČUNALNO GENERIRANE KOLONE ZA DATUME I VRIJEME ////
-//            columnList.add(new Column("Datum prijave", "dateOfSignUpSent", "id"));
-//            columnList.add(new Column("Vrijeme prijave", "timeOfSignUpSent", "id"));
-//            columnList.add(new Column("Datum odjave", "dateOfSignOutSent", "id"));
-//            columnList.add(new Column("Vrijeme odjave", "timeOfSignOutSent", "id"));
-//            columnList.add(new Column("Datum promjene", "dateOfUpdateSent", "id"));
-//            columnList.add(new Column("Vrijeme promjene", "timeOfUpdateSent", "id"));
         }
 
         User authenticatedUser = userService.findById(UserIdTracker.getUserId());
@@ -326,18 +260,14 @@ public class EmployeeController {
     @GetMapping("/employees/new-update/{oib}")
     public String showAddFilledForm(@PathVariable("oib") String oib, Model model) throws IllegalAccessException {
 
-//        Employee employee = (Employee) model.getAttribute("employee");
-
         Employee employee = new Employee();
-//        Employee tempEmployee = employeeService.findFirstByOib(oib);
         Employee tempEmployee = employeeService.findFirstByOibOrderByDateOfUpdateDesc(oib);
-        if (tempEmployee != null)
-        {
+        if (tempEmployee != null) {
             employee.setOib(tempEmployee.getOib());
             employee.setFirstName(tempEmployee.getFirstName());
             employee.setLastName(tempEmployee.getLastName());
             employee.setDateOfSignUp(tempEmployee.getDateOfSignUp());
-            employee.setDateOfUpdate(tempEmployee.getDateOfUpdate());
+            employee.setDateOfUpdate(tempEmployee.getDateOfUpdateReal());
             employee.setDateOfSignOut(tempEmployee.getDateOfSignOut());
         }
 
@@ -588,6 +518,19 @@ public class EmployeeController {
     @GetMapping("/employees/appsend/{id}")
     public String sendEmployeeMail(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
+        Employee employeeToSend = new Employee();
+
+        boolean success = true;
+
+        File pdfDir = new File("prijavaRadnika\\pdf");
+
+        if (!pdfDir.exists()) {
+            boolean dirCreated = pdfDir.mkdir();
+            if (!dirCreated) {
+                return "redirect:/employees/show";
+            }
+        }
+
         String messageTag = switch (FormTracker.getFormId()) {
             case 1 -> "prijavu";
             case 2 -> "promjenu podataka";
@@ -597,7 +540,7 @@ public class EmployeeController {
 
         try {
 
-            Employee employeeToSend = employeeService.findById(id);
+            employeeToSend = employeeService.findById(id);
             List<String> emptyAttributes = employeeToSend.hasEmptyAttributes(FormTracker.getFormId());
 
             if (!emptyAttributes.isEmpty()) {
@@ -644,7 +587,8 @@ public class EmployeeController {
                 employeeToSend.setUpdateSent(true);
                 employeeToSend.setDateOfUpdateSent(date);
                 employeeToSend.setTimeOfUpdateSent(time);
-                employeeToSend.setDateOfUpdate(employeeToSend.getDateOfUpdateReal());
+                // test
+//                employeeToSend.setDateOfUpdate(employeeToSend.getDateOfUpdateReal());
                 for (Employee employee : employees) {
                     if (employee.isUpdateSent() && !employee.equals(employeeToSend)) {
                         counter++;
@@ -652,8 +596,6 @@ public class EmployeeController {
                 }
                 employeeToSend.setNumUpdate(counter + 1);
             }
-
-            employeeService.saveEmployee(employeeToSend);
 
             String employeeName = employeeToSend.getFirstName() + " " + employeeToSend.getLastName();
             String mailRecipient = employeeToSend.getUser().getEmailToSend();
@@ -670,18 +612,22 @@ public class EmployeeController {
                     employeeToSend.getUser().getAddress() + " \n" +
                     employeeToSend.getUser().getCity()+ " \n"  ;
 
-                    // ovdje samo kreirati pdf i putanju proslijediti u mail za attachment
-                    String pdfFilePath = createAppPdf(id, model, ra, response);
+            // ovdje samo kreirati pdf i putanju proslijediti u mail za attachment
+            String pdfFilePath = createAppPdf(id, model, ra, response);
 
             SendMail.sendMail(mailRecipient, mailSubject, mailText, pdfFilePath);
             ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
-
-        } catch (EmployeeNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
+        } catch (Exception e) {
+            success = false;
+            ra.addFlashAttribute("message", "Slanje naloga nije uspjelo. Kontaktirajte podršku.");
         }
+
+        if (success) {
+            employeeService.saveEmployee(employeeToSend);
+        }
+
         return "redirect:/employees/show";
     }
-
 
     @GetMapping("employees/user/update/{id}")
     public String showEditUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
@@ -791,10 +737,6 @@ public class EmployeeController {
         return "page-not-found";
     }
 
-
-
-
-
     @Autowired
     private TemplateEngine templateEngine;
 
@@ -830,7 +772,6 @@ public class EmployeeController {
     public String createAppPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         try {
-
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
 
             Employee employee = employeeService.findById(id);
@@ -841,28 +782,28 @@ public class EmployeeController {
             String appOrderDate = "";
             String name = "";
             String year = "";
-            boolean appSend = false;
+
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
                 appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
-                name = "Prijava-" + id.toString() + "-" + employee.getNumSignUp();
+                name = "Prijava-" + id + "-" + employee.getNumSignUp();
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignOutSent = employee.getDateOfSignOutSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
                 appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
-                name = "Odjava-" + id.toString() + "-" + employee.getNumSignOut();
+                name = "Odjava-" + id + "-" + employee.getNumSignOut();
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
                 appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
-                name = "Promjena-" + id.toString() + "-" + employee.getNumUpdate();
+                name = "Promjena-" + id + "-" + employee.getNumUpdate();
 
             }
 

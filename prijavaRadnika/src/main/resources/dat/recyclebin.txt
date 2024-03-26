@@ -1,0 +1,65 @@
+
+
+//            //// SVE KOLONE ////
+//            columnList.add(new Column("Spol", "gender", "id"));
+//            columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
+//            columnList.add(new Column("Adresa", "address", "id"));
+//            columnList.add(new Column("Grad", "city", "id"));
+//            columnList.add(new Column("Stvarna stručna sprema", "professionalQualification", "id"));
+//            columnList.add(new Column("Naziv najviše završene škole", "highestLevelOfEducation", "id"));
+//            columnList.add(new Column("IBAN - tekući račun - redovni", "ibanRegular", "id"));
+//            columnList.add(new Column("IBAN - tekući račun - zaštićeni", "ibanProtected", "id"));
+//            columnList.add(new Column("Radno mjesto", "employmentPosition", "id"));
+//            columnList.add(new Column("Mjesto rada - Grad", "cityOfEmployment", "id"));
+//            columnList.add(new Column("Potrebna stručna sprema", "requiredProfessionalQualification", "id"));
+//            columnList.add(new Column("Ugovor o radu", "employmentContract", "id"));
+//            columnList.add(new Column("Razlog - na određeno", "reasonForDefinite", "id"));
+//            columnList.add(new Column("Dodatni radi", "additionalWork", "id"));
+//            columnList.add(new Column("Dodatni rad - sati", "additionalWorkHours", "id"));
+//            columnList.add(new Column("Radno vrijeme", "workingHours", "id"));
+//            columnList.add(new Column("Sati nepuno", "hoursForPartTime", "id"));
+//            columnList.add(new Column("Neradni dan(i) u tjednu", "nonWorkingDays", "id"));
+//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
+//            columnList.add(new Column("Datum odjave - za određeno", "dateOfSignOut", "id"));
+//            columnList.add(new Column("Iznos osnovne plaće", "basicSalary", "id"));
+//            columnList.add(new Column("Bruto / Neto", "salaryType", "id"));
+//            columnList.add(new Column("Strani državljanin", "foreignNational", "id"));
+//            columnList.add(new Column("Radna dozvola vrijedi do", "expiryDateOfWorkPermit", "id"));
+//            columnList.add(new Column("Umirovljenik", "retiree", "id"));
+//            columnList.add(new Column("Mlađi od 30 godina", "youngerThanThirty", "id"));
+//            columnList.add(new Column("Prvo zaposlenje", "firstEmployment", "id"));
+//            columnList.add(new Column("Invalid", "disability", "id"));
+//            columnList.add(new Column("Napomena", "noteSignUp", "id"));
+
+
+//
+//            //// KOLONE ZA ODJAVU ////
+//            columnList.add(new Column("Status", statusField, "id"));
+//            columnList.add(new Column("OIB", "oib", "id"));
+//            columnList.add(new Column("Ime", "firstName", "id"));
+//            columnList.add(new Column("Prezime", "lastName", "id"));
+//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
+//            columnList.add(new Column("Datum zadnje promjene", "dateOfUpdate", "id"));
+//            columnList.add(new Column("Datum odjave - iz Prijave", "dateOfSignOut", "id"));
+//            columnList.add(new Column("Datum odjave - stvarni", "dateOfSignOutSentReal", "id"));
+//            columnList.add(new Column("Razlog odjave", "reasonForSignOut", "id"));
+//            columnList.add(new Column("Napomena", "noteSignOut", "id"));
+//
+//            //// KOLONE ZA PROMJENU ////
+//            columnList.add(new Column("Status", statusField, "id"));
+//            columnList.add(new Column("OIB", "oib", "id"));
+//            columnList.add(new Column("Ime", "firstName", "id"));
+//            columnList.add(new Column("Prezime", "lastName", "id"));
+//            columnList.add(new Column("Datum prijave", "dateOfSignUp", "id"));
+//            columnList.add(new Column("Datum zadnje promjene", "dateOfUpdate", "id"));
+//            columnList.add(new Column("Datum promjene", "dateOfUpdateSentReal", "id"));
+//            columnList.add(new Column("Razlog promjene", "reasonForUpdate", "id"));
+//            columnList.add(new Column("Napomena", "noteSignOut", "id"));
+
+//            //// RAČUNALNO GENERIRANE KOLONE ZA DATUME I VRIJEME ////
+//            columnList.add(new Column("Datum prijave", "dateOfSignUpSent", "id"));
+//            columnList.add(new Column("Vrijeme prijave", "timeOfSignUpSent", "id"));
+//            columnList.add(new Column("Datum odjave", "dateOfSignOutSent", "id"));
+//            columnList.add(new Column("Vrijeme odjave", "timeOfSignOutSent", "id"));
+//            columnList.add(new Column("Datum promjene", "dateOfUpdateSent", "id"));
+//            columnList.add(new Column("Vrijeme promjene", "timeOfUpdateSent", "id"));

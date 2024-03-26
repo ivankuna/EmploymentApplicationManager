@@ -1,7 +1,7 @@
 package hr.betaSoft.repository;
 
 import hr.betaSoft.model.Employee;
-import hr.betaSoft.security.secModel.User;
+import hr.betaSoft.security.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;

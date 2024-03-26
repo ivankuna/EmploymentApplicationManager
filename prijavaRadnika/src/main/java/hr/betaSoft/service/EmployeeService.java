@@ -1,7 +1,7 @@
 package hr.betaSoft.service;
 
 import hr.betaSoft.model.Employee;
-import hr.betaSoft.security.secModel.User;
+import hr.betaSoft.security.model.User;
 
 import java.util.List;
 
