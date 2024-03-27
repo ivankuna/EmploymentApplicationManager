@@ -74,9 +74,6 @@ public class MainController {
             return "login";
         }
 
-
-
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
@@ -129,9 +126,4 @@ public class MainController {
             return "page-not-found";
         }
     }
-
-//    @GetMapping("/employees/test")
-//    public String testDatuma() {
-//        return "test";
-//    }
 }

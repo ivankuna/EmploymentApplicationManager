@@ -25,6 +25,7 @@ import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.sql.Date;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
@@ -61,9 +62,11 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
         boolean isAdmin = false;
-        String statusField = "signUpSent";
-        String datumField = "dateOfSignUp";
-        String datumApp = "dateOfSignUpSent";
+        String statusField = "";
+        String datumField = "";
+        String vrijemeField = "";
+        String datumApp = "";
+        String appNum = "";
 
         if (userService.getAuthenticatedUser().getId() == UserIdTracker.getADMIN_ID()) {
             isAdmin = true;
@@ -71,15 +74,23 @@ public class EmployeeController {
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 statusField = "signUpSent";
                 datumField = "dateOfSignUpSent";
+                vrijemeField = "timeOfSignUpSent";
                 datumApp = "dateOfSignUp";
+                appNum = "numSignUp";
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 statusField = "signOutSent";
                 datumField = "dateOfSignOutSent";
+                vrijemeField = "timeOfSignOutSent";
                 datumApp = "dateOfSignOutReal";
+                appNum = "numSignOut";
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 statusField = "updateSent";
                 datumField = "dateOfUpdateSent";
+                vrijemeField = "timeOfUpdateSent";
                 datumApp = "dateOfUpdateReal";
+                appNum = "numUpdate";
+            } else {
+                System.out.println("|| Error in showEmployees() ||");
             }
         }
 
@@ -95,19 +106,22 @@ public class EmployeeController {
                 columnList.add(new Column("S", statusField, "id", statusField));
             }
         } else {
-            columnList.add(new Column("OIB", "oib", "id", statusField));
-            columnList.add(new Column("Ime", "firstName", "id", statusField));
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
-            columnList.add(new Column("Datum", datumApp, "id", statusField));
-            columnList.add(new Column("Poslano", datumField, "id", statusField));
+            columnList.add(new Column("Ime", "firstName", "id", statusField));
+            columnList.add(new Column("OIB", "oib", "id", statusField));
+            columnList.add(new Column("Broj naloga", appNum, "id", statusField));
+            columnList.add(new Column("Datum naloga", datumApp, "id", statusField));
+            columnList.add(new Column("Datum slanja", datumField, "id", statusField));
+            columnList.add(new Column("Vrijeme slanja", vrijemeField, "id", statusField));
             if (isAdmin) {
                 columnList.add(new Column("PR", "fromSignUp", "id", statusField));
                 columnList.add(new Column("PP", "fromUpdate", "id", statusField));
                 columnList.add(new Column("OD", "fromSignOut", "id", statusField));
 
-            } else {
-                columnList.add(new Column("Status", statusField, "id", statusField));
             }
+//            else {
+//                columnList.add(new Column("Status", statusField, "id", statusField));
+//            }
             if (isAdmin) {
                 columnList.add(new Column("PPR", "signUpSent", "id", statusField));
                 columnList.add(new Column("PPP", "updateSent", "id", statusField));
@@ -317,7 +331,7 @@ public class EmployeeController {
             String pathSave = "";
             String sendLink = "";
             String title = "";
-            String  script = "/js/script-sent-form-employees.js";
+            String script = "/js/script-sent-form-employees.js";
             boolean appSend = false;
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
@@ -563,12 +577,16 @@ public class EmployeeController {
             List<Employee> employees = userService.findById(UserIdTracker.getUserId()).getEmployees();
             int counter = 0;
 
+            LocalDate currentDate = LocalDate.now();
+            LocalDate firstDayOfYear = LocalDate.of(currentDate.getYear(), 1, 1);
+            Date firstDayOfYearSql = Date.valueOf(firstDayOfYear);
+
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 employeeToSend.setSignUpSent(true);
                 employeeToSend.setDateOfSignUpSent(date);
                 employeeToSend.setTimeOfSignUpSent(time);
                 for (Employee employee : employees) {
-                    if (employee.isSignUpSent() && !employee.equals(employeeToSend)) {
+                    if (employee.isSignUpSent() && !employee.equals(employeeToSend) && employee.getDateOfSignUpSent().after(firstDayOfYearSql)) {
                         counter++;
                     }
                 }
@@ -578,7 +596,7 @@ public class EmployeeController {
                 employeeToSend.setDateOfSignOutSent(date);
                 employeeToSend.setTimeOfSignOutSent(time);
                 for (Employee employee : employees) {
-                    if (employee.isSignOutSent() && !employee.equals(employeeToSend)) {
+                    if (employee.isSignOutSent() && !employee.equals(employeeToSend) && employee.getDateOfSignOutSent().after(firstDayOfYearSql)) {
                         counter++;
                     }
                 }
@@ -587,10 +605,8 @@ public class EmployeeController {
                 employeeToSend.setUpdateSent(true);
                 employeeToSend.setDateOfUpdateSent(date);
                 employeeToSend.setTimeOfUpdateSent(time);
-                // test
-//                employeeToSend.setDateOfUpdate(employeeToSend.getDateOfUpdateReal());
                 for (Employee employee : employees) {
-                    if (employee.isUpdateSent() && !employee.equals(employeeToSend)) {
+                    if (employee.isUpdateSent() && !employee.equals(employeeToSend) && employee.getDateOfUpdateSent().after(firstDayOfYearSql)) {
                         counter++;
                     }
                 }
@@ -610,7 +626,7 @@ public class EmployeeController {
                     "" + " \n" +
                     employeeToSend.getUser().getCompany() + " \n" +
                     employeeToSend.getUser().getAddress() + " \n" +
-                    employeeToSend.getUser().getCity()+ " \n"  ;
+                    employeeToSend.getUser().getCity() + " \n";
 
             // ovdje samo kreirati pdf i putanju proslijediti u mail za attachment
             String pdfFilePath = createAppPdf(id, model, ra, response);
@@ -726,7 +742,6 @@ public class EmployeeController {
             model.addAttribute("dataList", dataList);
 
             return "app-html";
-
 
 
         } catch (EmployeeNotFoundException e) {
