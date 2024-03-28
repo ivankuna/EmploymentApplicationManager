@@ -74,13 +74,48 @@ public class UserController {
         return "table";
     }
 
-//    @GetMapping("/users/employees/show/{id}")
-//    public String showEmployeesFromUsers(@PathVariable Long id) {
-//
-//        UserIdTracker.setUserId(id);
-//
-//        return "redirect:/employees/show";
-//    }
+    @GetMapping("/users/select")
+    public String showUsersForSelection(Model model, HttpServletRequest request) {
+
+        DeviceDetector deviceDetector = new DeviceDetector();
+        boolean isMobile = deviceDetector.isMobileDevice(request);
+
+        List<Column> columnList = new ArrayList<>();
+
+        if (isMobile) {
+            columnList.add(new Column("Tvrtka", "company", "id",""));
+            columnList.add(new Column("Korisnik", "username", "id",""));
+            columnList.add(new Column("Licenca", "dateOfUserAccountExpiry", "id",""));
+
+        } else {
+            columnList.add(new Column("ID", "id", "id",""));
+            columnList.add(new Column("Korisničko ime", "username", "id",""));
+            columnList.add(new Column("OIB", "oib", "id",""));
+            columnList.add(new Column("Naziv tvrtke", "company", "id",""));
+            columnList.add(new Column("Adresa", "address", "id",""));
+            columnList.add(new Column("Grad", "city", "id",""));
+            columnList.add(new Column("Osoba", "name", "id",""));
+            columnList.add(new Column("Telefon", "telephone", "id",""));
+            columnList.add(new Column("e-mail korisnika", "email", "id",""));
+            columnList.add(new Column("e-mail primatelja naloga", "emailToSend", "id",""));
+            columnList.add(new Column("Prikaz svih naloga", "showAllApplications", "id",""));
+            columnList.add(new Column("Datum licence", "dateOfUserAccountExpiry", "id",""));
+        }
+
+        List<User> userList = userService.findAll();
+        model.addAttribute("title", "Popis korisnika");
+        model.addAttribute("columnList", columnList);
+        model.addAttribute("path", "/users");
+        model.addAttribute("dataList", userList);
+        model.addAttribute("updateLink", "/users/employees/show/{id}");
+        model.addAttribute("tableName", "users");
+        model.addAttribute("script", "/js/script-table-users.js");
+        model.addAttribute("showLink", "");
+        model.addAttribute("pdfLink", "");
+        model.addAttribute("deleteLink", "");
+
+        return "table";
+    }
 
     @GetMapping("/users/new")
     public String showAddForm(Model model) {

@@ -5,7 +5,6 @@ import hr.betaSoft.security.model.User;
 import hr.betaSoft.security.service.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.FormTracker;
-import hr.betaSoft.tools.UserIdTracker;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -77,7 +76,7 @@ public class MainController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        UserIdTracker.setUserId(userService.getAuthenticatedUser().getId());
+//        UserIdTracker.setUserId(userService.getAuthenticatedUser().getId());
         FormTracker.setFormId(FormTracker.getSIGN_UP());
 
         List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
