@@ -108,55 +108,27 @@ public class EmployeeController {
         }
 
         User authenticatedUser = userService.getAuthenticatedUser();
-
-        List<Employee> employeeListTemp = employeeService.findByUser(authenticatedUser);
         List<Employee> employeeList = new ArrayList<>();
 
         if (!authenticatedUser.isShowAllApplications()) {
-            for (Employee employee : employeeListTemp) {
-                if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-                    if (!employee.isSignUpSent()) {
-                        employeeList.add(employee);
-                    }
-                } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-                    if (!employee.isSignOutSent()) {
-                        employeeList.add(employee);
-                    }
-                } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-                    if (!employee.isUpdateSent()) {
-                        employeeList.add(employee);
-                    }
-                }
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                employeeList = employeeService.findByUserAndSignUpSentAndFromSignUp(authenticatedUser, false, true);
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                employeeList = employeeService.findByUserAndSignOutSentAndFromSignOut(authenticatedUser, false, true);
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                employeeList = employeeService.findByUserAndUpdateSentAndFromUpdate(authenticatedUser, false, true);
             }
         } else {
-            employeeList = employeeListTemp;
+            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+                employeeList = employeeService.findByUserAndFromSignUp(authenticatedUser, true);
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                employeeList = employeeService.findByUserAndFromSignOut(authenticatedUser, true);
+            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+                employeeList = employeeService.findByUserAndFromUpdate(authenticatedUser, true);
+            }
         }
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-            List<Employee> employeeListFromSignUp = new ArrayList<>();
-            for (Employee employee : employeeList) {
-                if (employee.isFromSignUp()) {
-                    employeeListFromSignUp.add(employee);
-                }
-            }
-            model.addAttribute("dataList", employeeListFromSignUp);
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            List<Employee> employeeListFromSignOut = new ArrayList<>();
-            for (Employee employee : employeeList) {
-                if (employee.isFromSignOut()) {
-                    employeeListFromSignOut.add(employee);
-                }
-            }
-            model.addAttribute("dataList", employeeListFromSignOut);
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            List<Employee> employeeListFromUpdate = new ArrayList<>();
-            for (Employee employee : employeeList) {
-                if (employee.isFromUpdate()) {
-                    employeeListFromUpdate.add(employee);
-                }
-            }
-            model.addAttribute("dataList", employeeListFromUpdate);
-        }
+        model.addAttribute("dataList", employeeList);
 
         String title = "";
 
@@ -192,15 +164,15 @@ public class EmployeeController {
 
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
-            List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id),true);
+            List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
 
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-            List<Employee> employeeList = employeeService.findByUserAndSignOutSent(userService.findById(id),true);
+            List<Employee> employeeList = employeeService.findByUserAndSignOutSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
 
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
-            List<Employee> employeeList = employeeService.findByUserAndUpdateSent(userService.findById(id),true);
+            List<Employee> employeeList = employeeService.findByUserAndUpdateSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
         }
 
@@ -439,15 +411,7 @@ public class EmployeeController {
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             employee.setFromSignOut(true);
         }
-        if (checkOibExists(employee)) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
-
-            if (employee.getId() != null) {
-                return "redirect:/employees/update/" + employee.getId();
-            }
-            return "redirect:/employees/new";
-        } else if (!OibHandler.checkOib(employee.getOib())) {
+        if (!OibHandler.checkOib(employee.getOib())) {
             ra.addFlashAttribute("employee", employee);
             ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
 
@@ -542,14 +506,7 @@ public class EmployeeController {
             employee.setFromSignOut(true);
         }
 
-        if (checkOibExists(employee)) {
-            ra.addFlashAttribute("employee", employee);
-            ra.addFlashAttribute("message", "Već postoji radnik unešen s tim OIB-om.");
-            if (employee.getId() != null) {
-                return "redirect:/employees/update/" + employee.getId();
-            }
-            return "redirect:/employees/new";
-        } else if (!OibHandler.checkOib(employee.getOib())) {
+        if (!OibHandler.checkOib(employee.getOib())) {
             ra.addFlashAttribute("employee", employee);
             ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
             if (employee.getId() != null) {
@@ -567,7 +524,6 @@ public class EmployeeController {
             }
         }
 
-//        employee.setUser(userService.findById(UserIdTracker.getUserId()));
         employee.setUser(userService.getAuthenticatedUser());
 
         employeeService.saveEmployee(employee);
@@ -582,15 +538,6 @@ public class EmployeeController {
         Employee employeeToSend = new Employee();
 
         boolean success = true;
-
-        File pdfDir = new File("prijavaRadnika\\pdf");
-
-        if (!pdfDir.exists()) {
-            boolean dirCreated = pdfDir.mkdir();
-            if (!dirCreated) {
-                return "redirect:/employees/show";
-            }
-        }
 
         String messageTag = switch (FormTracker.getFormId()) {
             case 1 -> "prijavu";
@@ -621,7 +568,6 @@ public class EmployeeController {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm");
             String time = currentTime.format(formatter);
 
-//            List<Employee> employees = userService.findById(UserIdTracker.getUserId()).getEmployees();
             List<Employee> employees = userService.getAuthenticatedUser().getEmployees();
 
             int counter = 0;
@@ -804,10 +750,20 @@ public class EmployeeController {
     @Autowired
     private TemplateEngine templateEngine;
 
-    @GetMapping("/employees/pdf/{id}")
-    public void showEmployeePdf(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
-
+    public void showPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+        String message = null;
         try {
+
+            message = "";
+
+            File pdfDir = new File("prijavaRadnika\\pdf");
+
+            if (!pdfDir.exists()) {
+                boolean dirCreated = pdfDir.mkdir();
+                if (!dirCreated) {
+                    message = "Slanje naloga nije uspjelo. Kontaktirajte podršku.";
+                }
+            }
 
             String pdfFilePath = createAppPdf(id, model, ra, response);
 
@@ -826,40 +782,19 @@ public class EmployeeController {
             fileInputStream.close();
             response.getOutputStream().flush();
 
-        } catch (EmployeeNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            ra.addFlashAttribute("message", message.isEmpty() ? e.getMessage() : message);
         }
+    }
+
+    @GetMapping("/employees/pdf/{id}")
+    public void showEmployeePdf(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+        showPdf(id, model, ra, response);
     }
 
     @GetMapping("/users/employees/pdf/{id}")
     public void showEmployeePdfForUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
-
-        try {
-
-            String pdfFilePath = createAppPdf(id, model, ra, response);
-
-            // Postavi odgovarajuće zaglavlje
-            response.setContentType("application/pdf");
-            response.setHeader("Content-Disposition", "inline; filename=" + pdfFilePath);
-
-            // Učitaj generirani PDF dokument
-            File pdfFile = new File(pdfFilePath);
-            FileInputStream fileInputStream = new FileInputStream(pdfFile);
-
-            // Kopiraj PDF sadržaj u odgovor
-            IOUtils.copy(fileInputStream, response.getOutputStream());
-
-            // Zatvori tokove
-            fileInputStream.close();
-            response.getOutputStream().flush();
-
-        } catch (EmployeeNotFoundException e) {
-            ra.addFlashAttribute("message", e.getMessage());
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
+        showPdf(id, model, ra, response);
     }
 
     public String createAppPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
@@ -935,17 +870,6 @@ public class EmployeeController {
         Context context = new Context();
         context.setVariables(model.asMap());
         return templateEngine.process("app-html", context);
-    }
-
-
-    private boolean checkOibExists(Employee employee) {
-
-//        Employee tempEmployee = employeeService.findByOib(employee.getOib());
-        boolean oibExist = false;
-//        if (tempEmployee != null && employee.getId() != tempEmployee.getId()) {
-//            oibExist = true;
-//        }
-        return oibExist;
     }
 
     private List<Data> defineDataList(long id) {
