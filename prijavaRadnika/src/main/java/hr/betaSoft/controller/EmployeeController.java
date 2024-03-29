@@ -190,29 +190,33 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
+        List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id),true);
         List<Column> columnList = new ArrayList<>();
 
+
         if (isMobile) {
-            columnList.add(new Column("Prezime", "lastName", "id", ""));
-            columnList.add(new Column("Ime", "firstName", "id", ""));
-            columnList.add(new Column("OIB", "oib", "id", ""));
+            columnList.add(new Column("Tvrtka", "company", "id", "true"));
+            columnList.add(new Column("Prezime", "lastName", "id", "true"));
+            columnList.add(new Column("Ime", "firstName", "id", "true"));
+            columnList.add(new Column("OIB", "oib", "id", "true"));
         } else {
-            columnList.add(new Column("Prezime", "lastName", "id", ""));
-            columnList.add(new Column("Ime", "firstName", "id", ""));
-            columnList.add(new Column("OIB", "oib", "id", ""));
+            columnList.add(new Column("Tvrtka", "company", "id", "true"));
+            columnList.add(new Column("Prezime", "lastName", "id", "true"));
+            columnList.add(new Column("Ime", "firstName", "id", "true"));
+            columnList.add(new Column("OIB", "oib", "id", "true"));
         }
 
         model.addAttribute("title", "Pregled radnika");
         model.addAttribute("columnList", columnList);
         model.addAttribute("path", "/users/select");
-        model.addAttribute("dataList", employeeService.findByUser(userService.findById(id)));
+        model.addAttribute("dataList", employeeList);
         model.addAttribute("tableName", "employees");
-        model.addAttribute("script", "/js/script-table-employees.js");
+        model.addAttribute("script", "/js/script-table-users.js");
         model.addAttribute("showLink", "");
-        model.addAttribute("pdfLink", "");
+        model.addAttribute("pdfLink", "/users/employees/pdf/{id}");
         model.addAttribute("deleteLink", "");
 
-        return "table";
+        return "table-apps";
     }
 
     @GetMapping("/employees/new")
@@ -744,6 +748,35 @@ public class EmployeeController {
 
     @GetMapping("/employees/pdf/{id}")
     public void showEmployeePdf(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+
+        try {
+
+            String pdfFilePath = createAppPdf(id, model, ra, response);
+
+            // Postavi odgovarajuće zaglavlje
+            response.setContentType("application/pdf");
+            response.setHeader("Content-Disposition", "inline; filename=" + pdfFilePath);
+
+            // Učitaj generirani PDF dokument
+            File pdfFile = new File(pdfFilePath);
+            FileInputStream fileInputStream = new FileInputStream(pdfFile);
+
+            // Kopiraj PDF sadržaj u odgovor
+            IOUtils.copy(fileInputStream, response.getOutputStream());
+
+            // Zatvori tokove
+            fileInputStream.close();
+            response.getOutputStream().flush();
+
+        } catch (EmployeeNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    @GetMapping("/users/employees/pdf/{id}")
+    public void showEmployeePdfForUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         try {
 

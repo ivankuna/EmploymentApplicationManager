@@ -158,6 +158,8 @@
                     </thead>
                     <tbody>
                     <tr th:each="data : ${dataList}">
+
+
                         <td th:each="column : ${columnList}" th:text="${data[column.field]}"
                             th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[columnList[0].id]})} + '\''">
                         </td>
@@ -193,6 +195,10 @@
                                 </a>
                             </div>
                         </td>
+
+
+
+
 
                     </tr>
                     </tbody>

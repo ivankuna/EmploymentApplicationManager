@@ -53,7 +53,7 @@ $(document).ready(function() {
               }
           ],
         "paging": false,
-        "searching": false,
+//        "searching": false,
         "info": false
     });
 

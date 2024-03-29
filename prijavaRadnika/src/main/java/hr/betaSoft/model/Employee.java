@@ -229,6 +229,28 @@ public class Employee {
     @Column
     private Integer numUpdate;
 
+
+    public String getCompany() {
+        // Provjera je li korisnik postavljen
+        if (user != null) {
+            // Ako je, dohvatiti company iz korisnika
+            return user.getCompany();
+        }
+        return null; // Ako korisnik nije postavljen, vratiti null
+    }
+
+    // Setter za company
+    public void setCompany(String company) {
+        // Provjera je li korisnik postavljen
+        if (user != null) {
+            // Ako je, postaviti company u korisnika
+            user.setCompany(company);
+        }
+        // Inače, ne raditi ništa, jer korisnik nije postavljen
+    }
+
+
+
     @Override
     public String toString() {
 
@@ -341,6 +363,10 @@ public class Employee {
         String result = emailTxt.replaceAll("\\bnull\\b", "").replaceAll("\\btrue\\b", "DA").replaceAll("\\bfalse\\b", "NE");
         return result;
     }
+
+
+
+
 
     public List<String> hasEmptyAttributes(int formId) {
 
