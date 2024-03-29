@@ -68,7 +68,16 @@ public class EmployeeServiceImpl implements EmployeeService {
 
     @Override
     public List<Employee> findByUserAndSignUpSent(User user, boolean signUpSent) {
-
         return employeeRepository.findByUserAndSignUpSent(user, signUpSent);
+    }
+
+    @Override
+    public List<Employee> findByUserAndSignOutSent(User user, boolean signOutSent) {
+        return employeeRepository.findByUserAndSignOutSent(user, signOutSent);
+    }
+
+    @Override
+    public List<Employee> findByUserAndUpdateSent(User user, boolean updateSent) {
+        return employeeRepository.findByUserAndUpdateSent(user, updateSent);
     }
 }

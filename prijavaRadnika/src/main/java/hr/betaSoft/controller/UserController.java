@@ -74,6 +74,8 @@ public class UserController {
         return "table";
     }
 
+
+
     @GetMapping("/users/select")
     public String showUsersForSelection(Model model, HttpServletRequest request) {
 

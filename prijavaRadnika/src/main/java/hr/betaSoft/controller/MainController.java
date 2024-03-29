@@ -125,4 +125,21 @@ public class MainController {
             return "page-not-found";
         }
     }
+
+    @GetMapping("/users/select/sign-up")
+    public String selectSignUp() {
+        FormTracker.setFormId(FormTracker.getSIGN_UP());
+        return "redirect:/users/select";
+    }
+
+    @GetMapping("/users/select/update")
+    public String selectUpdate() {
+        FormTracker.setFormId(FormTracker.getUPDATE());
+        return "redirect:/users/select";
+    }
+    @GetMapping("/users/select/sign-out")
+    public String selectSignOut() {
+        FormTracker.setFormId(FormTracker.getSIGN_OUT());
+        return "redirect:/users/select";
+    }
 }

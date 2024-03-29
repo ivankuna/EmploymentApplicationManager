@@ -190,30 +190,88 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
-        List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id),true);
+
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id),true);
+            model.addAttribute("dataList", employeeList);
+
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            List<Employee> employeeList = employeeService.findByUserAndSignOutSent(userService.findById(id),true);
+            model.addAttribute("dataList", employeeList);
+
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            List<Employee> employeeList = employeeService.findByUserAndUpdateSent(userService.findById(id),true);
+            model.addAttribute("dataList", employeeList);
+        }
+
+        String statusField = "";
+        String datumField = "";
+        String vrijemeField = "";
+        String datumApp = "";
+        String appNum = "";
+
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            statusField = "signUpSent";
+            datumField = "dateOfSignUpSent";
+            vrijemeField = "timeOfSignUpSent";
+            datumApp = "dateOfSignUp";
+            appNum = "numSignUp";
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            statusField = "signOutSent";
+            datumField = "dateOfSignOutSent";
+            vrijemeField = "timeOfSignOutSent";
+            datumApp = "dateOfSignOutReal";
+            appNum = "numSignOut";
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            statusField = "updateSent";
+            datumField = "dateOfUpdateSent";
+            vrijemeField = "timeOfUpdateSent";
+            datumApp = "dateOfUpdateReal";
+            appNum = "numUpdate";
+        } else {
+            System.out.println("|| Error in showEmployees() ||");
+        }
+
         List<Column> columnList = new ArrayList<>();
 
 
         if (isMobile) {
-            columnList.add(new Column("Tvrtka", "company", "id", "true"));
-            columnList.add(new Column("Prezime", "lastName", "id", "true"));
-            columnList.add(new Column("Ime", "firstName", "id", "true"));
-            columnList.add(new Column("OIB", "oib", "id", "true"));
+            columnList.add(new Column("Prezime", "lastName", "id", statusField));
+            columnList.add(new Column("Ime", "firstName", "id", statusField));
+//            columnList.add(new Column("OIB", "oib", "id", statusField));
+            columnList.add(new Column("Broj", appNum, "id", statusField));
+            columnList.add(new Column("Datum", datumApp, "id", statusField));
+            columnList.add(new Column("Poslano", datumField, "id", statusField));
+//            columnList.add(new Column("Vrijeme", vrijemeField, "id", statusField));
         } else {
-            columnList.add(new Column("Tvrtka", "company", "id", "true"));
-            columnList.add(new Column("Prezime", "lastName", "id", "true"));
-            columnList.add(new Column("Ime", "firstName", "id", "true"));
-            columnList.add(new Column("OIB", "oib", "id", "true"));
+            columnList.add(new Column("Tvrtka", "company", "id", statusField));
+            columnList.add(new Column("Prezime", "lastName", "id", statusField));
+            columnList.add(new Column("Ime", "firstName", "id", statusField));
+            columnList.add(new Column("OIB", "oib", "id", statusField));
+            columnList.add(new Column("Broj naloga", appNum, "id", statusField));
+            columnList.add(new Column("Datum naloga", datumApp, "id", statusField));
+            columnList.add(new Column("Datum slanja", datumField, "id", statusField));
+            columnList.add(new Column("Vrijeme slanja", vrijemeField, "id", statusField));
         }
 
-        model.addAttribute("title", "Pregled radnika");
+        String title = "";
+
+        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            title = "Nalozi za prijavu radnika";
+        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            title = "Nalozi za promjenu podataka";
+        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            title = "Nalozi za odjavu radnika";
+        }
+
+        model.addAttribute("title", title);
         model.addAttribute("columnList", columnList);
         model.addAttribute("path", "/users/select");
-        model.addAttribute("dataList", employeeList);
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/script-table-users.js");
         model.addAttribute("showLink", "");
-        model.addAttribute("pdfLink", "/users/employees/pdf/{id}");
+        model.addAttribute("updateLink", "/users/employees/pdf/{id}");
+        model.addAttribute("pdfLink", "");
         model.addAttribute("deleteLink", "");
 
         return "table-apps";
