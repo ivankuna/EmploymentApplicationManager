@@ -314,11 +314,6 @@ public class EmployeeController {
             title = "Nalog za promjenu";
         }
 
-//        if (employee != null) {
-//            model.addAttribute("class", employee);
-//        } else {
-//            model.addAttribute("class", new Employee());
-//        }
         model.addAttribute("class", employee);
         List<Data> dataList = defineDataList(0);
         model.addAttribute("dataList", dataList);
@@ -348,29 +343,20 @@ public class EmployeeController {
             String sendLink = "";
             String title = "";
             String script = "/js/script-sent-form-employees.js";
-//            boolean appSend = false;
+
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
                 sendLink = employee.isSignUpSent() ? "" : "/employees/appsend";
                 script = employee.isSignUpSent() ? "/js/script-sent-form-employees.js" : "/js/script-form-employees.js";
                 title = "Nalog za prijavu";
-//                if (employee.isSignUpSent()) {
-//                    appSend = true;
-//                }
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
                 sendLink = employee.isSignOutSent() ? "" : "/employees/appsend";
                 title = "Nalog za odjavu";
-//                if (employee.isSignOutSent()) {
-//                    appSend = true;
-//                }
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 pathSave = employee.isUpdateSent() ? "" : "/employees/save";
                 sendLink = employee.isUpdateSent() ? "" : "/employees/appsend";
                 title = "Nalog za promjenu";
-//                if (employee.isUpdateSent()) {
-//                    appSend = true;
-//                }
             }
 
             if (tempEmployee != null) {
@@ -388,7 +374,6 @@ public class EmployeeController {
             model.addAttribute("pathSave", pathSave);
             model.addAttribute("path", "/employees/show");
             model.addAttribute("sendLink", sendLink);
-
             model.addAttribute("script", script);
 
             return "form";
@@ -432,9 +417,7 @@ public class EmployeeController {
             }
         }
 
-//        employee.setUser(userService.findById(UserIdTracker.getUserId()));
         employee.setUser(userService.getAuthenticatedUser());
-
         employeeService.saveEmployee(employee);
         return "redirect:/employees/show";
     }
@@ -832,7 +815,6 @@ public class EmployeeController {
                 appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
-
             }
 
             appOrderDate = appOrder + " " + appDate;
@@ -847,8 +829,6 @@ public class EmployeeController {
             model.addAttribute("class", employee);
             List<Data> dataList = defineDataList(id);
             model.addAttribute("dataList", dataList);
-
-            // dalje je za PDF
 
             String htmlContent = renderHtml(model);
             String pdfFilePath = "prijavaRadnika/pdf/" + name + ".pdf";
@@ -887,8 +867,6 @@ public class EmployeeController {
                 fieldStatus = "false";
             }
         }
-
-        // ovdje algoritam za provjeru postoji li nalog za prijavu u tablici a forma je promjena ili odjava
         if (id != 0L) {
             if (fieldStatus == "true") {
                 if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {

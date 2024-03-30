@@ -278,10 +278,9 @@ public class UserController {
     @GetMapping("/users/shift-schedule")
     public String showShiftSchedule(Model model, HttpServletRequest request) {
 
-        model.addAttribute("title", "Veljača 2024.");
-        model.addAttribute("start", "2024-02-01");
-        model.addAttribute("end", "2024-02-29");
-
+        model.addAttribute("title", "Ožujak 2024.");
+        model.addAttribute("start", "2024-03-01");
+        model.addAttribute("end", "2024-03-31");
 
         return "shift-schedule";
     }
