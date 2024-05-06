@@ -40,6 +40,14 @@ public class MainController {
         return 0L;
     }
 
+    @GetMapping("/")
+    public String rootForm(Model model) {
+        if (userService.countUsers() != 0) {
+            return "login";
+        }
+        return showRegistrationForm(model);
+    }
+
     @GetMapping("/login")
     public String loginForm(Model model) {
         if (userService.countUsers() != 0) {

@@ -68,7 +68,7 @@ public class UserController {
         model.addAttribute("deleteLink", "/users/delete/{id}");
         model.addAttribute("showLink", "");
         model.addAttribute("tableName", "users");
-        model.addAttribute("script", "/js/script-table-users.js");
+        model.addAttribute("script", "/js/table-users.js");
 
         return "table";
     }
@@ -109,7 +109,7 @@ public class UserController {
         model.addAttribute("dataList", userList);
         model.addAttribute("updateLink", "/users/employees/show/{id}");
         model.addAttribute("tableName", "users");
-        model.addAttribute("script", "/js/script-table-users.js");
+        model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
         model.addAttribute("pdfLink", "");
         model.addAttribute("deleteLink", "");
@@ -136,7 +136,7 @@ public class UserController {
         model.addAttribute("path", "/users/show");
         model.addAttribute("sendLink", "");
         model.addAttribute("pathSaveSend", "");
-        model.addAttribute("script", "/js/script-form-users.js");
+        model.addAttribute("script", "/js/form-users.js");
         return "form";
     }
 
@@ -155,7 +155,7 @@ public class UserController {
             model.addAttribute("path", "/users/show");
             model.addAttribute("sendLink", "");
             model.addAttribute("pathSaveSend", "");
-            model.addAttribute("script", "/js/script-form-users.js");
+            model.addAttribute("script", "/js/form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());

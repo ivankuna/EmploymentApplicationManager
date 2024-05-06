@@ -2,48 +2,25 @@
 <html lang="hr"
       xmlns:th="http://www.thymeleaf.org"
       xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
->
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Sustav radnici</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     <link rel="shortcut icon" type="image/png" sizes="16x16" href="https://betastudio.hr/betasoft/png/employee-16x16.png">
+
     <link rel="shortcut icon" type="image/png" sizes="32x32" href="https://betastudio.hr/betasoft/png/employee-32x32.png">
+
     <link rel="icon" type="image/png" sizes="16x16" href="https://betastudio.hr/betasoft/png/employee-16x16.png">
+
     <link rel="icon" type="image/png" sizes="32x32" href="https://betastudio.hr/betasoft/png/employee-32x32.png">
+
     <link rel="apple-touch-icon" sizes="180x180" href="https://betastudio.hr/betasoft/png/employee-180x180.png">
-    <style>
-    * {
-         font-size: 14px;
-     }
-     .navbar {
-          position: fixed;
-          top: 0;
-          z-index: 1000;
-          width: 100%;
-          background-color: #343a40; /* siva boja */
-          padding: 10px 0;
-          padding-left: 2px;
-        }
 
-        .navbar .nav-item {
-          margin-right: 15px;
-        }
+    <link rel="stylesheet" href="css/register.css">
 
-        .navbar .nav-link {
-          color: #fff; /* bijela boja */
-          font-size: 14px;
-        }
-
-        .navbar .nav-link:hover {
-          color: #f8f9fa; /* svijetlo siva boja */
-        }
-        body {
-          padding-top: 50px; /* Dodatni padding na vrhu body elementa */
-        }
-
-    </style>
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top" style="padding-left: 5px;" th:fragment="header">

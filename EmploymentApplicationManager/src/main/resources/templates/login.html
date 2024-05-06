@@ -7,43 +7,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <title>Sustav radnici</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 
     <link rel="shortcut icon" type="image/png" sizes="16x16"
           href="https://betastudio.hr/betasoft/png/employee-16x16.png">
+
     <link rel="shortcut icon" type="image/png" sizes="32x32"
           href="https://betastudio.hr/betasoft/png/employee-32x32.png">
+
     <link rel="icon" type="image/png" sizes="16x16" href="https://betastudio.hr/betasoft/png/employee-16x16.png">
+
     <link rel="icon" type="image/png" sizes="32x32" href="https://betastudio.hr/betasoft/png/employee-32x32.png">
+
     <link rel="apple-touch-icon" sizes="180x180" href="https://betastudio.hr/betasoft/png/employee-180x180.png">
-    <style>
-         .navbar {
-          position: fixed;
-          top: 0;
-          z-index: 1000;
-          width: 100%;
-          background-color: #343a40; /* siva boja */
-          padding: 10px 0;
-          padding-left: 2px;
-        }
 
-        .navbar .nav-item {
-          margin-right: 15px;
-        }
-
-        .navbar .nav-link {
-          color: #fff;
-        }
-
-        .navbar .nav-link:hover {
-          color: #f8f9fa;
-        }
-        body {
-          padding-top: 0px;
-        }
-
-        .btn { height: 50px; }
-    </style>
+    <link rel="stylesheet" href="css/login.css">
 </head>
 <body>
 
@@ -115,23 +94,7 @@
     </div>
 </div>
 
-<script>
-  document.addEventListener('DOMContentLoaded', function() {
-    document.getElementById('togglePasswordVisibility').addEventListener('click', function() {
-        var passwordInput = document.getElementById('password');
-        var icon = document.getElementById('togglePasswordIcon');
-
-        if (passwordInput.type === 'password') {
-            passwordInput.type = 'text';
-            icon.innerHTML = '<i class="far fa-eye-slash fa-1x"></i>';
-        } else {
-            passwordInput.type = 'password';
-            icon.innerHTML = '<i class="far fa-eye fa-1x"></i>';
-        }
-    });
-});
-
-</script>
+<script type="text/javascript" src="/js/password-visibility-toggle.js"></script>
 
 </body>
 </html>

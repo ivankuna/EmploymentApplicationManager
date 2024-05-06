@@ -151,7 +151,7 @@ public class EmployeeController {
         model.addAttribute("updateLink", "/employees/update/{id}");
         model.addAttribute("showLink", "");
         model.addAttribute("tableName", "employees");
-        model.addAttribute("script", "/js/script-table-employees.js");
+        model.addAttribute("script", "/js/table-employees.js");
 
         return "table";
     }
@@ -237,7 +237,7 @@ public class EmployeeController {
         model.addAttribute("columnList", columnList);
         model.addAttribute("path", "/users/select");
         model.addAttribute("tableName", "employees");
-        model.addAttribute("script", "/js/script-table-users.js");
+        model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
         model.addAttribute("updateLink", "/users/employees/pdf/{id}");
         model.addAttribute("pdfLink", "");
@@ -256,7 +256,7 @@ public class EmployeeController {
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             title = "Nalog za prijavu";
-            script = "/js/script-form-employees.js";
+            script = "/js/form-employees.js";
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             title = "Nalog za odjavu";
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
@@ -304,7 +304,7 @@ public class EmployeeController {
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             title = "Nalog za prijavu";
-            script = "/js/script-form-employees.js";
+            script = "/js/form-employees.js";
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             title = "Nalog za odjavu";
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
@@ -339,12 +339,12 @@ public class EmployeeController {
             String pathSave = "";
             String sendLink = "";
             String title = "";
-            String script = "/js/script-sent-form-employees.js";
+            String script = "/js/sent-form-employees.js";
 
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
                 sendLink = employee.isSignUpSent() ? "" : "/employees/appsend";
-                script = employee.isSignUpSent() ? "/js/script-sent-form-employees.js" : "/js/script-form-employees.js";
+                script = employee.isSignUpSent() ? "/js/sent-form-employees.js" : "/js/form-employees.js";
                 title = "Nalog za prijavu";
             } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
@@ -626,7 +626,7 @@ public class EmployeeController {
             model.addAttribute("pathSave", "/employees/user/save");
             model.addAttribute("path", "/employees");
             model.addAttribute("sendLink", "");
-            model.addAttribute("script", "/js/script-form-users.js");
+            model.addAttribute("script", "/js/form-users.js");
             return "form";
         } catch (UserNotFoundException e) {
             ra.addFlashAttribute("message", e.getMessage());
@@ -724,7 +724,7 @@ public class EmployeeController {
         try {
             message = "";
 
-            File pdfDir = new File("src\\main\\resources\\pdf");
+            File pdfDir = new File("pdf");
 
             if (!pdfDir.exists()) {
                 boolean dirCreated = pdfDir.mkdir();
@@ -812,7 +812,7 @@ public class EmployeeController {
             model.addAttribute("dataList", dataList);
 
             String htmlContent = renderHtml(model);
-            String pdfFilePath = "src/main/resources/pdf/" + name + ".pdf";
+            String pdfFilePath = "pdf/" + name + ".pdf";
             HtmlToPdfConverter.convertHtmlContentToPdf(htmlContent, pdfFilePath);
 
             return pdfFilePath;
