@@ -25,6 +25,8 @@ public interface EmployeeService {
 
     Employee findFirstByOibOrderByDateOfUpdateDesc(String oib);
 
+    Employee findFirstByOibOrderByDateOfUpdateRealDesc(String oib);
+
     List<Employee> findByUserAndSignUpSent(User user, boolean signUpSent);
     List<Employee> findByUserAndSignOutSent(User user, boolean signOutSent);
 

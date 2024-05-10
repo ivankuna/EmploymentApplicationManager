@@ -1,6 +1,6 @@
 
 
-//            //// SVE KOLONE ////
+//            //// ALL COLUMNS ////
 //            columnList.add(new Column("Spol", "gender", "id"));
 //            columnList.add(new Column("Datum rođenja", "dateOfBirth", "id"));
 //            columnList.add(new Column("Adresa", "address", "id"));
@@ -33,7 +33,7 @@
 
 
 //
-//            //// KOLONE ZA ODJAVU ////
+//            //// SIGN OUT COLUMNS ////
 //            columnList.add(new Column("Status", statusField, "id"));
 //            columnList.add(new Column("OIB", "oib", "id"));
 //            columnList.add(new Column("Ime", "firstName", "id"));
@@ -45,7 +45,7 @@
 //            columnList.add(new Column("Razlog odjave", "reasonForSignOut", "id"));
 //            columnList.add(new Column("Napomena", "noteSignOut", "id"));
 //
-//            //// KOLONE ZA PROMJENU ////
+//            //// SIGN UP COLUMNS ////
 //            columnList.add(new Column("Status", statusField, "id"));
 //            columnList.add(new Column("OIB", "oib", "id"));
 //            columnList.add(new Column("Ime", "firstName", "id"));
@@ -56,7 +56,7 @@
 //            columnList.add(new Column("Razlog promjene", "reasonForUpdate", "id"));
 //            columnList.add(new Column("Napomena", "noteSignOut", "id"));
 
-//            //// RAČUNALNO GENERIRANE KOLONE ZA DATUME I VRIJEME ////
+//            //// AUTO GENERATED COLUMNS FOR DATE AND TIME ////
 //            columnList.add(new Column("Datum prijave", "dateOfSignUpSent", "id"));
 //            columnList.add(new Column("Vrijeme prijave", "timeOfSignUpSent", "id"));
 //            columnList.add(new Column("Datum odjave", "dateOfSignOutSent", "id"));

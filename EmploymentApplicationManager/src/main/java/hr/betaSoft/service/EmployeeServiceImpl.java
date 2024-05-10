@@ -72,6 +72,11 @@ public class EmployeeServiceImpl implements EmployeeService {
     }
 
     @Override
+    public Employee findFirstByOibOrderByDateOfUpdateRealDesc(String oib) {
+        return employeeRepository.findFirstByOibOrderByDateOfUpdateRealDesc(oib);
+    }
+
+    @Override
     public List<Employee> findByUserAndSignUpSent(User user, boolean signUpSent) {
         return employeeRepository.findByUserAndSignUpSent(user, signUpSent);
     }

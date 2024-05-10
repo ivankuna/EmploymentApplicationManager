@@ -328,12 +328,17 @@ public class EmployeeController {
         return "form";
     }
 
-
     @GetMapping("/employees/update/{id}")
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
+//            Employee employee = employeeService.findById(id);
             Employee employee = employeeService.findById(id);
+
+            Employee tempDateEmployee = employeeService.findFirstByOibOrderByDateOfUpdateDesc(employee.getOib());
+
+            employee.setDateOfUpdate(tempDateEmployee.getDateOfUpdateReal());
+
             Employee tempEmployee = (Employee) model.getAttribute("employee");
 
             String pathSave = "";
