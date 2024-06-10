@@ -227,6 +227,15 @@ public class Employee {
     @Column
     private Integer numUpdate;
 
+    private String numApp;
+
+    private Date dateApp;
+
+    private Date dateAppReal;
+
+    private String timeApp;
+
+    private boolean statusField;
 
     public String getCompany() {
 

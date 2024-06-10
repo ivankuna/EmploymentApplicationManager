@@ -42,7 +42,6 @@ public class HtmlToPdfConverter {
 
         XMLWorkerHelper worker = XMLWorkerHelper.getInstance();
 
-//        BaseFont bf = BaseFont.createFont("src/main/resources/font/Calibri-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         BaseFont bf = BaseFont.createFont("font/Calibri-Regular.ttf", BaseFont.IDENTITY_H, BaseFont.EMBEDDED);
         Font font = new Font(bf, 11);
 

@@ -168,19 +168,34 @@ public class UserController {
 
         User usernameExists = userService.findByUsername(userDto.getUsername());
 
-        if (usernameExists != null) {
-            ra.addFlashAttribute("userDto", userDto);
-            ra.addFlashAttribute("message", "Već postoji račun registriran s tim korisničkim imenom.");
+        boolean error = false;
 
-            if (userDto.getId() != null) {
-                return "redirect:/users/update/" + userDto.getId();
-            }
-            return "redirect:/users/new";
+        int errorNum = 0;
+
+        String errorMessage = "";
+
+        if (usernameExists != null) {
+            errorNum = 1;
+        } else if (!OibHandler.checkOib(userDto.getOib())) {
+            errorNum = 2;
+        } else if (userDto.getDateOfUserAccountExpiry() == null) {
+            errorNum = 3;
         }
 
-        if (!OibHandler.checkOib(userDto.getOib())) {
+        if (errorNum != 0) {
+            error = true;
+        }
+
+        errorMessage = switch (errorNum) {
+            case 1 -> "Već postoji račun registriran s tim korisničkim imenom.";
+            case 2 -> "Neispravan unos OIB-a.";
+            case 3 -> "Neispravan unos datuma isteka roka korisničkog računa.";
+            default -> "";
+        };
+
+        if (error) {
             ra.addFlashAttribute("userDto", userDto);
-            ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
+            ra.addFlashAttribute("message", errorMessage);
 
             if (userDto.getId() != null) {
                 return "redirect:/users/update/" + userDto.getId();
@@ -189,7 +204,12 @@ public class UserController {
         }
 
         if (result.hasErrors()) {
-            return showAddForm(model);
+            ra.addFlashAttribute("userDto", userDto);
+
+            if (userDto.getId() != null) {
+                return "redirect:/users/update/" + userDto.getId();
+            }
+            return "redirect:/users/new";
         }
 
         if (userDto.getId() != null) {

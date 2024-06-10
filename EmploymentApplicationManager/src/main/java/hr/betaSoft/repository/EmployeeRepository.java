@@ -38,4 +38,10 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByUserAndSignOutSentAndFromSignOut(User user, boolean signOutSent, boolean isFromSignOut);
 
     List<Employee> findByUserAndUpdateSentAndFromUpdate(User user, boolean updateSent, boolean isFromUpdate);
+
+    List<Employee> findBySignUpSent(boolean signUpSent);
+
+    List<Employee> findBySignOutSent(boolean signOutSent);
+
+    List<Employee> findByUpdateSent(boolean updateSent);
 }

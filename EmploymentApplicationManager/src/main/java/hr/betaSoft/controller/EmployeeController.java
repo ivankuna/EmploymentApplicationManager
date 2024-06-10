@@ -162,7 +162,6 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
-
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
@@ -177,31 +176,31 @@ public class EmployeeController {
         }
 
         String statusField = "";
-        String datumField = "";
-        String vrijemeField = "";
-        String datumApp = "";
+        String dateField = "";
+        String timeField = "";
+        String dateApp = "";
         String appNum = "";
 
         if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             statusField = "signUpSent";
-            datumField = "dateOfSignUpSent";
-            vrijemeField = "timeOfSignUpSent";
-            datumApp = "dateOfSignUp";
+            dateField = "dateOfSignUpSent";
+            timeField = "timeOfSignUpSent";
+            dateApp = "dateOfSignUp";
             appNum = "numSignUp";
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             statusField = "signOutSent";
-            datumField = "dateOfSignOutSent";
-            vrijemeField = "timeOfSignOutSent";
-            datumApp = "dateOfSignOutReal";
+            dateField = "dateOfSignOutSent";
+            timeField = "timeOfSignOutSent";
+            dateApp = "dateOfSignOutReal";
             appNum = "numSignOut";
         } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             statusField = "updateSent";
-            datumField = "dateOfUpdateSent";
-            vrijemeField = "timeOfUpdateSent";
-            datumApp = "dateOfUpdateReal";
+            dateField = "dateOfUpdateSent";
+            timeField = "timeOfUpdateSent";
+            dateApp = "dateOfUpdateReal";
             appNum = "numUpdate";
         } else {
-            System.out.println("Error: Class EmployeeController line: 204");
+            System.out.println("Error: EmployeeController.showEmployeesToAdmin");
         }
 
         List<Column> columnList = new ArrayList<>();
@@ -210,17 +209,17 @@ public class EmployeeController {
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
             columnList.add(new Column("Ime", "firstName", "id", statusField));
             columnList.add(new Column("Broj", appNum, "id", statusField));
-            columnList.add(new Column("Datum", datumApp, "id", statusField));
-            columnList.add(new Column("Poslano", datumField, "id", statusField));
+            columnList.add(new Column("Datum", dateApp, "id", statusField));
+            columnList.add(new Column("Poslano", dateField, "id", statusField));
         } else {
             columnList.add(new Column("Tvrtka", "company", "id", statusField));
             columnList.add(new Column("Prezime", "lastName", "id", statusField));
             columnList.add(new Column("Ime", "firstName", "id", statusField));
             columnList.add(new Column("OIB", "oib", "id", statusField));
             columnList.add(new Column("Broj naloga", appNum, "id", statusField));
-            columnList.add(new Column("Datum naloga", datumApp, "id", statusField));
-            columnList.add(new Column("Datum slanja", datumField, "id", statusField));
-            columnList.add(new Column("Vrijeme slanja", vrijemeField, "id", statusField));
+            columnList.add(new Column("Datum naloga", dateApp, "id", statusField));
+            columnList.add(new Column("Datum slanja", dateField, "id", statusField));
+            columnList.add(new Column("Vrijeme slanja", timeField, "id", statusField));
         }
 
         String title = "";
@@ -236,6 +235,85 @@ public class EmployeeController {
         model.addAttribute("title", title);
         model.addAttribute("columnList", columnList);
         model.addAttribute("path", "/users/select");
+        model.addAttribute("tableName", "employees");
+        model.addAttribute("script", "/js/table-users.js");
+        model.addAttribute("showLink", "");
+        model.addAttribute("updateLink", "/users/employees/pdf/{id}");
+        model.addAttribute("pdfLink", "");
+        model.addAttribute("deleteLink", "");
+
+        return "table-apps";
+    }
+
+    @GetMapping("/users/employees/show-all")
+    public String showAllAppsToAdmin(Model model, HttpServletRequest request) {
+
+        DeviceDetector deviceDetector = new DeviceDetector();
+        boolean isMobile = deviceDetector.isMobileDevice(request);
+
+        List<Employee> signUpList = employeeService.findBySignUpSent(true);
+        List<Employee> signOutList = employeeService.findBySignOutSent(true);
+        List<Employee> updateList = employeeService.findByUpdateSent(true);
+
+        List<Employee> employeeList = new ArrayList<>();
+        employeeList.addAll(signUpList);
+        employeeList.addAll(signOutList);
+        employeeList.addAll(updateList);
+
+        String year = "";
+        String appOrder = "";
+
+        for (Employee emp : employeeList) {
+            if (emp.getNumSignUp() != null) {
+                year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignUpSent());
+                appOrder = "Nalog: 1-" + emp.getNumSignUp() + "-" + year;
+                emp.setNumApp(appOrder);
+                emp.setDateApp(emp.getDateOfSignUp());
+                emp.setDateAppReal(emp.getDateOfSignUpSent());
+                emp.setTimeApp(emp.getTimeOfSignUpSent());
+                emp.setStatusField(emp.isSignUpSent());
+            } else if (emp.getNumUpdate() != null) {
+                year = new SimpleDateFormat("yyyy").format(emp.getDateOfUpdateSent());
+                appOrder = "Nalog: 2-" + emp.getNumUpdate() + "-" + year;
+                emp.setNumApp(appOrder);
+                emp.setDateApp(emp.getDateOfUpdate());
+                emp.setDateAppReal(emp.getDateOfUpdateSent());
+                emp.setTimeApp(emp.getTimeOfUpdateSent());
+                emp.setStatusField(emp.isUpdateSent());
+            } else {
+                year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignOutSent());
+                appOrder = "Nalog: 3-" + emp.getNumSignOut() + "-" + year;
+                emp.setNumApp(appOrder);
+                emp.setDateApp(emp.getDateOfSignOut());
+                emp.setDateAppReal(emp.getDateOfSignOutSent());
+                emp.setTimeApp(emp.getTimeOfSignOutSent());
+                emp.setStatusField(emp.isSignOutSent());
+            }
+        }
+
+        List<Column> columnList = new ArrayList<>();
+
+        if (isMobile) {
+            columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "id", "statusField"));
+            columnList.add(new Column("Broj", "numApp", "id", "statusField"));
+            columnList.add(new Column("Datum", "dateApp", "id", "statusField"));
+            columnList.add(new Column("Poslano", "dateAppReal", "id", "statusField"));
+        } else {
+            columnList.add(new Column("Tvrtka", "company", "id", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "id", "statusField"));
+            columnList.add(new Column("OIB", "oib", "id", "statusField"));
+            columnList.add(new Column("Broj naloga", "numApp", "id", "statusField"));
+            columnList.add(new Column("Datum naloga", "dateApp", "id", "statusField"));
+            columnList.add(new Column("Datum slanja", "dateAppReal", "id", "statusField"));
+            columnList.add(new Column("Vrijeme slanja", "timeApp", "id", "statusField"));
+        }
+
+        model.addAttribute("title", "Pregled svih naloga");
+        model.addAttribute("columnList", columnList);
+        model.addAttribute("dataList", employeeList);
+        model.addAttribute("path", "/users");
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
@@ -332,7 +410,6 @@ public class EmployeeController {
     public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
-//            Employee employee = employeeService.findById(id);
             Employee employee = employeeService.findById(id);
 
             Employee tempDateEmployee = employeeService.findFirstByOibOrderByDateOfUpdateDesc(employee.getOib());
