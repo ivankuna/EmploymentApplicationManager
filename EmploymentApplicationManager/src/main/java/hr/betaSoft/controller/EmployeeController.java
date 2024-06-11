@@ -248,47 +248,50 @@ public class EmployeeController {
     @GetMapping("/users/employees/show-all")
     public String showAllAppsToAdmin(Model model, HttpServletRequest request) {
 
+        FormTracker.setFormId(FormTracker.getSHOW_ALL());
+
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
-
-        List<Employee> signUpList = employeeService.findBySignUpSent(true);
-        List<Employee> signOutList = employeeService.findBySignOutSent(true);
-        List<Employee> updateList = employeeService.findByUpdateSent(true);
-
-        List<Employee> employeeList = new ArrayList<>();
-        employeeList.addAll(signUpList);
-        employeeList.addAll(signOutList);
-        employeeList.addAll(updateList);
 
         String year = "";
         String appOrder = "";
 
-        for (Employee emp : employeeList) {
-            if (emp.getNumSignUp() != null) {
-                year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignUpSent());
-                appOrder = "Nalog: 1-" + emp.getNumSignUp() + "-" + year;
-                emp.setNumApp(appOrder);
-                emp.setDateApp(emp.getDateOfSignUp());
-                emp.setDateAppReal(emp.getDateOfSignUpSent());
-                emp.setTimeApp(emp.getTimeOfSignUpSent());
-                emp.setStatusField(emp.isSignUpSent());
-            } else if (emp.getNumUpdate() != null) {
-                year = new SimpleDateFormat("yyyy").format(emp.getDateOfUpdateSent());
-                appOrder = "Nalog: 2-" + emp.getNumUpdate() + "-" + year;
-                emp.setNumApp(appOrder);
-                emp.setDateApp(emp.getDateOfUpdate());
-                emp.setDateAppReal(emp.getDateOfUpdateSent());
-                emp.setTimeApp(emp.getTimeOfUpdateSent());
-                emp.setStatusField(emp.isUpdateSent());
-            } else {
-                year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignOutSent());
-                appOrder = "Nalog: 3-" + emp.getNumSignOut() + "-" + year;
-                emp.setNumApp(appOrder);
-                emp.setDateApp(emp.getDateOfSignOut());
-                emp.setDateAppReal(emp.getDateOfSignOutSent());
-                emp.setTimeApp(emp.getTimeOfSignOutSent());
-                emp.setStatusField(emp.isSignOutSent());
-            }
+        List<Employee> employeeList = new ArrayList<>();
+
+        List<Employee> signUpList = employeeService.findBySignUpSent(true);
+        for (Employee emp : signUpList) {
+            year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignUpSent());
+            appOrder = "1-" + emp.getNumSignUp() + "-" + year;
+            emp.setNumApp(appOrder);
+            emp.setDateApp(emp.getDateOfSignUp());
+            emp.setDateAppReal(emp.getDateOfSignUpSent());
+            emp.setTimeApp(emp.getTimeOfSignUpSent());
+            emp.setStatusField(emp.isSignUpSent());
+            employeeList.add(dtoForTable(emp));
+        }
+
+        List<Employee> updateList = employeeService.findByUpdateSent(true);
+        for (Employee emp : updateList) {
+            year = new SimpleDateFormat("yyyy").format(emp.getDateOfUpdateSent());
+            appOrder = "2-" + emp.getNumUpdate() + "-" + year;
+            emp.setNumApp(appOrder);
+            emp.setDateApp(emp.getDateOfUpdate());
+            emp.setDateAppReal(emp.getDateOfUpdateSent());
+            emp.setTimeApp(emp.getTimeOfUpdateSent());
+            emp.setStatusField(emp.isUpdateSent());
+            employeeList.add(dtoForTable(emp));
+        }
+
+        List<Employee> signOutList = employeeService.findBySignOutSent(true);
+        for (Employee emp : signOutList) {
+            year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignOutSent());
+            appOrder = "3-" + emp.getNumSignOut() + "-" + year;
+            emp.setNumApp(appOrder);
+            emp.setDateApp(emp.getDateOfSignOut());
+            emp.setDateAppReal(emp.getDateOfSignOutSent());
+            emp.setTimeApp(emp.getTimeOfSignOutSent());
+            emp.setStatusField(emp.isSignOutSent());
+            employeeList.add(dtoForTable(emp));
         }
 
         List<Column> columnList = new ArrayList<>();
@@ -322,6 +325,23 @@ public class EmployeeController {
         model.addAttribute("deleteLink", "");
 
         return "table-apps";
+    }
+
+    private Employee dtoForTable(Employee tempEmployee) {
+        Employee employee = new Employee();
+
+        employee.setId(tempEmployee.getId());
+        employee.setUser(tempEmployee.getUser());
+        employee.setLastName(tempEmployee.getLastName());
+        employee.setFirstName(tempEmployee.getFirstName());
+        employee.setOib(tempEmployee.getOib());
+        employee.setNumApp(tempEmployee.getNumApp());
+        employee.setDateApp(tempEmployee.getDateApp());
+        employee.setDateAppReal(tempEmployee.getDateAppReal());
+        employee.setTimeApp(tempEmployee.getTimeApp());
+        employee.setStatusField(tempEmployee.isStatusField());
+
+        return employee;
     }
 
     @GetMapping("/employees/new")
@@ -756,24 +776,23 @@ public class EmployeeController {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
-                appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
+                appOrder = "1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
                 name = "Prijava-" + id + "-" + employee.getNumSignUp();
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
-                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
-                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
-                appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
-                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
-                name = "Odjava-" + id + "-" + employee.getNumSignOut();
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
-                appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
+                appOrder = "2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
-
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
+                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
+                appOrder = "3-" + employee.getNumSignOut() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
+                name = "Odjava-" + id + "-" + employee.getNumSignOut();
             }
 
             appOrderDate = appOrder + " " + appDate;
@@ -857,27 +876,29 @@ public class EmployeeController {
             String name = "";
             String year = "";
 
+            // OVDJE IMPLEMENTIRATI SHOW-ALL FORM TRACKER LOGIKU
+
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
-                appOrder = "Nalog: 1-" + employee.getNumSignUp() + "-" + year;
+                appOrder = "1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
                 name = "Prijava-" + id + "-" + employee.getNumSignUp();
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
-                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
-                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
-                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
-                appOrder = "Nalog: 3-" + employee.getNumSignOut() + "-" + year;
-                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
-                name = "Odjava-" + id + "-" + employee.getNumSignOut();
             } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
-                appOrder = "Nalog: 2-" + employee.getNumUpdate() + "-" + year;
+                appOrder = "2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
+            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+                title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
+                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+                year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
+                appOrder = "3-" + employee.getNumSignOut() + "-" + year;
+                appDate = "Datum: " + sdf.format(employee.getDateOfSignOutSent()) + " Vrijeme: " + employee.getTimeOfSignOutSent();
+                name = "Odjava-" + id + "-" + employee.getNumSignOut();
             }
 
             appOrderDate = appOrder + " " + appDate;
