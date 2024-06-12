@@ -237,6 +237,8 @@ public class Employee {
 
     private boolean statusField;
 
+    private String idApp;
+
     public String getCompany() {
 
         if (user != null) {

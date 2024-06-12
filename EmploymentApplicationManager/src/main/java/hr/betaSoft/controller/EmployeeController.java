@@ -267,6 +267,7 @@ public class EmployeeController {
             emp.setDateAppReal(emp.getDateOfSignUpSent());
             emp.setTimeApp(emp.getTimeOfSignUpSent());
             emp.setStatusField(emp.isSignUpSent());
+            emp.setIdApp(emp.getId() + "-1");
             employeeList.add(dtoForTable(emp));
         }
 
@@ -279,6 +280,7 @@ public class EmployeeController {
             emp.setDateAppReal(emp.getDateOfUpdateSent());
             emp.setTimeApp(emp.getTimeOfUpdateSent());
             emp.setStatusField(emp.isUpdateSent());
+            emp.setIdApp(emp.getId() + "-2");
             employeeList.add(dtoForTable(emp));
         }
 
@@ -291,6 +293,7 @@ public class EmployeeController {
             emp.setDateAppReal(emp.getDateOfSignOutSent());
             emp.setTimeApp(emp.getTimeOfSignOutSent());
             emp.setStatusField(emp.isSignOutSent());
+            emp.setIdApp(emp.getId() + "-3");
             employeeList.add(dtoForTable(emp));
         }
 
@@ -737,12 +740,16 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/user/save")
-    public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) throws IllegalAccessException {
-
-        User usernameExists = userService.findByUsername(userDto.getUsername());
+    public String addUser(@ModelAttribute("userDto") UserDto userDto, BindingResult result, Model model, RedirectAttributes ra) {
 
         if (result.hasErrors()) {
-            return showAddForm(model);
+            ra.addFlashAttribute("userDto", userDto);
+            ra.addFlashAttribute("message", "Greška prilikom spremanja promjene podataka. Kontaktirajte podršku.");
+
+            if (userDto.getId() != null) {
+                return "redirect:/employees/user/update/" + userDto.getId();
+            }
+            return "redirect:/employees";
         }
 
         if (userDto.getId() != null) {
