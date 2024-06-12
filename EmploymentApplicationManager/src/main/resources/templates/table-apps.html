@@ -74,7 +74,7 @@
                     <tbody>
                     <tr th:each="data : ${dataList}">
                         <td th:each="column : ${columnList}" th:text="${data[column.field]}"
-                            th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[columnList[0].id]})} + '\''">
+                            th:onclick="'window.location.href = \'' + @{${updateLink}(id=${data[column.id]})} + '\''">
                         </td>
                         <td>
                             <div th:if="${tableName == 'users'}">

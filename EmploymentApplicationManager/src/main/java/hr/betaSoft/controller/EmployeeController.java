@@ -30,6 +30,7 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.List;
 
@@ -300,20 +301,20 @@ public class EmployeeController {
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
-            columnList.add(new Column("Ime", "firstName", "id", "statusField"));
-            columnList.add(new Column("Broj", "numApp", "id", "statusField"));
-            columnList.add(new Column("Datum", "dateApp", "id", "statusField"));
-            columnList.add(new Column("Poslano", "dateAppReal", "id", "statusField"));
+            columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
+            columnList.add(new Column("Broj", "numApp", "idApp", "statusField"));
+            columnList.add(new Column("Datum", "dateAppReal", "idApp", "statusField"));
+
         } else {
-            columnList.add(new Column("Tvrtka", "company", "id", "statusField"));
-            columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
-            columnList.add(new Column("Ime", "firstName", "id", "statusField"));
-            columnList.add(new Column("OIB", "oib", "id", "statusField"));
-            columnList.add(new Column("Broj naloga", "numApp", "id", "statusField"));
-            columnList.add(new Column("Datum naloga", "dateApp", "id", "statusField"));
-            columnList.add(new Column("Datum slanja", "dateAppReal", "id", "statusField"));
-            columnList.add(new Column("Vrijeme slanja", "timeApp", "id", "statusField"));
+            columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
+            columnList.add(new Column("OIB", "oib", "idApp", "statusField"));
+            columnList.add(new Column("Broj naloga", "numApp", "idApp", "statusField"));
+            columnList.add(new Column("Datum slanja", "dateAppReal", "idApp", "statusField"));
+            columnList.add(new Column("Vrijeme slanja", "timeApp", "idApp", "statusField"));
         }
 
         model.addAttribute("title", "Pregled svih naloga");
@@ -323,7 +324,7 @@ public class EmployeeController {
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
-        model.addAttribute("updateLink", "/users/employees/pdf/{id}");
+        model.addAttribute("updateLink", "/users/employees/show-all/pdf/{id}");
         model.addAttribute("pdfLink", "");
         model.addAttribute("deleteLink", "");
 
@@ -343,6 +344,7 @@ public class EmployeeController {
         employee.setDateAppReal(tempEmployee.getDateAppReal());
         employee.setTimeApp(tempEmployee.getTimeApp());
         employee.setStatusField(tempEmployee.isStatusField());
+        employee.setIdApp(tempEmployee.getIdApp());
 
         return employee;
     }
@@ -861,6 +863,28 @@ public class EmployeeController {
 
     @GetMapping("/employees/pdf/{id}")
     public void showEmployeePdf(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+        showPdf(id, model, ra, response);
+    }
+
+    @GetMapping("/users/employees/show-all/pdf/{id}")
+    public void showEmployeePdfForUser(@PathVariable("id") String idApp, Model model, RedirectAttributes ra, HttpServletResponse response) {
+
+        Long id = 0L;
+        Integer appType = 0;
+
+        List<String> charList = Arrays.asList(idApp.split("-"));
+
+        id = Long.valueOf(charList.get(0));
+        appType = Integer.valueOf(charList.get(1));
+
+        if (appType == 1) {
+            FormTracker.setFormId(FormTracker.getSIGN_UP());
+        } else if (appType == 2) {
+            FormTracker.setFormId(FormTracker.getUPDATE());
+        } else if (appType == 3) {
+            FormTracker.setFormId(FormTracker.getSIGN_OUT());
+        }
+
         showPdf(id, model, ra, response);
     }
 
