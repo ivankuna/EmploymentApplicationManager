@@ -269,7 +269,7 @@ public class EmployeeController {
             emp.setTimeApp(emp.getTimeOfSignUpSent());
             emp.setStatusField(emp.isSignUpSent());
             emp.setIdApp(emp.getId() + "-1");
-            employeeList.add(dtoForTable(emp));
+            employeeList.add(dtoForTable(emp, true));
         }
 
         List<Employee> updateList = employeeService.findByUpdateSent(true);
@@ -282,7 +282,7 @@ public class EmployeeController {
             emp.setTimeApp(emp.getTimeOfUpdateSent());
             emp.setStatusField(emp.isUpdateSent());
             emp.setIdApp(emp.getId() + "-2");
-            employeeList.add(dtoForTable(emp));
+            employeeList.add(dtoForTable(emp, true));
         }
 
         List<Employee> signOutList = employeeService.findBySignOutSent(true);
@@ -295,7 +295,7 @@ public class EmployeeController {
             emp.setTimeApp(emp.getTimeOfSignOutSent());
             emp.setStatusField(emp.isSignOutSent());
             emp.setIdApp(emp.getId() + "-3");
-            employeeList.add(dtoForTable(emp));
+            employeeList.add(dtoForTable(emp, true));
         }
 
         List<Column> columnList = new ArrayList<>();
@@ -306,7 +306,6 @@ public class EmployeeController {
             columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
             columnList.add(new Column("Broj", "numApp", "idApp", "statusField"));
             columnList.add(new Column("Datum", "dateAppReal", "idApp", "statusField"));
-
         } else {
             columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
             columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
@@ -331,7 +330,68 @@ public class EmployeeController {
         return "table-apps";
     }
 
-    private Employee dtoForTable(Employee tempEmployee) {
+    @GetMapping("/users/employees/show-all-not-sent")
+    public String showAllNotSentAppsToAdmin(Model model, HttpServletRequest request) {
+
+        DeviceDetector deviceDetector = new DeviceDetector();
+        boolean isMobile = deviceDetector.isMobileDevice(request);
+
+        List<Employee> employeeList = new ArrayList<>();
+
+        List<Employee> signUpList = employeeService.findByFromSignUpAndSignUpSent(true, false);
+        for (Employee emp : signUpList) {
+            emp.setDateApp(emp.getDateOfSignUp());
+            emp.setNumApp("Prijava");
+            emp.setStatusField(false);
+            employeeList.add(dtoForTable(emp, false));
+        }
+
+        List<Employee> updateList = employeeService.findByFromUpdateAndUpdateSent(true, false);
+        for (Employee emp : updateList) {
+            emp.setDateApp(emp.getDateOfUpdate());
+            emp.setNumApp("Promjena");
+            emp.setStatusField(false);
+            employeeList.add(dtoForTable(emp, false));
+        }
+
+        List<Employee> signOutList = employeeService.findByFromSignOutAndSignOutSent(true, false);
+        for (Employee emp : signOutList) {
+            emp.setDateApp(emp.getDateOfSignOut());
+            emp.setNumApp("Odjava");
+            emp.setStatusField(false);
+            employeeList.add(dtoForTable(emp, false));
+        }
+
+        List<Column> columnList = new ArrayList<>();
+
+        if (isMobile) {
+            columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
+            columnList.add(new Column("Vrsta naloga", "numApp", "idApp", "statusField"));
+        } else {
+            columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
+            columnList.add(new Column("OIB", "oib", "idApp", "statusField"));
+            columnList.add(new Column("Vrsta naloga", "numApp", "idApp", "statusField"));
+        }
+
+        model.addAttribute("title", "Pregled svih naloga u pripremi");
+        model.addAttribute("columnList", columnList);
+        model.addAttribute("dataList", employeeList);
+        model.addAttribute("path", "/users");
+        model.addAttribute("tableName", "employees");
+        model.addAttribute("script", "/js/table-users.js");
+        model.addAttribute("showLink", "");
+        model.addAttribute("updateLink", "");
+        model.addAttribute("pdfLink", "");
+        model.addAttribute("deleteLink", "");
+
+        return "table-apps";
+    }
+
+    private Employee dtoForTable(Employee tempEmployee, boolean isAppSent) {
         Employee employee = new Employee();
 
         employee.setId(tempEmployee.getId());
@@ -339,13 +399,14 @@ public class EmployeeController {
         employee.setLastName(tempEmployee.getLastName());
         employee.setFirstName(tempEmployee.getFirstName());
         employee.setOib(tempEmployee.getOib());
-        employee.setNumApp(tempEmployee.getNumApp());
-        employee.setDateApp(tempEmployee.getDateApp());
-        employee.setDateAppReal(tempEmployee.getDateAppReal());
-        employee.setTimeApp(tempEmployee.getTimeApp());
         employee.setStatusField(tempEmployee.isStatusField());
-        employee.setIdApp(tempEmployee.getIdApp());
-
+        employee.setNumApp(tempEmployee.getNumApp());
+        if (isAppSent) {
+            employee.setDateApp(tempEmployee.getDateApp());
+            employee.setDateAppReal(tempEmployee.getDateAppReal());
+            employee.setTimeApp(tempEmployee.getTimeApp());
+            employee.setIdApp(tempEmployee.getIdApp());
+        }
         return employee;
     }
 
@@ -499,6 +560,7 @@ public class EmployeeController {
         } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             employee.setFromSignOut(true);
         }
+
         if (!OibHandler.checkOib(employee.getOib())) {
             ra.addFlashAttribute("employee", employee);
             ra.addFlashAttribute("message", "Neispravan unos OIB-a.");
@@ -995,6 +1057,10 @@ public class EmployeeController {
             } else {
                 fieldEnabled = "false";
             }
+        }
+
+        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+            fieldEnabled = "false";
         }
 
         dataList.add(new Data("1.", "OIB *", "oib", "", "", "", "number-input", "true", fieldEnabled, items, "false"));

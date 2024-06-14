@@ -135,4 +135,19 @@ public class EmployeeServiceImpl implements EmployeeService {
     public List<Employee> findByUpdateSent(boolean updateSent) {
         return employeeRepository.findByUpdateSent(updateSent);
     }
+
+    @Override
+    public List<Employee> findByFromSignUpAndSignUpSent(boolean isFromSignUp, boolean signUpSent) {
+        return employeeRepository.findByFromSignUpAndSignUpSent(isFromSignUp, signUpSent);
+    }
+
+    @Override
+    public List<Employee> findByFromUpdateAndUpdateSent(boolean isFromUpdate, boolean updateSent) {
+        return employeeRepository.findByFromUpdateAndUpdateSent(isFromUpdate, updateSent);
+    }
+
+    @Override
+    public List<Employee> findByFromSignOutAndSignOutSent(boolean isFromSignOut, boolean signOutSent) {
+        return employeeRepository.findByFromSignOutAndSignOutSent(isFromSignOut, signOutSent);
+    }
 }

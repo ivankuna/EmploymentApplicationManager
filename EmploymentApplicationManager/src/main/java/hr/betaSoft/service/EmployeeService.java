@@ -49,4 +49,10 @@ public interface EmployeeService {
     List<Employee> findBySignOutSent(boolean signOutSent);
 
     List<Employee> findByUpdateSent(boolean updateSent);
+
+    List<Employee> findByFromSignUpAndSignUpSent(boolean isFromSignUp, boolean signUpSent);
+
+    List<Employee> findByFromUpdateAndUpdateSent(boolean isFromUpdate, boolean updateSent);
+
+    List<Employee> findByFromSignOutAndSignOutSent(boolean isFromSignOut, boolean signOutSent);
 }
