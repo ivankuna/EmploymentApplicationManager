@@ -40,8 +40,9 @@
         <ul class="navbar-nav ml-auto">
             <li class="nav-item">
                 <a class="nav-link d-inline-block" style="padding-right: 10px;" id="logoutLink" href="#">
-                    <i class="fas fa-user"></i>
-                    <span id="usernameMessage" style="display: none;">Prijavljeni korisnik: <span th:text="${#authentication.principal}">not found</span></span>
+                    <i class="fas fa-phone"></i>
+                    <span id="usernameMessage" style="display: none;"><span th:text="${helpMsg}">not found</span></span>
+
                 </a>
                 <a class="nav-link d-inline-block" style="padding-right: 10px;" href="/logout">
                     <i class="fas fa-sign-out-alt fa-1x"></i>
