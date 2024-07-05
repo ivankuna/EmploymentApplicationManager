@@ -969,8 +969,6 @@ public class EmployeeController {
             String name = "";
             String year = "";
 
-            // OVDJE IMPLEMENTIRATI SHOW-ALL FORM TRACKER LOGIKU
-
             if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
