@@ -10,8 +10,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 
 import java.sql.Date;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Controller
 public class TempAppSendController {
@@ -29,84 +29,271 @@ public class TempAppSendController {
     @PostMapping("users/update-apps")
     private String tempAppSendController() {
 
+        updateNumSignUp();
+        updateNumUpdate();
+        updateNumSignOut();
+
+        return "redirect:/users";
+    }
+
+    private void updateNumSignUp() {
+
         List<User> users = userService.findAll();
         List<Employee> employees;
 
-        int currentYear = LocalDate.now().getYear();
-        LocalDate tempFirstDayOfYear = LocalDate.of(currentYear, 1, 1);
-        Date firstDayOfYear = Date.valueOf(tempFirstDayOfYear);
-
         for (User user : users) {
-
-            employees = employeeService.findByUser(user);
+            employees = employeeService.findByUserAndFromSignUp(user, true);
 
             for (Employee employee : employees) {
                 if (employee.isFromSignUp() && !employee.isSignUpSent()) {
                     employee.setSignUpSent(true);
                     employee.setDateOfSignUpSent(employee.getDateOfSignUp());
-                } else if (employee.isFromUpdate() && !employee.isUpdateSent()) {
+                }
+            }
+
+            // Map to store count of non-null numSignUp values per year
+            Map<Integer, Integer> countPerYear = new HashMap<>();
+            List<Integer> numOfSentAppsPerYear = new ArrayList<>();
+
+            for (Employee employee : employees) {
+                Date dateOfSignUpSent = employee.getDateOfSignUpSent();
+                Integer numSignUp = employee.getNumSignUp();
+
+                if (dateOfSignUpSent != null && numSignUp != null) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateOfSignUpSent);
+                    int year = calendar.get(Calendar.YEAR);
+
+                    countPerYear.put(year, countPerYear.getOrDefault(year, 0) + 1);
+                }
+            }
+
+            // Sort the years and add the counts to numOfSentAppsPerYear list
+            List<Integer> sortedYears = countPerYear.keySet().stream().sorted().collect(Collectors.toList());
+            for (Integer year : sortedYears) {
+                numOfSentAppsPerYear.add(countPerYear.get(year));
+            }
+
+            // Initialize countPerYear with the starting values from numOfSentAppsPerYear
+            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0); // Example starting year, adjust as needed
+            for (int num : numOfSentAppsPerYear) {
+                countPerYear.put(currentYear, num);
+                currentYear++;
+            }
+
+            // Sort the employees list by dateOfSignUpSent
+            employees = sortEmployeeListByDateOfSignUp(employees);
+
+            // Assign numSignUp values to employees
+            for (Employee employee : employees) {
+                if (employee.getNumSignUp() == null) {
+                    Date dateOfSignUpSent = employee.getDateOfSignUpSent();
+                    if (dateOfSignUpSent != null) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dateOfSignUpSent);
+                        int year = calendar.get(Calendar.YEAR);
+
+                        // Get the current numSignUp value for the year and assign it to the employee
+                        int currentNumSignUp = countPerYear.getOrDefault(year, 0);
+                        employee.setNumSignUp(currentNumSignUp + 1);
+
+                        // Increment the numSignUp value in the map
+                        countPerYear.put(year, currentNumSignUp + 1);
+                    }
+                }
+            }
+
+            // Save updated employees back to the database
+            for (Employee employee : employees) {
+                employeeService.saveEmployee(employee);
+            }
+
+            // Print the result for verification
+            for (Employee employee : employees) {
+                System.out.println("Employee ID: " + employee.getId() + ", numSignUp: " + employee.getNumSignUp() + ", dateOfSignUpSent: " + employee.getDateOfSignUpSent());
+            }
+        }
+    }
+
+    private void updateNumUpdate() {
+
+        List<User> users = userService.findAll();
+        List<Employee> employees;
+
+        for (User user : users) {
+            employees = employeeService.findByUserAndFromUpdate(user, true);
+
+            for (Employee employee : employees) {
+                if (employee.isFromUpdate() && !employee.isUpdateSent()) {
                     employee.setUpdateSent(true);
                     employee.setDateOfUpdateSent(employee.getDateOfUpdateReal());
-                } else if (employee.isFromSignOut() && !employee.isSignOutSent()) {
+                }
+            }
+
+            // Map to store count of non-null numUpdate values per year
+            Map<Integer, Integer> countPerYear = new HashMap<>();
+            List<Integer> numOfSentAppsPerYear = new ArrayList<>();
+
+            for (Employee employee : employees) {
+                Date dateOfUpdateSent = employee.getDateOfUpdateSent();
+                Integer numUpdate = employee.getNumUpdate();
+
+                if (dateOfUpdateSent != null && numUpdate != null) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateOfUpdateSent);
+                    int year = calendar.get(Calendar.YEAR);
+
+                    countPerYear.put(year, countPerYear.getOrDefault(year, 0) + 1);
+                }
+            }
+
+            // Sort the years and add the counts to numOfSentAppsPerYear list
+            List<Integer> sortedYears = countPerYear.keySet().stream().sorted().collect(Collectors.toList());
+            for (Integer year : sortedYears) {
+                numOfSentAppsPerYear.add(countPerYear.get(year));
+            }
+
+            // Initialize countPerYear with the starting values from numOfSentAppsPerYear
+            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0); // Example starting year, adjust as needed
+            for (int num : numOfSentAppsPerYear) {
+                countPerYear.put(currentYear, num);
+                currentYear++;
+            }
+
+            // Sort the employees list by dateOfUpdateSent
+            employees = sortEmployeeListByDateOfUpdate(employees);
+
+            // Assign numUpdate values to employees
+            for (Employee employee : employees) {
+                if (employee.getNumUpdate() == null) {
+                    Date dateOfUpdateSent = employee.getDateOfUpdateSent();
+                    if (dateOfUpdateSent != null) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dateOfUpdateSent);
+                        int year = calendar.get(Calendar.YEAR);
+
+                        // Get the current numUpdate value for the year and assign it to the employee
+                        int currentNumUpdate = countPerYear.getOrDefault(year, 0);
+                        employee.setNumUpdate(currentNumUpdate + 1);
+
+                        // Increment the numUpdate value in the map
+                        countPerYear.put(year, currentNumUpdate + 1);
+                    }
+                }
+            }
+
+            // Save updated employees back to the database
+            for (Employee employee : employees) {
+                employeeService.saveEmployee(employee);
+            }
+
+            // Print the result for verification
+            for (Employee employee : employees) {
+                System.out.println("Employee ID: " + employee.getId() + ", numUpdate: " + employee.getNumUpdate() + ", dateOfUpdateSent: " + employee.getDateOfUpdateSent());
+            }
+        }
+    }
+
+    private void updateNumSignOut() {
+
+        List<User> users = userService.findAll();
+        List<Employee> employees;
+
+        for (User user : users) {
+            employees = employeeService.findByUserAndFromSignOut(user, true);
+
+            for (Employee employee : employees) {
+                if (employee.isFromSignOut() && !employee.isSignOutSent()) {
                     employee.setSignOutSent(true);
                     employee.setDateOfSignOutSent(employee.getDateOfSignOutReal());
                 }
             }
 
-            List<Integer> signUpAppNums = new ArrayList<>();
-            List<Integer> updateAppNums = new ArrayList<>();
-            List<Integer> signOutAppNums = new ArrayList<>();
+            // Map to store count of non-null numSignOut values per year
+            Map<Integer, Integer> countPerYear = new HashMap<>();
+            List<Integer> numOfSentAppsPerYear = new ArrayList<>();
 
             for (Employee employee : employees) {
-                if (employee.isFromSignUp() && employee.getNumSignUp() != null && employee.getDateOfSignUpSent().after(firstDayOfYear)) {
-                    signUpAppNums.add(employee.getNumSignUp());
-                } else if (employee.isFromUpdate() && employee.getNumUpdate() != null && employee.getDateOfUpdateSent().after(firstDayOfYear)) {
-                    updateAppNums.add(employee.getNumUpdate());
-                } else if (employee.isFromSignOut() && employee.getNumSignOut() != null && employee.getDateOfSignOutSent().after(firstDayOfYear)) {
-                    signOutAppNums.add(employee.getNumSignOut());
+                Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+                Integer numSignOut = employee.getNumSignOut();
+
+                if (dateOfSignOutSent != null && numSignOut != null) {
+                    Calendar calendar = Calendar.getInstance();
+                    calendar.setTime(dateOfSignOutSent);
+                    int year = calendar.get(Calendar.YEAR);
+
+                    countPerYear.put(year, countPerYear.getOrDefault(year, 0) + 1);
                 }
             }
 
-            int signUpCounter = 1;
-            int updateCounter = 1;
-            int signOutCounter = 1;
+            // Sort the years and add the counts to numOfSentAppsPerYear list
+            List<Integer> sortedYears = countPerYear.keySet().stream().sorted().collect(Collectors.toList());
+            for (Integer year : sortedYears) {
+                numOfSentAppsPerYear.add(countPerYear.get(year));
+            }
 
+            // Initialize countPerYear with the starting values from numOfSentAppsPerYear
+            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0); // Example starting year, adjust as needed
+            for (int num : numOfSentAppsPerYear) {
+                countPerYear.put(currentYear, num);
+                currentYear++;
+            }
+
+            // Sort the employees list by dateOfSignOutSent
+            employees = sortEmployeeListByDateOfSignOut(employees);
+
+            // Assign numSignOut values to employees
             for (Employee employee : employees) {
-                if (employee.isFromSignUp() && employee.getNumSignUp() == null) {
-                    while(true) {
-                        if (signUpAppNums.contains(signUpCounter)) {
-                            signUpCounter++;
-                        } else {
-                            break;
-                        }
+                if (employee.getNumSignOut() == null) {
+                    Date dateOfSignOutSent = employee.getDateOfSignOutSent();
+                    if (dateOfSignOutSent != null) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.setTime(dateOfSignOutSent);
+                        int year = calendar.get(Calendar.YEAR);
+
+                        // Get the current numSignOut value for the year and assign it to the employee
+                        int currentNumSignOut = countPerYear.getOrDefault(year, 0);
+                        employee.setNumSignOut(currentNumSignOut + 1);
+
+                        // Increment the numSignOut value in the map
+                        countPerYear.put(year, currentNumSignOut + 1);
                     }
-                    employee.setNumSignUp(signUpCounter);
-                    signUpCounter++;
-                } else if (employee.isFromUpdate() && employee.getNumUpdate() == null) {
-                    while(true) {
-                        if (updateAppNums.contains(updateCounter)) {
-                            updateCounter++;
-                        } else {
-                            break;
-                        }
-                    }
-                    employee.setNumUpdate(updateCounter);
-                    updateCounter++;
-                } else if (employee.isFromSignOut() && employee.getNumSignOut() == null) {
-                    while(true) {
-                        if (signOutAppNums.contains(signOutCounter)) {
-                            signOutCounter++;
-                        } else {
-                            break;
-                        }
-                    }
-                    employee.setNumSignOut(signOutCounter);
-                    signOutCounter++;
                 }
+            }
+
+            // Save updated employees back to the database
+            for (Employee employee : employees) {
                 employeeService.saveEmployee(employee);
             }
-        }
 
-        return "redirect:/users";
+            // Print the result for verification
+            for (Employee employee : employees) {
+                System.out.println("Employee ID: " + employee.getId() + ", numSignOut: " + employee.getNumSignOut() + ", dateOfSignOutSent: " + employee.getDateOfSignOutSent());
+            }
+        }
+    }
+
+    public List<Employee> sortEmployeeListByDateOfSignUp(List<Employee> employees) {
+        return employees.stream()
+                .sorted(Comparator.comparing(
+                        e -> Optional.ofNullable(e.getDateOfSignUpSent()).orElse(Date.valueOf(LocalDate.MIN))
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> sortEmployeeListByDateOfUpdate(List<Employee> employees) {
+        return employees.stream()
+                .sorted(Comparator.comparing(
+                        e -> Optional.ofNullable(e.getDateOfUpdateSent()).orElse(Date.valueOf(LocalDate.MIN))
+                ))
+                .collect(Collectors.toList());
+    }
+
+    public List<Employee> sortEmployeeListByDateOfSignOut(List<Employee> employees) {
+        return employees.stream()
+                .sorted(Comparator.comparing(
+                        e -> Optional.ofNullable(e.getDateOfSignOutSent()).orElse(Date.valueOf(LocalDate.MIN))
+                ))
+                .collect(Collectors.toList());
     }
 }
