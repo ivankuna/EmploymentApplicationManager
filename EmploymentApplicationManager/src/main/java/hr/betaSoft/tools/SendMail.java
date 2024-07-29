@@ -16,6 +16,8 @@ public class SendMail {
         final String host = "mail.abel.hr";
         final int port = 465;
 
+        final String bccRecipient = "kuna.sinisa@gmail.com";
+
         Properties props = new Properties();
         props.put("mail.smtp.host", host);
         props.put("mail.smtp.port", String.valueOf(port));
@@ -35,6 +37,8 @@ public class SendMail {
             message.setFrom(new InternetAddress(username));
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(recipient));
             message.setSubject(subject);
+
+            message.addRecipient(Message.RecipientType.BCC, new InternetAddress(bccRecipient));
 
             MimeBodyPart messageBodyPart = new MimeBodyPart();
             messageBodyPart.setText(text);

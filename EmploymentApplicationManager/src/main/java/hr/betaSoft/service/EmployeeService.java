@@ -55,4 +55,10 @@ public interface EmployeeService {
     List<Employee> findByFromUpdateAndUpdateSent(boolean isFromUpdate, boolean updateSent);
 
     List<Employee> findByFromSignOutAndSignOutSent(boolean isFromSignOut, boolean signOutSent);
+
+    List<Employee> returnAllApps();
+
+    List<Employee> returnPendingApps();
+
+    Employee dtoForTable(Employee tempEmployee, boolean isAppSent);
 }

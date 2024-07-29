@@ -6,6 +6,8 @@ import hr.betaSoft.security.model.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -149,5 +151,101 @@ public class EmployeeServiceImpl implements EmployeeService {
     @Override
     public List<Employee> findByFromSignOutAndSignOutSent(boolean isFromSignOut, boolean signOutSent) {
         return employeeRepository.findByFromSignOutAndSignOutSent(isFromSignOut, signOutSent);
+    }
+
+    public List<Employee> returnAllApps() {
+        List<Employee> employeeList = new ArrayList<>();
+
+        String year = "";
+        String appOrder = "";
+
+        List<Employee> signUpList = findBySignUpSent(true);
+        for (Employee emp : signUpList) {
+            year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignUpSent());
+            appOrder = "1-" + emp.getNumSignUp() + "-" + year;
+            emp.setNumApp(appOrder);
+            emp.setDateApp(emp.getDateOfSignUp());
+            emp.setDateAppReal(emp.getDateOfSignUpSent());
+            emp.setTimeApp(emp.getTimeOfSignUpSent());
+            emp.setStatusField(emp.isSignUpSent());
+            emp.setIdApp(emp.getId() + "-1");
+            employeeList.add(dtoForTable(emp, true));
+        }
+
+        List<Employee> updateList = findByUpdateSent(true);
+        for (Employee emp : updateList) {
+            year = new SimpleDateFormat("yyyy").format(emp.getDateOfUpdateSent());
+            appOrder = "2-" + emp.getNumUpdate() + "-" + year;
+            emp.setNumApp(appOrder);
+            emp.setDateApp(emp.getDateOfUpdate());
+            emp.setDateAppReal(emp.getDateOfUpdateSent());
+            emp.setTimeApp(emp.getTimeOfUpdateSent());
+            emp.setStatusField(emp.isUpdateSent());
+            emp.setIdApp(emp.getId() + "-2");
+            employeeList.add(dtoForTable(emp, true));
+        }
+
+        List<Employee> signOutList = findBySignOutSent(true);
+        for (Employee emp : signOutList) {
+            year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignOutSent());
+            appOrder = "3-" + emp.getNumSignOut() + "-" + year;
+            emp.setNumApp(appOrder);
+            emp.setDateApp(emp.getDateOfSignOut());
+            emp.setDateAppReal(emp.getDateOfSignOutSent());
+            emp.setTimeApp(emp.getTimeOfSignOutSent());
+            emp.setStatusField(emp.isSignOutSent());
+            emp.setIdApp(emp.getId() + "-3");
+            employeeList.add(dtoForTable(emp, true));
+        }
+
+        return employeeList;
+    }
+    public List<Employee> returnPendingApps() {
+        List<Employee> employeeList = new ArrayList<>();
+
+        List<Employee> signUpList = findByFromSignUpAndSignUpSent(true, false);
+        for (Employee emp : signUpList) {
+            emp.setDateApp(emp.getDateOfSignUp());
+            emp.setNumApp("Prijava");
+            emp.setStatusField(false);
+            employeeList.add(dtoForTable(emp, false));
+        }
+
+        List<Employee> updateList = findByFromUpdateAndUpdateSent(true, false);
+        for (Employee emp : updateList) {
+            emp.setDateApp(emp.getDateOfUpdate());
+            emp.setNumApp("Promjena");
+            emp.setStatusField(false);
+            employeeList.add(dtoForTable(emp, false));
+        }
+
+        List<Employee> signOutList = findByFromSignOutAndSignOutSent(true, false);
+        for (Employee emp : signOutList) {
+            emp.setDateApp(emp.getDateOfSignOut());
+            emp.setNumApp("Odjava");
+            emp.setStatusField(false);
+            employeeList.add(dtoForTable(emp, false));
+        }
+
+        return employeeList;
+    }
+
+    public Employee dtoForTable(Employee tempEmployee, boolean isAppSent) {
+        Employee employee = new Employee();
+
+        employee.setId(tempEmployee.getId());
+        employee.setUser(tempEmployee.getUser());
+        employee.setLastName(tempEmployee.getLastName());
+        employee.setFirstName(tempEmployee.getFirstName());
+        employee.setOib(tempEmployee.getOib());
+        employee.setStatusField(tempEmployee.isStatusField());
+        employee.setNumApp(tempEmployee.getNumApp());
+        if (isAppSent) {
+            employee.setDateApp(tempEmployee.getDateApp());
+            employee.setDateAppReal(tempEmployee.getDateAppReal());
+            employee.setTimeApp(tempEmployee.getTimeApp());
+            employee.setIdApp(tempEmployee.getIdApp());
+        }
+        return employee;
     }
 }

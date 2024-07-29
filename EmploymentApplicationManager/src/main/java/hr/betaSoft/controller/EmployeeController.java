@@ -44,10 +44,17 @@ public class EmployeeController {
 
     private UserService userService;
 
+    private ExcelService excelService;
+
     @Autowired
-    public EmployeeController(EmployeeService employeeService, UserService userService) {
+    public EmployeeController(EmployeeService employeeService, UserService userService, ExcelService excelService) {
         this.employeeService = employeeService;
         this.userService = userService;
+        this.excelService = excelService;
+    }
+
+    public EmployeeController() {
+
     }
 
     @InitBinder
@@ -254,49 +261,7 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
-        String year = "";
-        String appOrder = "";
-
-        List<Employee> employeeList = new ArrayList<>();
-
-        List<Employee> signUpList = employeeService.findBySignUpSent(true);
-        for (Employee emp : signUpList) {
-            year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignUpSent());
-            appOrder = "1-" + emp.getNumSignUp() + "-" + year;
-            emp.setNumApp(appOrder);
-            emp.setDateApp(emp.getDateOfSignUp());
-            emp.setDateAppReal(emp.getDateOfSignUpSent());
-            emp.setTimeApp(emp.getTimeOfSignUpSent());
-            emp.setStatusField(emp.isSignUpSent());
-            emp.setIdApp(emp.getId() + "-1");
-            employeeList.add(dtoForTable(emp, true));
-        }
-
-        List<Employee> updateList = employeeService.findByUpdateSent(true);
-        for (Employee emp : updateList) {
-            year = new SimpleDateFormat("yyyy").format(emp.getDateOfUpdateSent());
-            appOrder = "2-" + emp.getNumUpdate() + "-" + year;
-            emp.setNumApp(appOrder);
-            emp.setDateApp(emp.getDateOfUpdate());
-            emp.setDateAppReal(emp.getDateOfUpdateSent());
-            emp.setTimeApp(emp.getTimeOfUpdateSent());
-            emp.setStatusField(emp.isUpdateSent());
-            emp.setIdApp(emp.getId() + "-2");
-            employeeList.add(dtoForTable(emp, true));
-        }
-
-        List<Employee> signOutList = employeeService.findBySignOutSent(true);
-        for (Employee emp : signOutList) {
-            year = new SimpleDateFormat("yyyy").format(emp.getDateOfSignOutSent());
-            appOrder = "3-" + emp.getNumSignOut() + "-" + year;
-            emp.setNumApp(appOrder);
-            emp.setDateApp(emp.getDateOfSignOut());
-            emp.setDateAppReal(emp.getDateOfSignOutSent());
-            emp.setTimeApp(emp.getTimeOfSignOutSent());
-            emp.setStatusField(emp.isSignOutSent());
-            emp.setIdApp(emp.getId() + "-3");
-            employeeList.add(dtoForTable(emp, true));
-        }
+        List<Employee> employeeList = employeeService.returnAllApps();
 
         List<Column> columnList = new ArrayList<>();
 
@@ -320,6 +285,8 @@ public class EmployeeController {
         model.addAttribute("columnList", columnList);
         model.addAttribute("dataList", employeeList);
         model.addAttribute("path", "/users");
+        model.addAttribute("excel", "/users/download-excel?allApps=true");
+        model.addAttribute("excelBtnText", "Export");
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
@@ -336,78 +303,64 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
-        List<Employee> employeeList = new ArrayList<>();
-
-        List<Employee> signUpList = employeeService.findByFromSignUpAndSignUpSent(true, false);
-        for (Employee emp : signUpList) {
-            emp.setDateApp(emp.getDateOfSignUp());
-            emp.setNumApp("Prijava");
-            emp.setStatusField(false);
-            employeeList.add(dtoForTable(emp, false));
-        }
-
-        List<Employee> updateList = employeeService.findByFromUpdateAndUpdateSent(true, false);
-        for (Employee emp : updateList) {
-            emp.setDateApp(emp.getDateOfUpdate());
-            emp.setNumApp("Promjena");
-            emp.setStatusField(false);
-            employeeList.add(dtoForTable(emp, false));
-        }
-
-        List<Employee> signOutList = employeeService.findByFromSignOutAndSignOutSent(true, false);
-        for (Employee emp : signOutList) {
-            emp.setDateApp(emp.getDateOfSignOut());
-            emp.setNumApp("Odjava");
-            emp.setStatusField(false);
-            employeeList.add(dtoForTable(emp, false));
-        }
+        List<Employee> employeeList = employeeService.returnPendingApps();
 
         List<Column> columnList = new ArrayList<>();
 
         if (isMobile) {
-            columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
-            columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
-            columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
-            columnList.add(new Column("Vrsta naloga", "numApp", "idApp", "statusField"));
+            columnList.add(new Column("Tvrtka", "company", "id", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "id", "statusField"));
+            columnList.add(new Column("Vrsta naloga", "numApp", "id", "statusField"));
         } else {
-            columnList.add(new Column("Tvrtka", "company", "idApp", "statusField"));
-            columnList.add(new Column("Prezime", "lastName", "idApp", "statusField"));
-            columnList.add(new Column("Ime", "firstName", "idApp", "statusField"));
-            columnList.add(new Column("OIB", "oib", "idApp", "statusField"));
-            columnList.add(new Column("Vrsta naloga", "numApp", "idApp", "statusField"));
+            columnList.add(new Column("Tvrtka", "company", "id", "statusField"));
+            columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
+            columnList.add(new Column("Ime", "firstName", "id", "statusField"));
+            columnList.add(new Column("OIB", "oib", "id", "statusField"));
+            columnList.add(new Column("Vrsta naloga", "numApp", "id", "statusField"));
         }
 
         model.addAttribute("title", "Pregled svih naloga u pripremi");
         model.addAttribute("columnList", columnList);
         model.addAttribute("dataList", employeeList);
         model.addAttribute("path", "/users");
+        model.addAttribute("excel", "/users/download-excel?allApps=false");
+        model.addAttribute("excelBtnText", "Export");
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
-        model.addAttribute("updateLink", "");
+        model.addAttribute("updateLink", "/users/employees/show-not-sent/{id}");
         model.addAttribute("pdfLink", "");
         model.addAttribute("deleteLink", "");
 
         return "table-apps";
     }
 
-    private Employee dtoForTable(Employee tempEmployee, boolean isAppSent) {
-        Employee employee = new Employee();
+    @GetMapping("/users/employees/show-not-sent/{id}")
+    public String showNotSentAppToAdmin(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
-        employee.setId(tempEmployee.getId());
-        employee.setUser(tempEmployee.getUser());
-        employee.setLastName(tempEmployee.getLastName());
-        employee.setFirstName(tempEmployee.getFirstName());
-        employee.setOib(tempEmployee.getOib());
-        employee.setStatusField(tempEmployee.isStatusField());
-        employee.setNumApp(tempEmployee.getNumApp());
-        if (isAppSent) {
-            employee.setDateApp(tempEmployee.getDateApp());
-            employee.setDateAppReal(tempEmployee.getDateAppReal());
-            employee.setTimeApp(tempEmployee.getTimeApp());
-            employee.setIdApp(tempEmployee.getIdApp());
+        try {
+            Employee employee = employeeService.findById(id);
+
+            model.addAttribute("class", employee);
+            List<Data> dataList = defineDataListForAdmin(id);
+            model.addAttribute("dataList", dataList);
+            List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
+            model.addAttribute("hiddenList", hiddenList);
+            model.addAttribute("title", "Nalog u pripremi");
+            model.addAttribute("dataId", "id");
+            model.addAttribute("pathSave", "");
+            model.addAttribute("path", "/users/employees/show-all-not-sent");
+            model.addAttribute("sendLink", "");
+            model.addAttribute("script", "/js/sent-form-employees.js");
+
+            return "form";
+        } catch (EmployeeNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/employees/show";
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
         }
-        return employee;
     }
 
     @GetMapping("/employees/new")
@@ -891,10 +844,9 @@ public class EmployeeController {
 
     public void showPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
-        String message = null;
+        String message = "";
 
         try {
-            message = "";
 
             File pdfDir = new File("pdf");
 
@@ -1150,6 +1102,102 @@ public class EmployeeController {
             dataList.add(new Data("8.", "Napomena", "noteUpdate", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
         }
+        return dataList;
+    }
+
+    private List<Data> defineDataListForAdmin(long id) {
+
+        List<Data> dataList = new ArrayList<>();
+        List<String> items = new ArrayList<>();
+
+
+        dataList.add(new Data("1.", "OIB *", "oib", "", "", "", "number-input", "true", "false", items, "false"));
+        ;
+        dataList.add(new Data("2.", "Ime *", "firstName", "", "", "", "text", "true", "false", items, "false"));
+        ;
+        dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", "false", items, "false"));
+        ;
+        dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", "false", Employee.GENDER, "false"));
+        ;
+        dataList.add(new Data("5.", "Datum rođenja *", "dateOfBirth", "", "", "", "date-input", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("6.", "Adresa *", "address", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("7.", "Poštanski broj i grad *", "city", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("8.", "Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", "false", Employee.PROFESSIONAL_QUALIFICATION, "false"));
+        ;
+        dataList.add(new Data("9.", "Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("10.", "IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("11.", "IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("12.", "Radno mjesto *", "employmentPosition", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("13.", "Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("14.", "Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", "false", Employee.PROFESSIONAL_QUALIFICATION, "false"));
+        ;
+        dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", "false", Employee.EMPLOYMENT_CONTRACT, "false"));
+        ;
+        dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", "false", Employee.REASON_FOR_DEFINITE, "false"));
+        ;
+        dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("17a.", "Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number-input", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("18.", "Radno vrijeme *", "workingHours", "", "", "", "text", "false", "false", Employee.WORKING_HOURS, "false"));
+        ;
+        dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "number-input", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", "false", Employee.NON_WORKING_DAYS, "true"));
+        ;
+        dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("21.", "Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("22.", "Bruto / Neto *", "salaryType", "", "", "", "text", "false", "false", Employee.SALARY_TYPE, "false"));
+        ;
+        dataList.add(new Data("22a.", "Iznos osnovne plaće *", "basicSalary", "", "", "", "number-input", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("23.", "Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("23a.", "Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("24.", "Umirovljenik *", "retiree", "", "", "", "checkbox", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("25.", "Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("26.", "Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("27.", "Invalid *", "disability", "", "", "", "checkbox", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("28.", "Napomena", "noteSignUp", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        dataList.add(new Data("29.", "Datum prijave - iz Prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("30.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("31.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("32.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("33.", "Razlog odjave *", "reasonForSignOut", "", "", "", "text", "false", "false", Employee.REASON_FOR_SIGN_OUT, "false"));
+        ;
+        dataList.add(new Data("34.", "Napomena", "noteSignOut", "", "", "", "text", "false", "false", items, "false"));
+        ;
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+        dataList.add(new Data("35.", "Datum promjene  *", "dateOfUpdateReal", "", "", "", "date-pick", "false", "false", items, "false"));
+        ;
+        dataList.add(new Data("36.", "Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", "false", Employee.REASON_FOR_UPDATE, "true"));
+        ;
+        dataList.add(new Data("37.", "Napomena", "noteUpdate", "", "", "", "text", "false", "false", items, "false"));
+        ;
+
         return dataList;
     }
 

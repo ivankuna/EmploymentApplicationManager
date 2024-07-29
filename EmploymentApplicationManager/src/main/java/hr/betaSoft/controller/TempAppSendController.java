@@ -51,7 +51,6 @@ public class TempAppSendController {
                 }
             }
 
-            // Map to store count of non-null numSignUp values per year
             Map<Integer, Integer> countPerYear = new HashMap<>();
             List<Integer> numOfSentAppsPerYear = new ArrayList<>();
 
@@ -68,23 +67,19 @@ public class TempAppSendController {
                 }
             }
 
-            // Sort the years and add the counts to numOfSentAppsPerYear list
             List<Integer> sortedYears = countPerYear.keySet().stream().sorted().collect(Collectors.toList());
             for (Integer year : sortedYears) {
                 numOfSentAppsPerYear.add(countPerYear.get(year));
             }
 
-            // Initialize countPerYear with the starting values from numOfSentAppsPerYear
-            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0); // Example starting year, adjust as needed
+            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0);
             for (int num : numOfSentAppsPerYear) {
                 countPerYear.put(currentYear, num);
                 currentYear++;
             }
 
-            // Sort the employees list by dateOfSignUpSent
             employees = sortEmployeeListByDateOfSignUp(employees);
 
-            // Assign numSignUp values to employees
             for (Employee employee : employees) {
                 if (employee.getNumSignUp() == null) {
                     Date dateOfSignUpSent = employee.getDateOfSignUpSent();
@@ -93,22 +88,18 @@ public class TempAppSendController {
                         calendar.setTime(dateOfSignUpSent);
                         int year = calendar.get(Calendar.YEAR);
 
-                        // Get the current numSignUp value for the year and assign it to the employee
                         int currentNumSignUp = countPerYear.getOrDefault(year, 0);
                         employee.setNumSignUp(currentNumSignUp + 1);
 
-                        // Increment the numSignUp value in the map
                         countPerYear.put(year, currentNumSignUp + 1);
                     }
                 }
             }
 
-            // Save updated employees back to the database
             for (Employee employee : employees) {
                 employeeService.saveEmployee(employee);
             }
 
-            // Print the result for verification
             for (Employee employee : employees) {
                 System.out.println("Employee ID: " + employee.getId() + ", numSignUp: " + employee.getNumSignUp() + ", dateOfSignUpSent: " + employee.getDateOfSignUpSent());
             }
@@ -130,7 +121,6 @@ public class TempAppSendController {
                 }
             }
 
-            // Map to store count of non-null numUpdate values per year
             Map<Integer, Integer> countPerYear = new HashMap<>();
             List<Integer> numOfSentAppsPerYear = new ArrayList<>();
 
@@ -147,23 +137,19 @@ public class TempAppSendController {
                 }
             }
 
-            // Sort the years and add the counts to numOfSentAppsPerYear list
             List<Integer> sortedYears = countPerYear.keySet().stream().sorted().collect(Collectors.toList());
             for (Integer year : sortedYears) {
                 numOfSentAppsPerYear.add(countPerYear.get(year));
             }
 
-            // Initialize countPerYear with the starting values from numOfSentAppsPerYear
-            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0); // Example starting year, adjust as needed
+            int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0);
             for (int num : numOfSentAppsPerYear) {
                 countPerYear.put(currentYear, num);
                 currentYear++;
             }
 
-            // Sort the employees list by dateOfUpdateSent
             employees = sortEmployeeListByDateOfUpdate(employees);
 
-            // Assign numUpdate values to employees
             for (Employee employee : employees) {
                 if (employee.getNumUpdate() == null) {
                     Date dateOfUpdateSent = employee.getDateOfUpdateSent();
@@ -172,22 +158,18 @@ public class TempAppSendController {
                         calendar.setTime(dateOfUpdateSent);
                         int year = calendar.get(Calendar.YEAR);
 
-                        // Get the current numUpdate value for the year and assign it to the employee
                         int currentNumUpdate = countPerYear.getOrDefault(year, 0);
                         employee.setNumUpdate(currentNumUpdate + 1);
 
-                        // Increment the numUpdate value in the map
                         countPerYear.put(year, currentNumUpdate + 1);
                     }
                 }
             }
 
-            // Save updated employees back to the database
             for (Employee employee : employees) {
                 employeeService.saveEmployee(employee);
             }
 
-            // Print the result for verification
             for (Employee employee : employees) {
                 System.out.println("Employee ID: " + employee.getId() + ", numUpdate: " + employee.getNumUpdate() + ", dateOfUpdateSent: " + employee.getDateOfUpdateSent());
             }
@@ -209,7 +191,6 @@ public class TempAppSendController {
                 }
             }
 
-            // Map to store count of non-null numSignOut values per year
             Map<Integer, Integer> countPerYear = new HashMap<>();
             List<Integer> numOfSentAppsPerYear = new ArrayList<>();
 
@@ -226,23 +207,19 @@ public class TempAppSendController {
                 }
             }
 
-            // Sort the years and add the counts to numOfSentAppsPerYear list
             List<Integer> sortedYears = countPerYear.keySet().stream().sorted().collect(Collectors.toList());
             for (Integer year : sortedYears) {
                 numOfSentAppsPerYear.add(countPerYear.get(year));
             }
 
-            // Initialize countPerYear with the starting values from numOfSentAppsPerYear
             int currentYear = sortedYears.isEmpty() ? 2020 : sortedYears.get(0); // Example starting year, adjust as needed
             for (int num : numOfSentAppsPerYear) {
                 countPerYear.put(currentYear, num);
                 currentYear++;
             }
 
-            // Sort the employees list by dateOfSignOutSent
             employees = sortEmployeeListByDateOfSignOut(employees);
 
-            // Assign numSignOut values to employees
             for (Employee employee : employees) {
                 if (employee.getNumSignOut() == null) {
                     Date dateOfSignOutSent = employee.getDateOfSignOutSent();
@@ -251,22 +228,18 @@ public class TempAppSendController {
                         calendar.setTime(dateOfSignOutSent);
                         int year = calendar.get(Calendar.YEAR);
 
-                        // Get the current numSignOut value for the year and assign it to the employee
                         int currentNumSignOut = countPerYear.getOrDefault(year, 0);
                         employee.setNumSignOut(currentNumSignOut + 1);
 
-                        // Increment the numSignOut value in the map
                         countPerYear.put(year, currentNumSignOut + 1);
                     }
                 }
             }
 
-            // Save updated employees back to the database
             for (Employee employee : employees) {
                 employeeService.saveEmployee(employee);
             }
 
-            // Print the result for verification
             for (Employee employee : employees) {
                 System.out.println("Employee ID: " + employee.getId() + ", numSignOut: " + employee.getNumSignOut() + ", dateOfSignOutSent: " + employee.getDateOfSignOutSent());
             }

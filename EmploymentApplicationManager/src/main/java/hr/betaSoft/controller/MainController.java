@@ -101,8 +101,6 @@ public class MainController {
 
     @GetMapping("/employees")
     public String showUserMenuForm(Model model) {
-        model.addAttribute("helpMsg", "Tehnička podrška: +385 (91) 227-5504");
-
         return "employees";
     }
 
