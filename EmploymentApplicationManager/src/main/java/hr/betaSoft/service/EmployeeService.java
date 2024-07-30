@@ -2,6 +2,7 @@ package hr.betaSoft.service;
 
 import hr.betaSoft.model.Employee;
 import hr.betaSoft.security.model.User;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -61,4 +62,12 @@ public interface EmployeeService {
     List<Employee> returnPendingApps();
 
     Employee dtoForTable(Employee tempEmployee, boolean isAppSent);
+
+    List<Employee> findBySignUpSentAndSignOutSentOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent);
+
+    List<Employee> findBySignUpSentAndSignOutSentAndForeignNationalOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent, boolean foreignNational);
+
+    List<Employee> findBySignUpSentAndSignOutSentAndEmploymentContractOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent, String employmentContract);
+
+    List<Employee> getEmployeeList(String appType);
 }

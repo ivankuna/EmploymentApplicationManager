@@ -248,4 +248,35 @@ public class EmployeeServiceImpl implements EmployeeService {
         }
         return employee;
     }
+
+    @Override
+    public List<Employee> findBySignUpSentAndSignOutSentOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent) {
+        return employeeRepository.findBySignUpSentAndSignOutSentOrderedByCompanyAndLastName(signUpSent, signOutSent);
+    }
+
+    @Override
+    public List<Employee> findBySignUpSentAndSignOutSentAndForeignNationalOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent, boolean foreignNational) {
+        return employeeRepository.findBySignUpSentAndSignOutSentAndForeignNationalOrderedByCompanyAndLastName(signUpSent, signOutSent, foreignNational);
+    }
+
+    @Override
+    public List<Employee> findBySignUpSentAndSignOutSentAndEmploymentContractOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent, String employmentContract) {
+        return employeeRepository.findBySignUpSentAndSignOutSentAndEmploymentContractOrderedByCompanyAndLastName(signUpSent, signOutSent, employmentContract);
+    }
+
+    @Override
+    public List<Employee> getEmployeeList(String appType) {
+
+        List<Employee> employeeList;
+
+        employeeList = switch (appType) {
+            case "allApps" -> returnAllApps();
+            case "pendingApps" -> returnPendingApps();
+            case "activeApps" -> findBySignUpSentAndSignOutSentOrderedByCompanyAndLastName(true, false);
+            case "expiryApps" -> findBySignUpSentAndSignOutSentAndForeignNationalOrderedByCompanyAndLastName(true, false, true);
+            case "fixedTermApps" -> findBySignUpSentAndSignOutSentAndEmploymentContractOrderedByCompanyAndLastName(true, false, "Određeno");
+            default -> throw new IllegalStateException("Unexpected value: " + appType);
+        };
+        return employeeList;
+    }
 }

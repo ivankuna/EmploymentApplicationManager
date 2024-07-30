@@ -253,6 +253,50 @@ public class EmployeeController {
         return "table-apps";
     }
 
+    @GetMapping("/users/employees/show-specific")
+    public String showActiveAppsToAdmin(@RequestParam String appType, Model model) {
+
+        FormTracker.setFormId(FormTracker.getSHOW_ALL());
+
+        List<Employee> employeeList = employeeService.getEmployeeList(appType);
+
+        List<Column> columnList = new ArrayList<>();
+
+        Column finalColumn = switch (appType) {
+            case "activeApps" -> new Column("Datum prijave", "dateOfSignUp", "id", "statusField");
+            case "expiryApps" -> new Column("Datum isteka radne dozvole", "expiryDateOfWorkPermit", "id", "statusField");
+            case "fixedTermApps" -> new Column("Datum odjave - iz Prijave", "dateOfSignOut", "id", "statusField");
+            default -> throw new IllegalStateException("Unexpected value: " + appType);
+        };
+        columnList.add(new Column("Tvrtka", "company", "id", "statusField"));
+        columnList.add(new Column("Prezime", "lastName", "id", "statusField"));
+        columnList.add(new Column("Ime", "firstName", "id", "statusField"));
+        columnList.add(new Column("OIB", "oib", "id", "statusField"));
+        columnList.add(finalColumn);
+
+        String title = switch (appType) {
+            case "activeApps" -> "Popis radnika u radnom odnosu";
+            case "expiryApps" -> "Izvještaj o isteku radne dozvole";
+            case "fixedTermApps" -> "Izvještaj o isteku rada na određeno";
+            default -> throw new IllegalStateException("Unexpected value: " + appType);
+        };
+
+        model.addAttribute("title", title);
+        model.addAttribute("columnList", columnList);
+        model.addAttribute("dataList", employeeList);
+        model.addAttribute("path", "/users");
+        model.addAttribute("excel", "/users/download-excel?appType=" + appType);
+        model.addAttribute("excelBtnText", "Export");
+        model.addAttribute("tableName", "employees");
+        model.addAttribute("script", "/js/table-users.js");
+        model.addAttribute("showLink", "");
+        model.addAttribute("updateLink", "");
+        model.addAttribute("pdfLink", "");
+        model.addAttribute("deleteLink", "");
+
+        return "table-apps";
+    }
+
     @GetMapping("/users/employees/show-all")
     public String showAllAppsToAdmin(Model model, HttpServletRequest request) {
 
@@ -285,7 +329,7 @@ public class EmployeeController {
         model.addAttribute("columnList", columnList);
         model.addAttribute("dataList", employeeList);
         model.addAttribute("path", "/users");
-        model.addAttribute("excel", "/users/download-excel?allApps=true");
+        model.addAttribute("excel", "/users/download-excel?appType=allApps");
         model.addAttribute("excelBtnText", "Export");
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
@@ -324,7 +368,7 @@ public class EmployeeController {
         model.addAttribute("columnList", columnList);
         model.addAttribute("dataList", employeeList);
         model.addAttribute("path", "/users");
-        model.addAttribute("excel", "/users/download-excel?allApps=false");
+        model.addAttribute("excel", "/users/download-excel?appType=pendingApps");
         model.addAttribute("excelBtnText", "Export");
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");

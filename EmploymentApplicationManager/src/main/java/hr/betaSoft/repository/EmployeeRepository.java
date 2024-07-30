@@ -3,6 +3,7 @@ package hr.betaSoft.repository;
 import hr.betaSoft.model.Employee;
 import hr.betaSoft.security.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 
@@ -50,4 +51,13 @@ public interface EmployeeRepository extends JpaRepository<Employee, Long> {
     List<Employee> findByFromUpdateAndUpdateSent(boolean isFromUpdate, boolean updateSent);
 
     List<Employee> findByFromSignOutAndSignOutSent(boolean isFromSignOut, boolean signOutSent);
+
+    @Query("SELECT e FROM Employee e JOIN e.user u WHERE e.signUpSent = ?1 AND e.signOutSent = ?2 ORDER BY u.company ASC, e.lastName ASC")
+    List<Employee> findBySignUpSentAndSignOutSentOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent);
+
+    @Query("SELECT e FROM Employee e JOIN e.user u WHERE e.signUpSent = ?1 AND e.signOutSent = ?2 AND e.foreignNational = ?3 ORDER BY u.company ASC, e.lastName ASC")
+    List<Employee> findBySignUpSentAndSignOutSentAndForeignNationalOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent, boolean foreignNational);
+
+    @Query("SELECT e FROM Employee e JOIN e.user u WHERE e.signUpSent = ?1 AND e.signOutSent = ?2 AND e.employmentContract = ?3 ORDER BY u.company ASC, e.lastName ASC")
+    List<Employee> findBySignUpSentAndSignOutSentAndEmploymentContractOrderedByCompanyAndLastName(boolean signUpSent, boolean signOutSent, String employmentContract);
 }
