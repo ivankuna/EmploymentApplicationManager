@@ -40,6 +40,8 @@ import org.thymeleaf.context.Context;
 @Controller
 public class EmployeeController {
 
+    private User currentUserForAdminUpdate;
+
     private EmployeeService employeeService;
 
     private UserService userService;
@@ -334,7 +336,7 @@ public class EmployeeController {
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
-        model.addAttribute("updateLink", "/users/employees/show-all/pdf/{id}");
+        model.addAttribute("updateLink", "/users/employees/temp-update-as-admin/{id}");
         model.addAttribute("pdfLink", "");
         model.addAttribute("deleteLink", "");
 
@@ -343,6 +345,8 @@ public class EmployeeController {
 
     @GetMapping("/users/employees/show-all-not-sent")
     public String showAllNotSentAppsToAdmin(Model model, HttpServletRequest request) {
+
+        FormTracker.setFormId(FormTracker.getSHOW_NOT_SENT());
 
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
@@ -373,11 +377,61 @@ public class EmployeeController {
         model.addAttribute("tableName", "employees");
         model.addAttribute("script", "/js/table-users.js");
         model.addAttribute("showLink", "");
-        model.addAttribute("updateLink", "/users/employees/show-not-sent/{id}");
+        model.addAttribute("updateLink", "/users/employees/update-as-admin/{id}");
         model.addAttribute("pdfLink", "");
         model.addAttribute("deleteLink", "");
 
         return "table-apps";
+    }
+
+    @GetMapping("/users/employees/temp-update-as-admin/{id}")
+    public String tempUpdateAppAsAdmin(@PathVariable("id") String idApp) {
+
+        Long id = 0L;
+
+        List<String> charList = Arrays.asList(idApp.split("-"));
+
+        id = Long.valueOf(charList.get(0));
+
+        return "redirect:/users/employees/update-as-admin/" + id;
+    }
+
+    @GetMapping("/users/employees/update-as-admin/{id}")
+    public String updateAppAsAdmin(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
+
+        try {
+
+            String path = "";
+
+            if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+                path = "/users/employees/show-all";
+            } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
+                path = "/users/employees/show-all-not-sent";
+            }
+
+            Employee employee = employeeService.findById(id);
+
+            currentUserForAdminUpdate = employee.getUser();
+
+            model.addAttribute("class", employee);
+            List<Data> dataList = defineDataListForAdmin(true);
+            model.addAttribute("dataList", dataList);
+            List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
+            model.addAttribute("hiddenList", hiddenList);
+            model.addAttribute("title", "Ažuriranje podataka naloga");
+            model.addAttribute("dataId", "id");
+            model.addAttribute("pathSave", "/users/employees/save-as-admin");
+            model.addAttribute("path", path);
+            model.addAttribute("sendLink", "");
+            model.addAttribute("script", "/js/form-employees.js");
+
+            return "form";
+        } catch (EmployeeNotFoundException e) {
+            ra.addFlashAttribute("message", e.getMessage());
+            return "redirect:/employees/show";
+        } catch (IllegalAccessException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @GetMapping("/users/employees/show-not-sent/{id}")
@@ -387,7 +441,7 @@ public class EmployeeController {
             Employee employee = employeeService.findById(id);
 
             model.addAttribute("class", employee);
-            List<Data> dataList = defineDataListForAdmin(id);
+            List<Data> dataList = defineDataListForAdmin(false);
             model.addAttribute("dataList", dataList);
             List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
             model.addAttribute("hiddenList", hiddenList);
@@ -581,6 +635,23 @@ public class EmployeeController {
         employee.setUser(userService.getAuthenticatedUser());
         employeeService.saveEmployee(employee);
         return "redirect:/employees/show";
+    }
+
+    @PostMapping("/users/employees/save-as-admin")
+    public String saveUpdateAppAsAdmin(@ModelAttribute("employee") Employee employee, BindingResult result, Model model, RedirectAttributes ra) {
+
+        String path = "";
+
+        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+            path = "/users/employees/show-all";
+        } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
+            path = "/users/employees/show-all-not-sent";
+        }
+
+        employee.setUser(currentUserForAdminUpdate);
+
+        employeeService.saveEmployee(employee);
+        return "redirect:" + path;
     }
 
     @GetMapping("/employees/delete/{id}")
@@ -1149,97 +1220,97 @@ public class EmployeeController {
         return dataList;
     }
 
-    private List<Data> defineDataListForAdmin(long id) {
+    private List<Data> defineDataListForAdmin(boolean update) {
 
         List<Data> dataList = new ArrayList<>();
         List<String> items = new ArrayList<>();
 
+        String enabled = update ? "true" : "false";
 
+        // SIGN UP DATA
         dataList.add(new Data("1.", "OIB *", "oib", "", "", "", "number-input", "true", "false", items, "false"));
         ;
-        dataList.add(new Data("2.", "Ime *", "firstName", "", "", "", "text", "true", "false", items, "false"));
+        dataList.add(new Data("2.", "Ime *", "firstName", "", "", "", "text", "true", enabled, items, "false"));
         ;
-        dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", "false", items, "false"));
+        dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", enabled, items, "false"));
         ;
-        dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", "false", Employee.GENDER, "false"));
+        dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", enabled, Employee.GENDER, "false"));
         ;
-        dataList.add(new Data("5.", "Datum rođenja *", "dateOfBirth", "", "", "", "date-input", "false", "false", items, "false"));
+        dataList.add(new Data("5.", "Datum rođenja *", "dateOfBirth", "", "", "", "date-input", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("6.", "Adresa *", "address", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("6.", "Adresa *", "address", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("7.", "Poštanski broj i grad *", "city", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("7.", "Poštanski broj i grad *", "city", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("8.", "Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", "false", Employee.PROFESSIONAL_QUALIFICATION, "false"));
+        dataList.add(new Data("8.", "Stvarna stručna sprema *", "professionalQualification", "", "", "", "text", "false", enabled, Employee.PROFESSIONAL_QUALIFICATION, "false"));
         ;
-        dataList.add(new Data("9.", "Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("9.", "Naziv najviše završene škole", "highestLevelOfEducation", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("10.", "IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("10.", "IBAN - tekući račun - redovni", "ibanRegular", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("11.", "IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("11.", "IBAN - tekući račun - zaštićeni", "ibanProtected", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("12.", "Radno mjesto *", "employmentPosition", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("12.", "Radno mjesto *", "employmentPosition", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("13.", "Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("13.", "Mjesto rada - Grad *", "cityOfEmployment", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("14.", "Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", "false", Employee.PROFESSIONAL_QUALIFICATION, "false"));
+        dataList.add(new Data("14.", "Potrebna stručna sprema *", "requiredProfessionalQualification", "", "", "", "text", "false", enabled, Employee.PROFESSIONAL_QUALIFICATION, "false"));
         ;
-        dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", "false", Employee.EMPLOYMENT_CONTRACT, "false"));
+        dataList.add(new Data("15.", "Ugovor o radu *", "employmentContract", "", "", "", "text", "false", enabled, Employee.EMPLOYMENT_CONTRACT, "false"));
         ;
-        dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", "false", Employee.REASON_FOR_DEFINITE, "false"));
+        dataList.add(new Data("16.", "Razlog - na određeno *", "reasonForDefinite", "", "", "", "text", "false", enabled, Employee.REASON_FOR_DEFINITE, "false"));
         ;
-        dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", "false", items, "false"));
+        dataList.add(new Data("17.", "Dodatni rad *", "additionalWork", "", "", "", "checkbox", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("17a.", "Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number-input", "false", "false", items, "false"));
+        dataList.add(new Data("17a.", "Dodatni rad - sati *", "additionalWorkHours", "", "", "", "number-input", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("18.", "Radno vrijeme *", "workingHours", "", "", "", "text", "false", "false", Employee.WORKING_HOURS, "false"));
+        dataList.add(new Data("18.", "Radno vrijeme *", "workingHours", "", "", "", "text", "false", enabled, Employee.WORKING_HOURS, "false"));
         ;
-        dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "number-input", "false", "false", items, "false"));
+        dataList.add(new Data("18a.", "Sati nepuno *", "hoursForPartTime", "", "", "", "number-input", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", "false", Employee.NON_WORKING_DAYS, "true"));
+        dataList.add(new Data("19.", "Neradni dan(i) u tjednu *", "nonWorkingDays", "", "", "", "text", "false", enabled, Employee.NON_WORKING_DAYS, "true"));
         ;
-        dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", "false", items, "false"));
+        dataList.add(new Data("20.", "Datum prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("21.", "Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
+        dataList.add(new Data("21.", "Datum odjave - za određeno *", "dateOfSignOut", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("22.", "Bruto / Neto *", "salaryType", "", "", "", "text", "false", "false", Employee.SALARY_TYPE, "false"));
+        dataList.add(new Data("22.", "Bruto / Neto *", "salaryType", "", "", "", "text", "false", enabled, Employee.SALARY_TYPE, "false"));
         ;
-        dataList.add(new Data("22a.", "Iznos osnovne plaće *", "basicSalary", "", "", "", "number-input", "false", "false", items, "false"));
+        dataList.add(new Data("22a.", "Iznos osnovne plaće *", "basicSalary", "", "", "", "number-input", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("23.", "Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", "false", items, "false"));
+        dataList.add(new Data("23.", "Strani državljanin *", "foreignNational", "", "", "", "checkbox", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("23a.", "Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date-pick", "false", "false", items, "false"));
+        dataList.add(new Data("23a.", "Radna dozvola vrijedi do *", "expiryDateOfWorkPermit", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("24.", "Umirovljenik *", "retiree", "", "", "", "checkbox", "false", "false", items, "false"));
+        dataList.add(new Data("24.", "Umirovljenik *", "retiree", "", "", "", "checkbox", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("25.", "Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", "false", items, "false"));
+        dataList.add(new Data("25.", "Mlađi od 30 godina *", "youngerThanThirty", "", "", "", "checkbox", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("26.", "Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", "false", items, "false"));
+        dataList.add(new Data("26.", "Prvo zaposlenje *", "firstEmployment", "", "", "", "checkbox", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("27.", "Invalid *", "disability", "", "", "", "checkbox", "false", "false", items, "false"));
+        dataList.add(new Data("27.", "Invalid *", "disability", "", "", "", "checkbox", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("28.", "Napomena", "noteSignUp", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("28.", "Napomena", "noteSignUp", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        dataList.add(new Data("29.", "Datum prijave - iz Prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", "false", items, "false"));
+        // SIGN OUT DATA
+        dataList.add(new Data("29.", "Datum prijave - iz Prijave *", "dateOfSignUp", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("30.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", "false", items, "false"));
+        dataList.add(new Data("30.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("31.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
+        dataList.add(new Data("31.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("32.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date-pick", "false", "false", items, "false"));
+        dataList.add(new Data("32.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("33.", "Razlog odjave *", "reasonForSignOut", "", "", "", "text", "false", "false", Employee.REASON_FOR_SIGN_OUT, "false"));
+        dataList.add(new Data("33.", "Razlog odjave *", "reasonForSignOut", "", "", "", "text", "false", enabled, Employee.REASON_FOR_SIGN_OUT, "false"));
         ;
-        dataList.add(new Data("34.", "Napomena", "noteSignOut", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("34.", "Napomena", "noteSignOut", "", "", "", "text", "false", enabled, items, "false"));
         ;
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-        dataList.add(new Data("35.", "Datum promjene  *", "dateOfUpdateReal", "", "", "", "date-pick", "false", "false", items, "false"));
+        // UPDATE DATA
+        dataList.add(new Data("35.", "Datum promjene  *", "dateOfUpdateReal", "", "", "", "date-pick", "false", enabled, items, "false"));
         ;
-        dataList.add(new Data("36.", "Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", "false", Employee.REASON_FOR_UPDATE, "true"));
+        dataList.add(new Data("36.", "Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", enabled, Employee.REASON_FOR_UPDATE, "true"));
         ;
-        dataList.add(new Data("37.", "Napomena", "noteUpdate", "", "", "", "text", "false", "false", items, "false"));
+        dataList.add(new Data("37.", "Napomena", "noteUpdate", "", "", "", "text", "false", enabled, items, "false"));
         ;
 
         return dataList;

@@ -18,6 +18,9 @@ public class FormTracker {
     private static final int SIGN_OUT = 3;
 
     @Getter
+    private static final int SHOW_NOT_SENT = -1;
+
+    @Getter
     @Setter
     private static int formId;
 }
