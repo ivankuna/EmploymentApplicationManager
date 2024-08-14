@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="hr-HR"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+    <title>Close Tab</title>
+</head>
+<body>
+<script type="text/javascript">
+    // Zatvori trenutni tab
+    window.close();
+</script>
+<noscript>
+    <!-- Ako JavaScript nije omogućen, prikaži poruku i vrati se na glavnu stranicu -->
+    <p>JavaScript je potreban za zatvaranje ovog taba. Molimo zatvorite tab ručno.</p>
+    <a th:href="@{${path}}">Vrati se na glavnu stranicu</a>
+</noscript>
+</body>
+</html>

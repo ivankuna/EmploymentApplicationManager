@@ -651,7 +651,11 @@ public class EmployeeController {
         employee.setUser(currentUserForAdminUpdate);
 
         employeeService.saveEmployee(employee);
-        return "redirect:" + path;
+
+//        return "redirect:" + path;
+        // Vratiti view koji zatvara tab
+        model.addAttribute("path", path);
+        return "close-tab";
     }
 
     @GetMapping("/employees/delete/{id}")

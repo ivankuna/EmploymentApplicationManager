@@ -74,8 +74,12 @@
                     </thead>
                     <tbody>
                     <tr th:each="data : ${dataList}">
-                        <td th:each="column : ${columnList}" th:text="${data[column.field]}"
-                            th:onclick="${updateLink != null && updateLink != ''} ? 'window.location.href = \'' + @{${updateLink}(id=${data[column.id]})} + '\'' : ''">
+<!--                        <td th:each="column : ${columnList}" th:text="${data[column.field]}"-->
+<!--                            th:onclick="${updateLink != null && updateLink != ''} ? 'window.location.href = \'' + @{${updateLink}(id=${data[column.id]})} + '\'' : ''">-->
+<!--                        </td>-->
+                        <td th:each="column : ${columnList}"
+                            th:text="${data[column.field]}"
+                            th:onclick="${updateLink != null && updateLink != ''} ? 'window.open(\'' + @{${updateLink}(id=${data[column.id]})} + '\', \'_blank\')' : ''">
                         </td>
 
                         <td>
