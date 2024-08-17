@@ -5,6 +5,7 @@ import hr.betaSoft.security.model.User;
 import hr.betaSoft.security.service.UserService;
 import hr.betaSoft.security.userdto.UserDto;
 import hr.betaSoft.tools.FormTracker;
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -73,7 +74,7 @@ public class MainController {
     }
 
     @GetMapping("/authorization")
-    public String authorization(Model model) {
+    public String authorization(HttpSession session, Model model) {
 
         if (userService.getAuthenticatedUser().getDateOfUserAccountExpiry().before(new Date(System.currentTimeMillis()))) {
             model.addAttribute("accExpired", true);
@@ -84,7 +85,8 @@ public class MainController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-        FormTracker.setFormId(FormTracker.getSIGN_UP());
+//        FormTracker.setFormId(FormTracker.getSIGN_UP());
+        session.setAttribute("formId", FormTracker.getSIGN_UP());
 
         List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
         if (authorityList.get(0).getAuthority().equals("ROLE_ADMIN")) {
@@ -105,20 +107,23 @@ public class MainController {
     }
 
     @GetMapping("/empsignup")
-    public String employeeSignUp() {
-        FormTracker.setFormId(FormTracker.getSIGN_UP());
+    public String employeeSignUp(HttpSession session) {
+//        FormTracker.setFormId(FormTracker.getSIGN_UP());
+        session.setAttribute("formId", FormTracker.getSIGN_UP());
         return "redirect:/employees/show";
     }
 
     @GetMapping("/empupdate")
-    public String employeeUpdate() {
-        FormTracker.setFormId(FormTracker.getUPDATE());
+    public String employeeUpdate(HttpSession session) {
+//        FormTracker.setFormId(FormTracker.getUPDATE());
+        session.setAttribute("formId", FormTracker.getUPDATE());
         return "redirect:/employees/show";
     }
 
     @GetMapping("/empsignout")
-    public String employeeSignOut() {
-        FormTracker.setFormId(FormTracker.getSIGN_OUT());
+    public String employeeSignOut(HttpSession session) {
+//        FormTracker.setFormId(FormTracker.getSIGN_OUT());
+        session.setAttribute("formId", FormTracker.getSIGN_OUT());
         return "redirect:/employees/show";
     }
 
@@ -134,19 +139,23 @@ public class MainController {
     }
 
     @GetMapping("/users/select/sign-up")
-    public String selectSignUp() {
-        FormTracker.setFormId(FormTracker.getSIGN_UP());
+    public String selectSignUp(HttpSession session) {
+//        FormTracker.setFormId(FormTracker.getSIGN_UP());
+        session.setAttribute("formId", FormTracker.getSIGN_UP());
+
         return "redirect:/users/select";
     }
 
     @GetMapping("/users/select/update")
-    public String selectUpdate() {
-        FormTracker.setFormId(FormTracker.getUPDATE());
+    public String selectUpdate(HttpSession session) {
+//        FormTracker.setFormId(FormTracker.getUPDATE());
+        session.setAttribute("formId", FormTracker.getUPDATE());
         return "redirect:/users/select";
     }
     @GetMapping("/users/select/sign-out")
-    public String selectSignOut() {
-        FormTracker.setFormId(FormTracker.getSIGN_OUT());
+    public String selectSignOut(HttpSession session) {
+//        FormTracker.setFormId(FormTracker.getSIGN_OUT());
+        session.setAttribute("formId", FormTracker.getSIGN_OUT());
         return "redirect:/users/select";
     }
 }

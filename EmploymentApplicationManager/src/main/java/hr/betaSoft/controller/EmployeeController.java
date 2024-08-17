@@ -10,6 +10,7 @@ import hr.betaSoft.service.EmployeeService;
 import hr.betaSoft.tools.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 import org.apache.pdfbox.io.IOUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.propertyeditors.CustomDateEditor;
@@ -29,10 +30,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Calendar;
-import java.util.List;
+import java.util.*;
 
 import org.thymeleaf.TemplateEngine;
 import org.thymeleaf.context.Context;
@@ -67,7 +65,7 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/show")
-    public String showEmployees(Model model, HttpServletRequest request) {
+    public String showEmployees(Model model, HttpSession session, HttpServletRequest request) {
 
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
@@ -77,26 +75,33 @@ public class EmployeeController {
         String datumApp = "";
         String appNum = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        // TEST
+//        Integer currentFormId = FormTracker.getFormId();
+        Integer currentFormId = (Integer) session.getAttribute("formId");
+
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             statusField = "signUpSent";
             datumField = "dateOfSignUpSent";
             vrijemeField = "timeOfSignUpSent";
             datumApp = "dateOfSignUp";
             appNum = "numSignUp";
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             statusField = "signOutSent";
             datumField = "dateOfSignOutSent";
             vrijemeField = "timeOfSignOutSent";
             datumApp = "dateOfSignOutReal";
             appNum = "numSignOut";
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             statusField = "updateSent";
             datumField = "dateOfUpdateSent";
             vrijemeField = "timeOfUpdateSent";
             datumApp = "dateOfUpdateReal";
             appNum = "numUpdate";
         } else {
-            System.out.println("Error: Class EmployeeController line: 89");
+            System.out.println("Error: Class EmployeeController: /employees/show");
         }
 
         List<Column> columnList = new ArrayList<>();
@@ -121,19 +126,25 @@ public class EmployeeController {
         List<Employee> employeeList = new ArrayList<>();
 
         if (!authenticatedUser.isShowAllApplications()) {
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employeeList = employeeService.findByUserAndSignUpSentAndFromSignUp(authenticatedUser, false, true);
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employeeList = employeeService.findByUserAndSignOutSentAndFromSignOut(authenticatedUser, false, true);
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employeeList = employeeService.findByUserAndUpdateSentAndFromUpdate(authenticatedUser, false, true);
             }
         } else {
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employeeList = employeeService.findByUserAndFromSignUp(authenticatedUser, true);
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employeeList = employeeService.findByUserAndFromSignOut(authenticatedUser, true);
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employeeList = employeeService.findByUserAndFromUpdate(authenticatedUser, true);
             }
         }
@@ -142,11 +153,14 @@ public class EmployeeController {
 
         String title = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalozi za prijavu radnika";
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalozi za promjenu podataka";
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalozi za odjavu radnika";
         }
 
@@ -167,20 +181,25 @@ public class EmployeeController {
     }
 
     @GetMapping("/users/employees/show/{id}")
-    public String showEmployeesToAdmin(@PathVariable("id") Long id, Model model, HttpServletRequest request) {
+    public String showEmployeesToAdmin(@PathVariable("id") Long id, HttpSession session, Model model, HttpServletRequest request) {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
 
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
 
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             List<Employee> employeeList = employeeService.findByUserAndSignOutSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
 
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             List<Employee> employeeList = employeeService.findByUserAndUpdateSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
         }
@@ -191,19 +210,22 @@ public class EmployeeController {
         String dateApp = "";
         String appNum = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             statusField = "signUpSent";
             dateField = "dateOfSignUpSent";
             timeField = "timeOfSignUpSent";
             dateApp = "dateOfSignUp";
             appNum = "numSignUp";
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             statusField = "signOutSent";
             dateField = "dateOfSignOutSent";
             timeField = "timeOfSignOutSent";
             dateApp = "dateOfSignOutReal";
             appNum = "numSignOut";
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             statusField = "updateSent";
             dateField = "dateOfUpdateSent";
             timeField = "timeOfUpdateSent";
@@ -234,11 +256,14 @@ public class EmployeeController {
 
         String title = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalozi za prijavu radnika";
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalozi za promjenu podataka";
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalozi za odjavu radnika";
         }
 
@@ -256,9 +281,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/users/employees/show-specific")
-    public String showActiveAppsToAdmin(@RequestParam String appType, Model model) {
+    public String showActiveAppsToAdmin(@RequestParam String appType, HttpSession session, Model model) {
 
-        FormTracker.setFormId(FormTracker.getSHOW_ALL());
+//        FormTracker.setFormId(FormTracker.getSHOW_ALL());
+        session.setAttribute("formId", FormTracker.getSHOW_ALL());
 
         List<Employee> employeeList = employeeService.getEmployeeList(appType);
 
@@ -300,9 +326,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/users/employees/show-all")
-    public String showAllAppsToAdmin(Model model, HttpServletRequest request) {
+    public String showAllAppsToAdmin(Model model, HttpSession session, HttpServletRequest request) {
 
-        FormTracker.setFormId(FormTracker.getSHOW_ALL());
+//        FormTracker.setFormId(FormTracker.getSHOW_ALL());
+        session.setAttribute("formId", FormTracker.getSHOW_ALL());
 
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
@@ -344,9 +371,10 @@ public class EmployeeController {
     }
 
     @GetMapping("/users/employees/show-all-not-sent")
-    public String showAllNotSentAppsToAdmin(Model model, HttpServletRequest request) {
+    public String showAllNotSentAppsToAdmin(Model model, HttpSession session, HttpServletRequest request) {
 
-        FormTracker.setFormId(FormTracker.getSHOW_NOT_SENT());
+//        FormTracker.setFormId(FormTracker.getSHOW_NOT_SENT());
+        session.setAttribute("formId", FormTracker.getSHOW_NOT_SENT());
 
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
@@ -401,13 +429,13 @@ public class EmployeeController {
 
         try {
 
-            String path = "";
-
-            if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
-                path = "/users/employees/show-all";
-            } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
-                path = "/users/employees/show-all-not-sent";
-            }
+//            String path = "";
+//
+//            if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+//                path = "/users/employees/show-all";
+//            } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
+//                path = "/users/employees/show-all-not-sent";
+//            }
 
             Employee employee = employeeService.findById(id);
 
@@ -421,7 +449,8 @@ public class EmployeeController {
             model.addAttribute("title", "Ažuriranje podataka naloga");
             model.addAttribute("dataId", "id");
             model.addAttribute("pathSave", "/users/employees/save-as-admin");
-            model.addAttribute("path", path);
+            model.addAttribute("path", "/users/employees/close-as-admin");
+
             model.addAttribute("sendLink", "");
             model.addAttribute("script", "/js/form-employees.js");
 
@@ -462,19 +491,24 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/new")
-    public String showAddForm(Model model) throws IllegalAccessException {
+    public String showAddForm(HttpSession session, Model model) throws IllegalAccessException {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
 
         Employee employee = (Employee) model.getAttribute("employee");
 
         String title = "";
         String script = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalog za prijavu";
             script = "/js/form-employees.js";
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalog za odjavu";
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalog za promjenu";
         }
 
@@ -484,7 +518,7 @@ public class EmployeeController {
             model.addAttribute("class", new Employee());
         }
 
-        List<Data> dataList = defineDataList(0);
+        List<Data> dataList = defineDataList(0, currentFormId);
         model.addAttribute("dataList", dataList);
 
         List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
@@ -501,10 +535,13 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/new-update/{oib}")
-    public String showAddFilledForm(@PathVariable("oib") String oib, Model model) throws IllegalAccessException {
+    public String showAddFilledForm(@PathVariable("oib") String oib, HttpSession session, Model model) throws IllegalAccessException {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
 
         Employee employee = new Employee();
         Employee tempEmployee = employeeService.findFirstByOibOrderByDateOfUpdateDesc(oib);
+
         if (tempEmployee != null) {
             employee.setOib(tempEmployee.getOib());
             employee.setFirstName(tempEmployee.getFirstName());
@@ -517,17 +554,20 @@ public class EmployeeController {
         String title = "";
         String script = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalog za prijavu";
             script = "/js/form-employees.js";
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalog za odjavu";
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalog za promjenu";
         }
 
         model.addAttribute("class", employee);
-        List<Data> dataList = defineDataList(0);
+        List<Data> dataList = defineDataList(0, currentFormId);
         model.addAttribute("dataList", dataList);
 
         List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
@@ -544,9 +584,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/update/{id}")
-    public String showEditForm(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
+    public String showEditForm(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes ra) {
 
         try {
+            Integer currentFormId = (Integer) session.getAttribute("formId");
+
             Employee employee = employeeService.findById(id);
 
             Employee tempDateEmployee = employeeService.findFirstByOibOrderByDateOfUpdateDesc(employee.getOib());
@@ -560,16 +602,19 @@ public class EmployeeController {
             String title = "";
             String script = "/js/sent-form-employees.js";
 
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
                 sendLink = employee.isSignUpSent() ? "" : "/employees/appsend";
                 script = employee.isSignUpSent() ? "/js/sent-form-employees.js" : "/js/form-employees.js";
                 title = "Nalog za prijavu";
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
                 sendLink = employee.isSignOutSent() ? "" : "/employees/appsend";
                 title = "Nalog za odjavu";
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 pathSave = employee.isUpdateSent() ? "" : "/employees/save";
                 sendLink = employee.isUpdateSent() ? "" : "/employees/appsend";
                 title = "Nalog za promjenu";
@@ -581,7 +626,7 @@ public class EmployeeController {
                 model.addAttribute("class", employee);
             }
 
-            List<Data> dataList = defineDataList(id);
+            List<Data> dataList = defineDataList(id, currentFormId);
             model.addAttribute("dataList", dataList);
             List<String> hiddenList = getEmployeeColumnFieldsNotInDataList(dataList);
             model.addAttribute("hiddenList", hiddenList);
@@ -602,13 +647,18 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/save")
-    public String addEmployee(@ModelAttribute("employee") Employee employee, RedirectAttributes ra) {
+    public String addEmployee(@ModelAttribute("employee") Employee employee, HttpSession session, RedirectAttributes ra) {
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        Integer currentFormId = (Integer) session.getAttribute("formId");
+
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             employee.setFromSignUp(true);
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             employee.setFromUpdate(true);
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             employee.setFromSignOut(true);
         }
 
@@ -623,11 +673,14 @@ public class EmployeeController {
         }
 
         if (employee.getId() == null) {
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employee.setFromSignUp(true);
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employee.setFromUpdate(true);
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employee.setFromSignOut(true);
             }
         }
@@ -638,13 +691,17 @@ public class EmployeeController {
     }
 
     @PostMapping("/users/employees/save-as-admin")
-    public String saveUpdateAppAsAdmin(@ModelAttribute("employee") Employee employee, BindingResult result, Model model, RedirectAttributes ra) {
+    public String saveUpdateAppAsAdmin(@ModelAttribute("employee") Employee employee, HttpSession session, BindingResult result, Model model, RedirectAttributes ra) {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
 
         String path = "";
 
-        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+//        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+        if (Objects.equals(currentFormId, FormTracker.getSHOW_ALL())) {
             path = "/users/employees/show-all";
-        } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSHOW_NOT_SENT())) {
             path = "/users/employees/show-all-not-sent";
         }
 
@@ -652,30 +709,52 @@ public class EmployeeController {
 
         employeeService.saveEmployee(employee);
 
-//        return "redirect:" + path;
-        // Vratiti view koji zatvara tab
+        model.addAttribute("path", path);
+        return "close-tab";
+    }
+    @GetMapping("/users/employees/close-as-admin")
+//    public String closeUpdateAppAsAdmin(@ModelAttribute("employee") Employee employee, BindingResult result, Model model, RedirectAttributes ra) {
+    public String closeUpdateAppAsAdmin(Model model, HttpSession session) {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
+
+        String path = "";
+
+//        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+        if (Objects.equals(currentFormId, FormTracker.getSHOW_ALL())) {
+            path = "/users/employees/show-all";
+//        } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSHOW_NOT_SENT())) {
+            path = "/users/employees/show-all-not-sent";
+        }
+
         model.addAttribute("path", path);
         return "close-tab";
     }
 
     @GetMapping("/employees/delete/{id}")
-    public String deleteEmployee(@PathVariable Long id, RedirectAttributes ra) {
+    public String deleteEmployee(@PathVariable Long id, HttpSession session, RedirectAttributes ra) {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
 
         Employee tempEmployee = employeeService.findById(id);
 
         String message = "Nije moguće obrisati poslani nalog!";
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             if (tempEmployee.isSignUpSent()) {
                 ra.addFlashAttribute("message", message);
                 return "redirect:/employees/show";
             }
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             if (tempEmployee.isSignOutSent()) {
                 ra.addFlashAttribute("message", message);
                 return "redirect:/employees/show";
             }
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             if (tempEmployee.isUpdateSent()) {
                 ra.addFlashAttribute("message", message);
                 return "redirect:/employees/show";
@@ -694,13 +773,16 @@ public class EmployeeController {
             counter++;
         }
         if (counter > 1) {
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 tempEmployee.setFromSignUp(false);
                 employeeService.saveEmployee(tempEmployee);
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 tempEmployee.setFromSignOut(false);
                 employeeService.saveEmployee(tempEmployee);
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 tempEmployee.setFromUpdate(false);
                 employeeService.saveEmployee(tempEmployee);
             }
@@ -715,13 +797,18 @@ public class EmployeeController {
     }
 
     @PostMapping("/employees/appsend")
-    public String addEmployeeSend(@ModelAttribute("employee") Employee employee, Model model, RedirectAttributes ra) {
+    public String addEmployeeSend(@ModelAttribute("employee") Employee employee, HttpSession session, Model model, RedirectAttributes ra) {
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        Integer currentFormId = (Integer) session.getAttribute("formId");
+
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             employee.setFromSignUp(true);
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             employee.setFromUpdate(true);
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             employee.setFromSignOut(true);
         }
 
@@ -734,11 +821,14 @@ public class EmployeeController {
             return "redirect:/employees/new";
         }
         if (employee.getId() == null) {
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employee.setFromSignUp(true);
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employee.setFromUpdate(true);
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employee.setFromSignOut(true);
             }
         }
@@ -750,13 +840,16 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/appsend/{id}")
-    public String sendEmployeeMail(@PathVariable Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+    public String sendEmployeeMail(@PathVariable Long id, HttpSession session, Model model, RedirectAttributes ra, HttpServletResponse response) {
+
+        Integer currentFormId = (Integer) session.getAttribute("formId");
 
         Employee employeeToSend = new Employee();
 
         boolean success = true;
 
-        String messageTag = switch (FormTracker.getFormId()) {
+//        String messageTag = switch (FormTracker.getFormId()) {
+        String messageTag = switch (currentFormId) {
             case 1 -> "prijavu";
             case 2 -> "promjenu podataka";
             case 3 -> "odjavu";
@@ -765,7 +858,8 @@ public class EmployeeController {
 
         try {
             employeeToSend = employeeService.findById(id);
-            List<String> emptyAttributes = employeeToSend.hasEmptyAttributes(FormTracker.getFormId());
+//            List<String> emptyAttributes = employeeToSend.hasEmptyAttributes(FormTracker.getFormId());
+            List<String> emptyAttributes = employeeToSend.hasEmptyAttributes(currentFormId);
 
             if (!emptyAttributes.isEmpty()) {
                 StringBuilder message = new StringBuilder();
@@ -792,7 +886,8 @@ public class EmployeeController {
             LocalDate firstDayOfYear = LocalDate.of(currentDate.getYear(), 1, 1);
             Date firstDayOfYearSql = Date.valueOf(firstDayOfYear);
 
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (currentFormId.equals(FormTracker.getSIGN_UP())) {
                 employeeToSend.setSignUpSent(true);
                 employeeToSend.setDateOfSignUpSent(date);
                 employeeToSend.setTimeOfSignUpSent(time);
@@ -802,7 +897,8 @@ public class EmployeeController {
                     }
                 }
                 employeeToSend.setNumSignUp(counter + 1);
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (currentFormId.equals(FormTracker.getSIGN_OUT())) {
                 employeeToSend.setSignOutSent(true);
                 employeeToSend.setDateOfSignOutSent(date);
                 employeeToSend.setTimeOfSignOutSent(time);
@@ -812,7 +908,8 @@ public class EmployeeController {
                     }
                 }
                 employeeToSend.setNumSignOut(counter + 1);
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (currentFormId.equals(FormTracker.getUPDATE())) {
                 employeeToSend.setUpdateSent(true);
                 employeeToSend.setDateOfUpdateSent(date);
                 employeeToSend.setTimeOfUpdateSent(time);
@@ -839,7 +936,7 @@ public class EmployeeController {
                     employeeToSend.getUser().getAddress() + " \n" +
                     employeeToSend.getUser().getCity() + " \n";
 
-            String pdfFilePath = createAppPdf(id, model, ra, response);
+            String pdfFilePath = createAppPdf(id, currentFormId, model, ra, response);
             SendMail.sendMail(mailRecipient, mailSubject, mailText, pdfFilePath);
             ra.addFlashAttribute("successMessage", "Nalog za " + messageTag + " radnika je poslan.");
         } catch (Exception e) {
@@ -901,9 +998,11 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/html/{id}")
-    public String showEmployeeHtml(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+    public String showEmployeeHtml(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         try {
+            Integer currentFormId = (Integer) session.getAttribute("formId");
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
 
             Employee employee = employeeService.findById(id);
@@ -915,21 +1014,24 @@ public class EmployeeController {
             String name = "";
             String year = "";
 
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
                 appOrder = "1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
                 name = "Prijava-" + id + "-" + employee.getNumSignUp();
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
                 appOrder = "2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignOutSent = employee.getDateOfSignOutSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
@@ -948,7 +1050,7 @@ public class EmployeeController {
             model.addAttribute("companyOib", employee.getUser().getOib());
 
             model.addAttribute("class", employee);
-            List<Data> dataList = defineDataList(id);
+            List<Data> dataList = defineDataList(id, currentFormId);
             model.addAttribute("dataList", dataList);
 
             return "app-html";
@@ -961,7 +1063,7 @@ public class EmployeeController {
         return "page-not-found";
     }
 
-    public void showPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+    public void showPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response, Integer currentFormId) {
 
         String message = "";
 
@@ -976,7 +1078,7 @@ public class EmployeeController {
                 }
             }
 
-            String pdfFilePath = createAppPdf(id, model, ra, response);
+            String pdfFilePath = createAppPdf(id, currentFormId, model, ra, response);
 
             response.setContentType("application/pdf");
             response.setHeader("Content-Disposition", "inline; filename=" + pdfFilePath);
@@ -995,15 +1097,18 @@ public class EmployeeController {
     }
 
     @GetMapping("/employees/pdf/{id}")
-    public void showEmployeePdf(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
-        showPdf(id, model, ra, response);
+    public void showEmployeePdf(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes ra, HttpServletResponse response) {
+        Integer currentFormId = (Integer) session.getAttribute("formId");
+
+        showPdf(id, model, ra, response, currentFormId);
     }
 
     @GetMapping("/users/employees/show-all/pdf/{id}")
-    public void showEmployeePdfForUser(@PathVariable("id") String idApp, Model model, RedirectAttributes ra, HttpServletResponse response) {
+    public void showEmployeePdfForUser(@PathVariable("id") String idApp, Model model, HttpSession session, RedirectAttributes ra, HttpServletResponse response) {
 
         Long id = 0L;
         Integer appType = 0;
+        Integer tempFormId = 0;
 
         List<String> charList = Arrays.asList(idApp.split("-"));
 
@@ -1011,24 +1116,33 @@ public class EmployeeController {
         appType = Integer.valueOf(charList.get(1));
 
         if (appType == 1) {
-            FormTracker.setFormId(FormTracker.getSIGN_UP());
+//            FormTracker.setFormId(FormTracker.getSIGN_UP());
+            session.setAttribute("formId", FormTracker.getSIGN_UP());
+            tempFormId = FormTracker.getSIGN_UP();
         } else if (appType == 2) {
-            FormTracker.setFormId(FormTracker.getUPDATE());
+//            FormTracker.setFormId(FormTracker.getUPDATE());
+            session.setAttribute("formId", FormTracker.getUPDATE());
+            tempFormId = FormTracker.getUPDATE();
         } else if (appType == 3) {
-            FormTracker.setFormId(FormTracker.getSIGN_OUT());
+//            FormTracker.setFormId(FormTracker.getSIGN_OUT());
+            session.setAttribute("formId", FormTracker.getSIGN_OUT());
+            tempFormId = FormTracker.getSIGN_OUT();
         }
 
-        showPdf(id, model, ra, response);
+        showPdf(id, model, ra, response, tempFormId);
     }
 
     @GetMapping("/users/employees/pdf/{id}")
-    public void showEmployeePdfForUser(@PathVariable("id") Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
-        showPdf(id, model, ra, response);
+    public void showEmployeePdfForUser(@PathVariable("id") Long id, HttpSession session, Model model, RedirectAttributes ra, HttpServletResponse response) {
+        Integer currentFormId = (Integer) session.getAttribute("formId");
+
+        showPdf(id, model, ra, response, currentFormId);
     }
 
-    public String createAppPdf(Long id, Model model, RedirectAttributes ra, HttpServletResponse response) {
+    public String createAppPdf(Long id, Integer currentFormId, Model model, RedirectAttributes ra, HttpServletResponse response) {
 
         try {
+
             SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy.");
 
             Employee employee = employeeService.findById(id);
@@ -1040,21 +1154,24 @@ public class EmployeeController {
             String name = "";
             String year = "";
 
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignUpSent);
                 appOrder = "1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
                 name = "Prijava-" + id + "-" + employee.getNumSignUp();
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfUpdateSent);
                 appOrder = "2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignOutSent = employee.getDateOfSignOutSent();
                 year = new SimpleDateFormat("yyyy").format(dateOfSignOutSent);
@@ -1073,7 +1190,7 @@ public class EmployeeController {
             model.addAttribute("companyOib", employee.getUser().getOib());
 
             model.addAttribute("class", employee);
-            List<Data> dataList = defineDataList(id);
+            List<Data> dataList = defineDataList(id, currentFormId);
             model.addAttribute("dataList", dataList);
 
             String htmlContent = renderHtml(model);
@@ -1099,28 +1216,34 @@ public class EmployeeController {
         return templateEngine.process("app-html", context);
     }
 
-    private List<Data> defineDataList(long id) {
+    private List<Data> defineDataList(long id, Integer currentFormId) {
 
         List<Data> dataList = new ArrayList<>();
         List<String> items = new ArrayList<>();
         String fieldEnabled = "true";
         String fieldStatus = "true";
         if (id != 0L) {
-            if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
+//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
+            if (Objects.equals(currentFormId, FormTracker.getSIGN_UP()) && employeeService.findById(id).isSignUpSent()) {
+            fieldStatus = "false";
+//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignOutSent()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT()) && employeeService.findById(id).isSignOutSent()) {
                 fieldStatus = "false";
-            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignOutSent()) {
-                fieldStatus = "false";
-            } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isUpdateSent()) {
+//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isUpdateSent()) {
+            } else if (Objects.equals(currentFormId, FormTracker.getUPDATE()) && employeeService.findById(id).isUpdateSent()) {
                 fieldStatus = "false";
             }
         }
         if (id != 0L) {
             if (fieldStatus == "true") {
-                if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
+//                if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
+                if (Objects.equals(currentFormId, FormTracker.getSIGN_UP()) && employeeService.findById(id).isSignUpSent()) {
                     fieldEnabled = "false";
-                } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignUpSent()) {
+//                } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignUpSent()) {
+                } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT()) && employeeService.findById(id).isSignUpSent()) {
                     fieldEnabled = "false";
-                } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isSignUpSent()) {
+//                } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isSignUpSent()) {
+                } else if (Objects.equals(currentFormId, FormTracker.getUPDATE()) && employeeService.findById(id).isSignUpSent()) {
                     fieldEnabled = "false";
                 }
             } else {
@@ -1128,7 +1251,8 @@ public class EmployeeController {
             }
         }
 
-        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+//        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
+        if (Objects.equals(currentFormId, FormTracker.getSHOW_ALL())) {
             fieldEnabled = "false";
         }
 
@@ -1138,7 +1262,8 @@ public class EmployeeController {
         ;
         dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", fieldEnabled, items, "false"));
         ;
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
 
             dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", fieldEnabled, Employee.GENDER, "false"));
             ;
@@ -1204,7 +1329,8 @@ public class EmployeeController {
             dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
         }
-        if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
             dataList.add(new Data("7.", "Datum odjave - stvarni *", "dateOfSignOutReal", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
@@ -1213,7 +1339,8 @@ public class EmployeeController {
             ;
             dataList.add(new Data("9.", "Napomena", "noteSignOut", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             dataList.add(new Data("6.", "Datum promjene  *", "dateOfUpdateReal", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
             ;
             dataList.add(new Data("7.", "Razlog promjene *", "reasonForUpdate", "", "", "", "text", "false", fieldStatus, Employee.REASON_FOR_UPDATE, "true"));

@@ -15,6 +15,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 @Getter
@@ -60,7 +61,7 @@ public class Employee {
     @Column
     private String gender;
 
-    @Column()
+    @Column
     private String oib;
 
     @JsonFormat(pattern = "yyyy-MM-dd")
@@ -254,8 +255,8 @@ public class Employee {
         }
     }
 
-    @Override
-    public String toString() {
+//    @Override
+    public String toString(Integer currentFormId) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
         String emailTxt = "";
@@ -292,7 +293,8 @@ public class Employee {
             formattedDateOfUpdateReal = sdf.format(dateOfUpdateReal);
         }
 
-        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             emailTxt =
                     " \nPOSLODAVAC" +
                             " \n Tvrtka: " + getUser().getCompany() +
@@ -330,7 +332,8 @@ public class Employee {
                             " \n 27.  Invalid: " + disability +
                             " \n 28.  Napomena: " + noteSignUp
             ;
-        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             emailTxt =
                     " \nPOSLODAVAC" +
                             " \n Tvrtka: " + getUser().getCompany() +
@@ -346,7 +349,8 @@ public class Employee {
                             " \n  8.  Razlog odjave: " + reasonForSignOut +
                             " \n  9.  Napomena: " + noteSignOut
             ;
-        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             emailTxt =
                     " \nPOSLODAVAC" +
                             " \n Tvrtka: " + getUser().getCompany() +
@@ -368,17 +372,17 @@ public class Employee {
         return result;
     }
 
-    public List<String> hasEmptyAttributes(int formId) {
+    public List<String> hasEmptyAttributes(Integer formId) {
 
         String[] attributeValues = new String[]{};
 
-        if (formId == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(formId, FormTracker.getSIGN_UP())) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Spol", "Datum rođenja", "Adresa", "Poštanski broj i grad", "Stvarna stručna sprema",
                                            "Radno mjesto", "Mjesto rada - Grad", "Potrebna stručna sprema", "Ugovor o radu",
                                            "Neradni dani u tjednu", "Datum prijave", "Iznos osnovne plaće", "Bruto / Neto"};
-        } else if (formId == FormTracker.getSIGN_OUT()) {
+        } else if (Objects.equals(formId, FormTracker.getSIGN_OUT())) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum odjave - stvarni", "Razlog odjave"};
-        } else if (formId == FormTracker.getUPDATE()) {
+        } else if (Objects.equals(formId, FormTracker.getUPDATE())) {
             attributeValues = new String[]{"OIB", "Ime", "Prezime", "Datum promjene", "Razlog promjene"};
         }
 
@@ -396,7 +400,7 @@ public class Employee {
                 })
                 .forEach(emptyAttributes::add);
 
-        if (formId == FormTracker.getSIGN_UP()) {
+        if (Objects.equals(formId, FormTracker.getSIGN_UP())) {
             if (employmentContract.equals("Određeno") && (dateOfSignOut == null || dateOfSignOut.toString().trim().isEmpty())) {
                 emptyAttributes.add("Datum odjave");
             }
