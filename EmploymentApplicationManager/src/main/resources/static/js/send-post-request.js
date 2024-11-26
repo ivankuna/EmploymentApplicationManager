@@ -23,7 +23,6 @@
          }
         }).then(url => {
          if (url) {
-
              if (url != '') {
              window.location = url;
              }

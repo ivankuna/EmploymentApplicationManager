@@ -7,6 +7,8 @@ import hr.betaSoft.tools.FormTracker;
 import hr.betaSoft.tools.OibRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -33,16 +35,18 @@ public class OibController {
         String oib = oibRequest.getOib();
         Employee tempEmployee = employeeService.findFirstByOibAndUser(oib, userService.getAuthenticatedUser());
         String url = "";
+
         if (tempEmployee != null && tempEmployee.getId() != null) {
-//            if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 if (tempEmployee.isFromUpdate()) {
                     url = "/employees/new-update/" + oib;
                 } else {
                     url = "/employees/update/" + tempEmployee.getId();
                 }
-            } else {
+            } else if (Objects.equals(currentFormId, FormTracker.getSIGN_UP()) && !tempEmployee.isSignOutSent()) {
                 url = "/employees/update/" + tempEmployee.getId();
+            } else {
+                url = "/employees/new/" + tempEmployee.getId();
             }
         }
         return url;

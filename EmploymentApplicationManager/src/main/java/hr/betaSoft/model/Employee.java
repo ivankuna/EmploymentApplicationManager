@@ -255,7 +255,6 @@ public class Employee {
         }
     }
 
-//    @Override
     public String toString(Integer currentFormId) {
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd.MM.yyyy");
@@ -293,7 +292,6 @@ public class Employee {
             formattedDateOfUpdateReal = sdf.format(dateOfUpdateReal);
         }
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             emailTxt =
                     " \nPOSLODAVAC" +
@@ -332,7 +330,6 @@ public class Employee {
                             " \n 27.  Invalid: " + disability +
                             " \n 28.  Napomena: " + noteSignUp
             ;
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             emailTxt =
                     " \nPOSLODAVAC" +
@@ -349,7 +346,6 @@ public class Employee {
                             " \n  8.  Razlog odjave: " + reasonForSignOut +
                             " \n  9.  Napomena: " + noteSignOut
             ;
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             emailTxt =
                     " \nPOSLODAVAC" +

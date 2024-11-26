@@ -85,7 +85,6 @@ public class MainController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-//        FormTracker.setFormId(FormTracker.getSIGN_UP());
         session.setAttribute("formId", FormTracker.getSIGN_UP());
 
         List<GrantedAuthority> authorityList = new ArrayList<>(authorities);
@@ -108,21 +107,18 @@ public class MainController {
 
     @GetMapping("/empsignup")
     public String employeeSignUp(HttpSession session) {
-//        FormTracker.setFormId(FormTracker.getSIGN_UP());
         session.setAttribute("formId", FormTracker.getSIGN_UP());
         return "redirect:/employees/show";
     }
 
     @GetMapping("/empupdate")
     public String employeeUpdate(HttpSession session) {
-//        FormTracker.setFormId(FormTracker.getUPDATE());
         session.setAttribute("formId", FormTracker.getUPDATE());
         return "redirect:/employees/show";
     }
 
     @GetMapping("/empsignout")
     public String employeeSignOut(HttpSession session) {
-//        FormTracker.setFormId(FormTracker.getSIGN_OUT());
         session.setAttribute("formId", FormTracker.getSIGN_OUT());
         return "redirect:/employees/show";
     }
@@ -140,7 +136,6 @@ public class MainController {
 
     @GetMapping("/users/select/sign-up")
     public String selectSignUp(HttpSession session) {
-//        FormTracker.setFormId(FormTracker.getSIGN_UP());
         session.setAttribute("formId", FormTracker.getSIGN_UP());
 
         return "redirect:/users/select";
@@ -148,13 +143,11 @@ public class MainController {
 
     @GetMapping("/users/select/update")
     public String selectUpdate(HttpSession session) {
-//        FormTracker.setFormId(FormTracker.getUPDATE());
         session.setAttribute("formId", FormTracker.getUPDATE());
         return "redirect:/users/select";
     }
     @GetMapping("/users/select/sign-out")
     public String selectSignOut(HttpSession session) {
-//        FormTracker.setFormId(FormTracker.getSIGN_OUT());
         session.setAttribute("formId", FormTracker.getSIGN_OUT());
         return "redirect:/users/select";
     }

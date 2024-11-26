@@ -75,25 +75,20 @@ public class EmployeeController {
         String datumApp = "";
         String appNum = "";
 
-        // TEST
-//        Integer currentFormId = FormTracker.getFormId();
         Integer currentFormId = (Integer) session.getAttribute("formId");
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             statusField = "signUpSent";
             datumField = "dateOfSignUpSent";
             vrijemeField = "timeOfSignUpSent";
             datumApp = "dateOfSignUp";
             appNum = "numSignUp";
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             statusField = "signOutSent";
             datumField = "dateOfSignOutSent";
             vrijemeField = "timeOfSignOutSent";
             datumApp = "dateOfSignOutReal";
             appNum = "numSignOut";
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             statusField = "updateSent";
             datumField = "dateOfUpdateSent";
@@ -126,24 +121,18 @@ public class EmployeeController {
         List<Employee> employeeList = new ArrayList<>();
 
         if (!authenticatedUser.isShowAllApplications()) {
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employeeList = employeeService.findByUserAndSignUpSentAndFromSignUp(authenticatedUser, false, true);
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employeeList = employeeService.findByUserAndSignOutSentAndFromSignOut(authenticatedUser, false, true);
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employeeList = employeeService.findByUserAndUpdateSentAndFromUpdate(authenticatedUser, false, true);
             }
         } else {
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employeeList = employeeService.findByUserAndFromSignUp(authenticatedUser, true);
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employeeList = employeeService.findByUserAndFromSignOut(authenticatedUser, true);
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employeeList = employeeService.findByUserAndFromUpdate(authenticatedUser, true);
             }
@@ -153,13 +142,10 @@ public class EmployeeController {
 
         String title = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalozi za prijavu radnika";
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalozi za promjenu podataka";
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalozi za odjavu radnika";
         }
@@ -188,17 +174,12 @@ public class EmployeeController {
         DeviceDetector deviceDetector = new DeviceDetector();
         boolean isMobile = deviceDetector.isMobileDevice(request);
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             List<Employee> employeeList = employeeService.findByUserAndSignUpSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
-
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             List<Employee> employeeList = employeeService.findByUserAndSignOutSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
-
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             List<Employee> employeeList = employeeService.findByUserAndUpdateSent(userService.findById(id), true);
             model.addAttribute("dataList", employeeList);
@@ -210,21 +191,18 @@ public class EmployeeController {
         String dateApp = "";
         String appNum = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             statusField = "signUpSent";
             dateField = "dateOfSignUpSent";
             timeField = "timeOfSignUpSent";
             dateApp = "dateOfSignUp";
             appNum = "numSignUp";
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             statusField = "signOutSent";
             dateField = "dateOfSignOutSent";
             timeField = "timeOfSignOutSent";
             dateApp = "dateOfSignOutReal";
             appNum = "numSignOut";
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             statusField = "updateSent";
             dateField = "dateOfUpdateSent";
@@ -256,13 +234,10 @@ public class EmployeeController {
 
         String title = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalozi za prijavu radnika";
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalozi za promjenu podataka";
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalozi za odjavu radnika";
         }
@@ -283,7 +258,6 @@ public class EmployeeController {
     @GetMapping("/users/employees/show-specific")
     public String showActiveAppsToAdmin(@RequestParam String appType, HttpSession session, Model model) {
 
-//        FormTracker.setFormId(FormTracker.getSHOW_ALL());
         session.setAttribute("formId", FormTracker.getSHOW_ALL());
 
         List<Employee> employeeList = employeeService.getEmployeeList(appType);
@@ -328,7 +302,6 @@ public class EmployeeController {
     @GetMapping("/users/employees/show-all")
     public String showAllAppsToAdmin(Model model, HttpSession session, HttpServletRequest request) {
 
-//        FormTracker.setFormId(FormTracker.getSHOW_ALL());
         session.setAttribute("formId", FormTracker.getSHOW_ALL());
 
         DeviceDetector deviceDetector = new DeviceDetector();
@@ -373,7 +346,6 @@ public class EmployeeController {
     @GetMapping("/users/employees/show-all-not-sent")
     public String showAllNotSentAppsToAdmin(Model model, HttpSession session, HttpServletRequest request) {
 
-//        FormTracker.setFormId(FormTracker.getSHOW_NOT_SENT());
         session.setAttribute("formId", FormTracker.getSHOW_NOT_SENT());
 
         DeviceDetector deviceDetector = new DeviceDetector();
@@ -428,15 +400,6 @@ public class EmployeeController {
     public String updateAppAsAdmin(@PathVariable("id") Long id, Model model, RedirectAttributes ra) {
 
         try {
-
-//            String path = "";
-//
-//            if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
-//                path = "/users/employees/show-all";
-//            } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
-//                path = "/users/employees/show-all-not-sent";
-//            }
-
             Employee employee = employeeService.findById(id);
 
             currentUserForAdminUpdate = employee.getUser();
@@ -500,14 +463,11 @@ public class EmployeeController {
         String title = "";
         String script = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalog za prijavu";
             script = "/js/form-employees.js";
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalog za odjavu";
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalog za promjenu";
         }
@@ -534,6 +494,28 @@ public class EmployeeController {
         return "form";
     }
 
+    @GetMapping("/employees/new/{id}")
+    public String showAddFilledSignUpForm(@PathVariable("id") Long id, RedirectAttributes ra) {
+        Employee tempEmployee = employeeService.findById(id);
+        Employee employee = new Employee();
+
+        employee.setOib(tempEmployee.getOib());
+        employee.setFirstName(tempEmployee.getFirstName() == null ? "" : tempEmployee.getFirstName());
+        employee.setLastName(tempEmployee.getLastName() == null ? "" : tempEmployee.getLastName());
+        employee.setGender(tempEmployee.getGender() == null ? "" : tempEmployee.getGender());
+        employee.setDateOfBirth(tempEmployee.getDateOfBirth() == null ? null : tempEmployee.getDateOfBirth());
+        employee.setAddress(tempEmployee.getAddress() == null ? "" : tempEmployee.getAddress());
+        employee.setCity(tempEmployee.getCity() == null ? "" : tempEmployee.getCity());
+        employee.setProfessionalQualification(tempEmployee.getProfessionalQualification() == null ? "" : tempEmployee.getProfessionalQualification());
+        employee.setHighestLevelOfEducation(tempEmployee.getHighestLevelOfEducation() == null ? "" : tempEmployee.getHighestLevelOfEducation());
+        employee.setIbanRegular(tempEmployee.getIbanRegular() == null ? "" : tempEmployee.getIbanRegular());
+        employee.setIbanProtected(tempEmployee.getIbanProtected() == null ? "" : tempEmployee.getIbanProtected());
+
+        ra.addFlashAttribute("employee", employee);
+
+        return "redirect:/employees/new";
+    }
+
     @GetMapping("/employees/new-update/{oib}")
     public String showAddFilledForm(@PathVariable("oib") String oib, HttpSession session, Model model) throws IllegalAccessException {
 
@@ -554,14 +536,11 @@ public class EmployeeController {
         String title = "";
         String script = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             title = "Nalog za prijavu";
             script = "/js/form-employees.js";
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             title = "Nalog za odjavu";
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             title = "Nalog za promjenu";
         }
@@ -602,18 +581,15 @@ public class EmployeeController {
             String title = "";
             String script = "/js/sent-form-employees.js";
 
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 pathSave = employee.isSignUpSent() ? "" : "/employees/save";
                 sendLink = employee.isSignUpSent() ? "" : "/employees/appsend";
                 script = employee.isSignUpSent() ? "/js/sent-form-employees.js" : "/js/form-employees.js";
                 title = "Nalog za prijavu";
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 pathSave = employee.isSignOutSent() ? "" : "/employees/save";
                 sendLink = employee.isSignOutSent() ? "" : "/employees/appsend";
                 title = "Nalog za odjavu";
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 pathSave = employee.isUpdateSent() ? "" : "/employees/save";
                 sendLink = employee.isUpdateSent() ? "" : "/employees/appsend";
@@ -651,13 +627,10 @@ public class EmployeeController {
 
         Integer currentFormId = (Integer) session.getAttribute("formId");
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             employee.setFromSignUp(true);
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             employee.setFromUpdate(true);
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             employee.setFromSignOut(true);
         }
@@ -673,13 +646,10 @@ public class EmployeeController {
         }
 
         if (employee.getId() == null) {
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employee.setFromSignUp(true);
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employee.setFromUpdate(true);
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employee.setFromSignOut(true);
             }
@@ -697,10 +667,8 @@ public class EmployeeController {
 
         String path = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
         if (Objects.equals(currentFormId, FormTracker.getSHOW_ALL())) {
             path = "/users/employees/show-all";
-//        } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSHOW_NOT_SENT())) {
             path = "/users/employees/show-all-not-sent";
         }
@@ -713,17 +681,14 @@ public class EmployeeController {
         return "close-tab";
     }
     @GetMapping("/users/employees/close-as-admin")
-//    public String closeUpdateAppAsAdmin(@ModelAttribute("employee") Employee employee, BindingResult result, Model model, RedirectAttributes ra) {
     public String closeUpdateAppAsAdmin(Model model, HttpSession session) {
 
         Integer currentFormId = (Integer) session.getAttribute("formId");
 
         String path = "";
 
-//        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
         if (Objects.equals(currentFormId, FormTracker.getSHOW_ALL())) {
             path = "/users/employees/show-all";
-//        } else if (FormTracker.getFormId() == FormTracker.getSHOW_NOT_SENT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSHOW_NOT_SENT())) {
             path = "/users/employees/show-all-not-sent";
         }
@@ -741,19 +706,16 @@ public class EmployeeController {
 
         String message = "Nije moguće obrisati poslani nalog!";
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             if (tempEmployee.isSignUpSent()) {
                 ra.addFlashAttribute("message", message);
                 return "redirect:/employees/show";
             }
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             if (tempEmployee.isSignOutSent()) {
                 ra.addFlashAttribute("message", message);
                 return "redirect:/employees/show";
             }
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             if (tempEmployee.isUpdateSent()) {
                 ra.addFlashAttribute("message", message);
@@ -773,15 +735,12 @@ public class EmployeeController {
             counter++;
         }
         if (counter > 1) {
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 tempEmployee.setFromSignUp(false);
                 employeeService.saveEmployee(tempEmployee);
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 tempEmployee.setFromSignOut(false);
                 employeeService.saveEmployee(tempEmployee);
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 tempEmployee.setFromUpdate(false);
                 employeeService.saveEmployee(tempEmployee);
@@ -801,13 +760,10 @@ public class EmployeeController {
 
         Integer currentFormId = (Integer) session.getAttribute("formId");
 
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
             employee.setFromSignUp(true);
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             employee.setFromUpdate(true);
-//        } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             employee.setFromSignOut(true);
         }
@@ -821,13 +777,10 @@ public class EmployeeController {
             return "redirect:/employees/new";
         }
         if (employee.getId() == null) {
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 employee.setFromSignUp(true);
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 employee.setFromUpdate(true);
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 employee.setFromSignOut(true);
             }
@@ -848,7 +801,6 @@ public class EmployeeController {
 
         boolean success = true;
 
-//        String messageTag = switch (FormTracker.getFormId()) {
         String messageTag = switch (currentFormId) {
             case 1 -> "prijavu";
             case 2 -> "promjenu podataka";
@@ -858,7 +810,6 @@ public class EmployeeController {
 
         try {
             employeeToSend = employeeService.findById(id);
-//            List<String> emptyAttributes = employeeToSend.hasEmptyAttributes(FormTracker.getFormId());
             List<String> emptyAttributes = employeeToSend.hasEmptyAttributes(currentFormId);
 
             if (!emptyAttributes.isEmpty()) {
@@ -886,7 +837,6 @@ public class EmployeeController {
             LocalDate firstDayOfYear = LocalDate.of(currentDate.getYear(), 1, 1);
             Date firstDayOfYearSql = Date.valueOf(firstDayOfYear);
 
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (currentFormId.equals(FormTracker.getSIGN_UP())) {
                 employeeToSend.setSignUpSent(true);
                 employeeToSend.setDateOfSignUpSent(date);
@@ -897,7 +847,6 @@ public class EmployeeController {
                     }
                 }
                 employeeToSend.setNumSignUp(counter + 1);
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (currentFormId.equals(FormTracker.getSIGN_OUT())) {
                 employeeToSend.setSignOutSent(true);
                 employeeToSend.setDateOfSignOutSent(date);
@@ -908,7 +857,6 @@ public class EmployeeController {
                     }
                 }
                 employeeToSend.setNumSignOut(counter + 1);
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (currentFormId.equals(FormTracker.getUPDATE())) {
                 employeeToSend.setUpdateSent(true);
                 employeeToSend.setDateOfUpdateSent(date);
@@ -1014,7 +962,6 @@ public class EmployeeController {
             String name = "";
             String year = "";
 
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
@@ -1022,7 +969,6 @@ public class EmployeeController {
                 appOrder = "1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
                 name = "Prijava-" + id + "-" + employee.getNumSignUp();
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
@@ -1030,7 +976,6 @@ public class EmployeeController {
                 appOrder = "2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignOutSent = employee.getDateOfSignOutSent();
@@ -1116,15 +1061,12 @@ public class EmployeeController {
         appType = Integer.valueOf(charList.get(1));
 
         if (appType == 1) {
-//            FormTracker.setFormId(FormTracker.getSIGN_UP());
             session.setAttribute("formId", FormTracker.getSIGN_UP());
             tempFormId = FormTracker.getSIGN_UP();
         } else if (appType == 2) {
-//            FormTracker.setFormId(FormTracker.getUPDATE());
             session.setAttribute("formId", FormTracker.getUPDATE());
             tempFormId = FormTracker.getUPDATE();
         } else if (appType == 3) {
-//            FormTracker.setFormId(FormTracker.getSIGN_OUT());
             session.setAttribute("formId", FormTracker.getSIGN_OUT());
             tempFormId = FormTracker.getSIGN_OUT();
         }
@@ -1154,7 +1096,6 @@ public class EmployeeController {
             String name = "";
             String year = "";
 
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
                 title = "NALOG - PRIJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignUpSent = employee.getDateOfSignUpSent();
@@ -1162,7 +1103,6 @@ public class EmployeeController {
                 appOrder = "1-" + employee.getNumSignUp() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfSignUpSent()) + " Vrijeme: " + employee.getTimeOfSignUpSent();
                 name = "Prijava-" + id + "-" + employee.getNumSignUp();
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
                 title = "NALOG - PROMJENA PODATAKA RADNIKA - HZMO - HZZO";
                 Date dateOfUpdateSent = employee.getDateOfUpdateSent();
@@ -1170,7 +1110,6 @@ public class EmployeeController {
                 appOrder = "2-" + employee.getNumUpdate() + "-" + year;
                 appDate = "Datum: " + sdf.format(employee.getDateOfUpdateSent()) + " Vrijeme: " + employee.getTimeOfUpdateSent();
                 name = "Promjena-" + id + "-" + employee.getNumUpdate();
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
                 title = "NALOG - ODJAVA RADNIKA - HZMO - HZZO";
                 Date dateOfSignOutSent = employee.getDateOfSignOutSent();
@@ -1223,26 +1162,20 @@ public class EmployeeController {
         String fieldEnabled = "true";
         String fieldStatus = "true";
         if (id != 0L) {
-//            if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
             if (Objects.equals(currentFormId, FormTracker.getSIGN_UP()) && employeeService.findById(id).isSignUpSent()) {
             fieldStatus = "false";
-//            } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignOutSent()) {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT()) && employeeService.findById(id).isSignOutSent()) {
                 fieldStatus = "false";
-//            } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isUpdateSent()) {
             } else if (Objects.equals(currentFormId, FormTracker.getUPDATE()) && employeeService.findById(id).isUpdateSent()) {
                 fieldStatus = "false";
             }
         }
         if (id != 0L) {
             if (fieldStatus == "true") {
-//                if (FormTracker.getFormId() == FormTracker.getSIGN_UP() && employeeService.findById(id).isSignUpSent()) {
                 if (Objects.equals(currentFormId, FormTracker.getSIGN_UP()) && employeeService.findById(id).isSignUpSent()) {
                     fieldEnabled = "false";
-//                } else if (FormTracker.getFormId() == FormTracker.getSIGN_OUT() && employeeService.findById(id).isSignUpSent()) {
                 } else if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT()) && employeeService.findById(id).isSignUpSent()) {
                     fieldEnabled = "false";
-//                } else if (FormTracker.getFormId() == FormTracker.getUPDATE() && employeeService.findById(id).isSignUpSent()) {
                 } else if (Objects.equals(currentFormId, FormTracker.getUPDATE()) && employeeService.findById(id).isSignUpSent()) {
                     fieldEnabled = "false";
                 }
@@ -1251,7 +1184,6 @@ public class EmployeeController {
             }
         }
 
-//        if (FormTracker.getFormId() == FormTracker.getSHOW_ALL()) {
         if (Objects.equals(currentFormId, FormTracker.getSHOW_ALL())) {
             fieldEnabled = "false";
         }
@@ -1262,7 +1194,6 @@ public class EmployeeController {
         ;
         dataList.add(new Data("3.", "Prezime *", "lastName", "", "", "", "text", "true", fieldEnabled, items, "false"));
         ;
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_UP()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_UP())) {
 
             dataList.add(new Data("4.", "Spol *", "gender", "", "", "", "text", "false", fieldEnabled, Employee.GENDER, "false"));
@@ -1329,7 +1260,6 @@ public class EmployeeController {
             dataList.add(new Data("5.", "Datum zadnje promjene *", "dateOfUpdate", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
         }
-//        if (FormTracker.getFormId() == FormTracker.getSIGN_OUT()) {
         if (Objects.equals(currentFormId, FormTracker.getSIGN_OUT())) {
             dataList.add(new Data("6.", "Datum odjave - iz Prijave *", "dateOfSignOut", "", "", "", "date-pick", "false", "false", items, "false"));
             ;
@@ -1339,7 +1269,6 @@ public class EmployeeController {
             ;
             dataList.add(new Data("9.", "Napomena", "noteSignOut", "", "", "", "text", "false", fieldStatus, items, "false"));
             ;
-//        } else if (FormTracker.getFormId() == FormTracker.getUPDATE()) {
         } else if (Objects.equals(currentFormId, FormTracker.getUPDATE())) {
             dataList.add(new Data("6.", "Datum promjene  *", "dateOfUpdateReal", "", "", "", "date-pick", "false", fieldStatus, items, "false"));
             ;
