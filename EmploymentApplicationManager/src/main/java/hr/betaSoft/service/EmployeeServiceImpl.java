@@ -69,6 +69,11 @@ public class EmployeeServiceImpl implements EmployeeService {
         return employeeRepository.findFirstByOibAndUser(oib, user);
     }
 
+    @Override
+    public Employee findFirstByOibAndUserAndSignOutSentFalse(String oib, User user) {
+        return employeeRepository.findFirstByOibAndUserAndSignOutSentFalse(oib, user);
+    }
+
     public Employee findFirstByOibOrderByDateOfUpdateDesc(String oib) {
         return employeeRepository.findFirstByOibOrderByDateOfUpdateDesc(oib);
     }

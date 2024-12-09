@@ -33,7 +33,8 @@ public class OibController {
         Integer currentFormId = (Integer) session.getAttribute("formId");
 
         String oib = oibRequest.getOib();
-        Employee tempEmployee = employeeService.findFirstByOibAndUser(oib, userService.getAuthenticatedUser());
+//        Employee tempEmployee = employeeService.findFirstByOibAndUser(oib, userService.getAuthenticatedUser());
+        Employee tempEmployee = employeeService.findFirstByOibAndUserAndSignOutSentFalse(oib, userService.getAuthenticatedUser());
         String url = "";
 
         if (tempEmployee != null && tempEmployee.getId() != null) {
@@ -46,9 +47,14 @@ public class OibController {
             } else if (Objects.equals(currentFormId, FormTracker.getSIGN_UP()) && !tempEmployee.isSignOutSent()) {
                 url = "/employees/update/" + tempEmployee.getId();
             } else {
-                url = "/employees/new/" + tempEmployee.getId();
+                if (tempEmployee.isSignOutSent()) {
+                    url = "/employees/new/" + tempEmployee.getId();
+                } else {
+                    url = "/employees/update/" + tempEmployee.getId();
+                }
             }
         }
+
         return url;
     }
 }

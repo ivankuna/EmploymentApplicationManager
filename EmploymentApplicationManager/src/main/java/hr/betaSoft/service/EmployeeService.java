@@ -24,6 +24,8 @@ public interface EmployeeService {
 
     Employee findFirstByOibAndUser(String oib, User user);
 
+    Employee findFirstByOibAndUserAndSignOutSentFalse(String oib, User user);
+
     Employee findFirstByOibOrderByDateOfUpdateDesc(String oib);
 
     Employee findFirstByOibOrderByDateOfUpdateRealDesc(String oib);
