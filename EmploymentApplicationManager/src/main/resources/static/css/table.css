@@ -41,10 +41,6 @@ table { font-size: 14px; }
         padding-left: 0px !important;
     }
 
-      th {
-        text-indent: 10px;
-    }
-
     .navbar {
             position: fixed;
             top: 0;
