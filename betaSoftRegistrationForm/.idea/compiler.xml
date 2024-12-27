@@ -7,6 +7,7 @@
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
+        <module name="betaSoftRegistrationForm" />
         <module name="betaSoft" />
         <module name="prijavaRadnika" />
       </profile>
@@ -20,6 +21,7 @@
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="EmploymentApplicationManager" options="-parameters" />
       <module name="betaSoft" options="-parameters" />
+      <module name="betaSoftRegistrationForm" options="-parameters" />
       <module name="pickBox" options="-parameters" />
       <module name="prijavaRadnika" options="-parameters" />
       <module name="webAutorizacija" options="-parameters" />
